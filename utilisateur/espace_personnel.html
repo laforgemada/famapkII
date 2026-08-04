@@ -245,7 +245,7 @@
 
 .earn-card {
     position: relative;
-    background: var(--card-bg, #ffffff);
+    background: aliceblue;
     border: 1px solid rgba(124, 58, 237, 0.12);
     border-radius: 20px;
     padding: 20px;
@@ -412,7 +412,133 @@
 }
 </style>
 <style>
+.earn-points-section {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+   
+    margin: 20px 0;
+    font-family: inherit;
+}
 
+.earn-points-section .section-badge {
+    display: inline-block;
+    background: #fdf4ff;
+    color: #c084fc;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.earn-points-section .impact-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+   
+    margin-bottom: 6px;
+}
+
+.earn-points-section .impact-desc {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.earn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+}
+
+.earn-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.earn-card:hover {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08);
+}
+
+/* Boîte d'icône avec un style plus vivant, texturé et en relief */
+.earn-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.6), 0 4px 8px rgba(0, 0, 0, 0.04);
+}
+
+.emoji-icon {
+    font-size: 1.5rem;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
+    transition: transform 0.2s ease;
+}
+
+.earn-card:hover .emoji-icon {
+    transform: scale(1.15) rotate(5deg);
+}
+
+/* Dégradés colorés et chaleureux pour les fonds d'icônes */
+.earn-icon-blue { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); }
+.earn-icon-purple { background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); }
+.earn-icon-green { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); }
+.earn-icon-pink { background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%); }
+
+.earn-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.earn-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 2px;
+}
+
+.earn-card-note {
+    font-size: 0.78rem;
+    color: #64748b;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.earn-bonus {
+    background: #f1f5f9;
+    color: #0f172a;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 6px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+    transition: background 0.2s, color 0.2s;
+}
+
+.earn-card:hover .earn-bonus {
+    background: #0f172a;
+    color: #ffffff;
+}
 </style>
 </head>
 
@@ -633,68 +759,68 @@
 		</section>
 
 		<section class="card earn-points-section" id="earn-points-section">
-		<div class="section-badge">
-			🌟 Gagner plus de points
-		</div>
+    <div class="section-badge">
+        🌟 Gagner plus de points
+    </div>
 
-		<div class="impact-title">
-			Opportunités de Points
-		</div>
+    <div class="impact-title">
+        Opportunités de Points
+    </div>
 
-		<p class="impact-desc">
-			Explorez ces activités interactives pour augmenter votre solde de points et débloquer de nouveaux trophées exclusifs !
-		</p>
+    <p class="impact-desc">
+        Explorez ces activités interactives pour augmenter votre solde de points et débloquer de nouveaux trophées exclusifs !
+    </p>
 
-		<div class="earn-grid">
-			<!-- Sondage -->
-			<div class="earn-card" id="earn-card-poll" onclick="startDailyPoll()">
-				<div class="earn-icon-box earn-icon-blue">
-					<i data-feather="check-square"></i>
-				</div>
-				<div class="earn-content">
-					<div class="earn-title">Sondage Quotidien</div>
-					<span class="earn-card-note">Donnez votre avis du jour</span>
-					<div class="earn-bonus" id="earn-bonus-poll">+5 pts</div>
-				</div>
-			</div>
+    <div class="earn-grid">
+        <!-- Sondage -->
+        <div class="earn-card" id="earn-card-poll" onclick="startDailyPoll()">
+            <div class="earn-icon-box earn-icon-blue">
+                <span class="emoji-icon">📊</span>
+            </div>
+            <div class="earn-content">
+                <div class="earn-title">Sondage Quotidien</div>
+                <span class="earn-card-note">Donnez votre avis du jour</span>
+            </div>
+            <div class="earn-bonus" id="earn-bonus-poll">+5 pts</div>
+        </div>
 
-			<!-- Quiz -->
-			<div class="earn-card" id="earn-card-quiz" onclick="startBibleQuiz()">
-				<div class="earn-icon-box earn-icon-purple">
-					<i data-feather="help-circle"></i>
-				</div>
-				<div class="earn-content">
-					<div class="earn-title">Quiz Biblique</div>
-					<span class="earn-card-note">Testez vos connaissances</span>
-					<div class="earn-bonus" id="earn-bonus-quiz">+10 pts</div>
-				</div>
-			</div>
+        <!-- Quiz -->
+        <div class="earn-card" id="earn-card-quiz" onclick="startBibleQuiz()">
+            <div class="earn-icon-box earn-icon-purple">
+                <span class="emoji-icon">💡</span>
+            </div>
+            <div class="earn-content">
+                <div class="earn-title">Quiz Biblique</div>
+                <span class="earn-card-note">Testez vos connaissances</span>
+            </div>
+            <div class="earn-bonus" id="earn-bonus-quiz">+10 pts</div>
+        </div>
 
-			<!-- Vidéo -->
-			<div class="earn-card" id="earn-card-video" onclick="watchVideoAd()">
-				<div class="earn-icon-box earn-icon-green">
-					<i data-feather="monitor"></i>
-				</div>
-				<div class="earn-content">
-					<div class="earn-title">Vidéo Bonus</div>
-					<span class="earn-card-note" id="earn-note-video">Regardez 1 min pour gagner des points</span>
-					<div class="earn-bonus" id="earn-bonus-video">+3 pts</div>
-				</div>
-			</div>
+        <!-- Vidéo -->
+        <div class="earn-card" id="earn-card-video" onclick="watchVideoAd()">
+            <div class="earn-icon-box earn-icon-green">
+                <span class="emoji-icon">🎬</span>
+            </div>
+            <div class="earn-content">
+                <div class="earn-title">Vidéo Bonus</div>
+                <span class="earn-card-note" id="earn-note-video">Regardez 1 min pour gagner des points</span>
+            </div>
+            <div class="earn-bonus" id="earn-bonus-video">+3 pts</div>
+        </div>
 
-			<!-- Partage -->
-			<div class="earn-card" id="earn-card-share" onclick="shareApp()">
-				<div class="earn-icon-box earn-icon-pink">
-					<i data-feather="share-2"></i>
-				</div>
-				<div class="earn-content">
-					<div class="earn-title">Partager l'App</div>
-					<span class="earn-card-note">Invitez vos proches</span>
-					<div class="earn-bonus" id="earn-bonus-share">+15 pts</div>
-				</div>
-			</div>
-		</div>
-	</section>
+        <!-- Partage -->
+        <div class="earn-card" id="earn-card-share" onclick="shareApp()">
+            <div class="earn-icon-box earn-icon-pink">
+                <span class="emoji-icon">🎁</span>
+            </div>
+            <div class="earn-content">
+                <div class="earn-title">Partager l'App</div>
+                <span class="earn-card-note">Invitez vos proches</span>
+            </div>
+            <div class="earn-bonus" id="earn-bonus-share">+15 pts</div>
+        </div>
+    </div>
+</section>
 
     <section class="card" id="trophies">
 
