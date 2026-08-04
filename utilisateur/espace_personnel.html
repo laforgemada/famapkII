@@ -1558,7 +1558,12 @@ function logout(){
         localStorage.removeItem('user_name');
         localStorage.removeItem('user_role');
         localStorage.removeItem('token');
-        window.location.href='../../index.html';
+        
+        // Détection automatique du chemin de base pour GitHub Pages ou Localhost
+        const isGitHubPages = window.location.hostname.includes("github.io");
+        const basePath = isGitHubPages ? "/famapkII" : "";
+        
+        window.location.href = basePath + "/index.html";
     }
 }
 
