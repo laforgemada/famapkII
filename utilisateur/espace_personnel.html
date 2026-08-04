@@ -19,7 +19,7 @@
     })();
 </script>
 
-<link rel="stylesheet" href="../css/espace_personnel.css">
+
 
 <style>
 /* ==========================================
@@ -2679,6 +2679,16 @@ function setStreakDisplay(count) {
         countEl.textContent = count;
     }
 }
+</script>
+
+<script>
+    const isGitHubPages = window.location.hostname.includes("github.io");
+    const basePath = isGitHubPages ? "/famapkII" : "";
+    
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = basePath + '/css/espace_personnel.css';
+    document.head.appendChild(link);
 </script>
 
 </body>
