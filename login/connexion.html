@@ -190,6 +190,7 @@
                 if (response.ok && data.status === 'success') {
                     localStorage.setItem('user_name', data.userData.username);
                     localStorage.setItem('user_full_data', JSON.stringify(data.userData));
+                    localStorage.setItem('token', data.token);
                     
                     const roles = data.userData.roles;
 

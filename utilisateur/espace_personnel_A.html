@@ -677,8 +677,8 @@
 				</div>
 				<div class="earn-content">
 					<div class="earn-title">Vidéo Bonus</div>
-					<span class="earn-card-note" id="earn-note-video">Regardez 1 min pour gagner des points</span>
-					<div class="earn-bonus" id="earn-bonus-video">+3 pts</div>
+					<span class="earn-card-note" id="earn-note-video">0/3 aujourd'hui</span>
+					<div class="earn-bonus" id="earn-bonus-video">+2 pts</div>
 				</div>
 			</div>
 
@@ -850,15 +850,15 @@
             </button>
         </div>
         <div class="modal-body">
-            <div id="youtubePlayerWrapper" style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:12px; background:#000;">
-                <div id="youtubePlayer" style="position:absolute; top:0; left:0; width:100%; height:100%;"></div>
-                <div id="videoUnavailableMsg" style="display:none; position:absolute; inset:0; align-items:center; justify-content:center; color:#fff; text-align:center; padding:20px; flex-direction:column; gap:8px;">
-                    <i data-feather="video-off"></i>
-                    <p style="margin:0;">Aucune vidéo bonus n'est disponible pour le moment.</p>
-                </div>
+            <div class="video-fake-player">
+                <i data-feather="play-circle" class="video-play-icon"></i>
+                <p id="videoPlayerText">« Sois fort et courageux... » — Josué 1:9</p>
             </div>
             <div class="video-progress-bar"><div class="video-progress-fill" id="videoProgressFill"></div></div>
-            <p id="videoStatusText" class="video-status-text">Regardez au moins 1 minute pour gagner vos points.</p>
+            <p id="videoStatusText" class="video-status-text">Cliquez sur « Regarder » pour démarrer (8 secondes).</p>
+            <button class="loyalty-action-btn" id="videoActionBtn" style="width:100%;" onclick="beginVideoPlayback()">
+                <i data-feather="play"></i> Regarder (+2 pts)
+            </button>
         </div>
     </div>
 </div>
@@ -1184,13 +1184,6 @@ function openProfileModal() {
 function closeModal(id) {
     const modal = document.getElementById(id);
     if (modal) modal.classList.remove('show');
-
-    if (id === 'videoModal') {
-        clearInterval(ytPollInterval);
-        if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
-            try { ytPlayer.pauseVideo(); } catch (e) { /* lecteur pas encore prêt */ }
-        }
-    }
 }
 
 function closeModalOnOverlay(event, id) {
@@ -1248,10 +1241,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     renderProfileAvatar(currentUsername); // Appel de la fonction pour l'avatar
-
-    // Récupère la vidéo bonus définie par l'admin (visible même en mode invité,
-    // mais les points ne sont attribués qu'aux utilisateurs connectés)
-    fetchVideoBonusSettings().then(() => updateEarnCardsState());
 
     if (currentUsername) {
         loadLoyaltyData();
@@ -1405,7 +1394,7 @@ function initRealtimeNotifications() {
 
             let iconType = 'article'; 
             let iconName = 'book-open';
-            let directLink = '../../index.html';
+            let directLink = '../';
 
             if (data.type === 'new_badge' || data.message.includes('badge') || data.message.includes('Trophée')) {
                 iconType = 'badge';
@@ -1558,7 +1547,7 @@ function logout(){
         localStorage.removeItem('user_name');
         localStorage.removeItem('user_role');
         localStorage.removeItem('token');
-        window.location.href='../../index.html';
+        window.location.href='../';
     }
 }
 
@@ -1609,8 +1598,7 @@ async function awardPoints(points, reason) {
  * (Sondage, Quiz biblique, Vidéo bonus, Partage)
  * ==========================================
  */
-const VIDEO_WATCH_TARGET_SECONDS = 60; // Durée de visionnage requise pour gagner le bonus
-const VIDEO_BONUS_POINTS = 3;          // Points accordés une fois la vidéo regardée ~1 minute
+const VIDEO_DAILY_LIMIT = 3;
 
 function getDateKey(d = new Date()) {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -1631,6 +1619,18 @@ function isActionDoneToday(action) {
 
 function markActionDoneToday(action) {
     setCache(earnKey(action), true);
+}
+
+function videoCountKey() {
+    return `earn_video_count_${currentUsername || 'guest'}_${getDateKey()}`;
+}
+
+function getVideoCountToday() {
+    return getCache(videoCountKey()) || 0;
+}
+
+function setVideoCountToday(n) {
+    setCache(videoCountKey(), n);
 }
 
 const pollBank = [
@@ -1774,144 +1774,72 @@ async function finishQuiz() {
     updateEarnCardsState();
 }
 
-/* ---------- VIDÉO BONUS (vraie vidéo YouTube définie par l'admin) ---------- */
-let ytPlayer = null;              // Instance du lecteur YouTube IFrame API
-let ytPollInterval = null;        // Intervalle qui comptabilise les secondes réellement regardées
-let watchedSeconds = 0;           // Secondes de lecture réelle accumulées pour la vidéo en cours
-let videoRewarded = false;        // Empêche de recevoir 2x les points sur la même vidéo/jour
-let currentVideoId = null;        // ID YouTube de la vidéo actuellement chargée
-let currentVideoUrl = null;       // URL brute renvoyée par le serveur (cache)
+/* ---------- VIDÉO BONUS ---------- */
+let videoTimer = null;
 
-/**
- * Extrait l'identifiant YouTube (11 caractères) depuis n'importe quel
- * format d'URL courant : watch?v=, youtu.be/, embed/, shorts/.
- */
-function extractYouTubeId(url) {
-    if (!url) return null;
-    const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-    return match ? match[1] : null;
-}
-
-/**
- * Charge dynamiquement le script officiel de l'API YouTube IFrame
- * (une seule fois) et résout la promesse quand il est prêt à l'emploi.
- */
-function loadYouTubeAPI() {
-    return new Promise((resolve) => {
-        if (window.YT && window.YT.Player) { resolve(); return; }
-        const existingCallback = window.onYouTubeIframeAPIReady;
-        window.onYouTubeIframeAPIReady = () => {
-            if (typeof existingCallback === 'function') existingCallback();
-            resolve();
-        };
-        if (!document.getElementById('youtube-iframe-api-script')) {
-            const tag = document.createElement('script');
-            tag.id = 'youtube-iframe-api-script';
-            tag.src = 'https://www.youtube.com/iframe_api';
-            document.head.appendChild(tag);
-        }
-    });
-}
-
-/**
- * Récupère l'URL de la vidéo bonus configurée par l'admin.
- * Essaie d'abord le serveur (source de vérité, partagée entre tous les
- * utilisateurs), puis retombe sur le cache local si le serveur ne répond pas.
- */
-async function fetchVideoBonusSettings() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/settings/video-bonus`);
-        if (response.ok) {
-            const data = await response.json();
-            if (data && data.url) {
-                currentVideoUrl = data.url;
-                setCache('video_bonus_url_cache', data.url);
-                return currentVideoUrl;
-            }
-        }
-    } catch (e) {
-        console.warn("Vidéo bonus : serveur injoignable, utilisation du cache local.", e);
-    }
-    currentVideoUrl = getCache('video_bonus_url_cache');
-    return currentVideoUrl;
-}
-
-async function watchVideoAd() {
+function watchVideoAd() {
     if (!currentUsername) { showToast("Veuillez vous connecter pour participer.", "error"); return; }
-
-    const url = currentVideoUrl || await fetchVideoBonusSettings();
-    const videoId = extractYouTubeId(url);
-
-    document.getElementById('videoModal').classList.add('show');
-    document.getElementById('videoProgressFill').style.width = '0%';
-
-    const unavailableMsg = document.getElementById('videoUnavailableMsg');
-    const playerEl = document.getElementById('youtubePlayer');
-
-    if (!videoId) {
-        unavailableMsg.style.display = 'flex';
-        playerEl.style.display = 'none';
-        setText('videoStatusText', "Aucune vidéo bonus n'est disponible pour le moment.");
+    const count = getVideoCountToday();
+    if (count >= VIDEO_DAILY_LIMIT) {
+        showToast("Vous avez atteint la limite de vidéos pour aujourd'hui. Revenez demain !", "info");
         return;
     }
-    unavailableMsg.style.display = 'none';
-    playerEl.style.display = 'block';
 
-    currentVideoId = videoId;
-    watchedSeconds = 0;
-    videoRewarded = isActionDoneToday('video_' + videoId);
+    document.getElementById('videoProgressFill').style.width = '0%';
+    setText('videoStatusText', 'Cliquez sur « Regarder » pour démarrer (8 secondes).');
+    const btn = document.getElementById('videoActionBtn');
+    btn.disabled = false;
+    btn.innerHTML = `<i data-feather="play"></i> Regarder (+2 pts)`;
+    feather.replace();
 
-    setText('videoStatusText', videoRewarded
-        ? "Vous avez déjà reçu vos points pour cette vidéo aujourd'hui. Vous pouvez la regarder à nouveau, sans bonus."
-        : `Regardez au moins ${VIDEO_WATCH_TARGET_SECONDS} secondes pour gagner ${VIDEO_BONUS_POINTS} points.`);
-
-    await loadYouTubeAPI();
-
-    if (ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
-        ytPlayer.loadVideoById(videoId);
-    } else {
-        ytPlayer = new YT.Player('youtubePlayer', {
-            videoId: videoId,
-            playerVars: { rel: 0, modestbranding: 1 },
-            events: { onStateChange: onYtStateChange }
-        });
-    }
+    document.getElementById('videoModal').classList.add('show');
 }
 
-function onYtStateChange(event) {
-    clearInterval(ytPollInterval);
-    if (event.data === YT.PlayerState.PLAYING) {
-        // On ne compte que le temps de lecture réel : une pause ou un
-        // buffering arrête le décompte, une reprise le relance.
-        ytPollInterval = setInterval(trackWatchProgress, 1000);
-    }
-}
+function beginVideoPlayback() {
+    const btn = document.getElementById('videoActionBtn');
+    const fill = document.getElementById('videoProgressFill');
+    if (btn.disabled) return;
 
-function trackWatchProgress() {
-    if (videoRewarded) { clearInterval(ytPollInterval); return; }
+    btn.disabled = true;
+    btn.innerHTML = `<i data-feather="loader" class="animate-spin"></i> Lecture en cours...`;
+    feather.replace();
 
-    watchedSeconds += 1;
-    const pct = Math.min(100, (watchedSeconds / VIDEO_WATCH_TARGET_SECONDS) * 100);
-    document.getElementById('videoProgressFill').style.width = `${pct}%`;
+    const durationMs = 8000;
+    const startTime = Date.now();
 
-    if (watchedSeconds >= VIDEO_WATCH_TARGET_SECONDS) {
-        clearInterval(ytPollInterval);
-        completeVideoPlayback();
-    } else {
-        setText('videoStatusText', `${VIDEO_WATCH_TARGET_SECONDS - watchedSeconds}s de lecture restantes pour gagner vos points...`);
-    }
+    clearInterval(videoTimer);
+    videoTimer = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const pct = Math.min(100, (elapsed / durationMs) * 100);
+        fill.style.width = `${pct}%`;
+        const secondsLeft = Math.ceil((durationMs - elapsed) / 1000);
+        setText('videoStatusText', secondsLeft > 0 ? `${secondsLeft}s restantes...` : 'Terminé !');
+
+        if (elapsed >= durationMs) {
+            clearInterval(videoTimer);
+            completeVideoPlayback();
+        }
+    }, 100);
 }
 
 async function completeVideoPlayback() {
-    videoRewarded = true; // Verrouillage optimiste pour éviter un double-clic/double-appel
-    const ok = await awardPoints(VIDEO_BONUS_POINTS, "Visionnage vidéo bonus (1 min)");
+    const ok = await awardPoints(2, "Visionnage vidéo bonus");
+    const btn = document.getElementById('videoActionBtn');
 
     if (ok) {
-        markActionDoneToday('video_' + currentVideoId);
-        setText('videoStatusText', `🎉 Bravo ! Vous avez gagné ${VIDEO_BONUS_POINTS} points de fidélité.`);
+        const newCount = getVideoCountToday() + 1;
+        setVideoCountToday(newCount);
+
+        setText('videoStatusText', `Merci d'avoir regardé ! (${newCount}/${VIDEO_DAILY_LIMIT} aujourd'hui)`);
+        btn.innerHTML = `<i data-feather="check"></i> +2 points obtenus`;
+        feather.replace();
         updateEarnCardsState();
+
+        setTimeout(() => closeModal('videoModal'), 1000);
     } else {
-        videoRewarded = false; // L'appel serveur a échoué : on autorise un nouvel essai
+        btn.disabled = false;
+        btn.innerHTML = `<i data-feather="play"></i> Réessayer`;
+        feather.replace();
     }
 }
 
@@ -1969,27 +1897,20 @@ function updateEarnCardsState() {
         }
     });
 
-    // Carte vidéo : une vidéo unique définie par l'admin, +3 pts après 1 min regardée
+    // Carte vidéo : gère un compteur (x/3) plutôt qu'un simple booléen
     const videoCard = document.getElementById('earn-card-video');
     const videoBonus = document.getElementById('earn-bonus-video');
     const videoNote = document.getElementById('earn-note-video');
+    const videoCount = getVideoCountToday();
     if (videoCard && videoBonus && videoNote) {
-        const videoId = extractYouTubeId(currentVideoUrl || getCache('video_bonus_url_cache'));
-        const videoDoneToday = videoId ? isActionDoneToday('video_' + videoId) : false;
-
-        if (!videoId) {
-            videoNote.innerText = "Aucune vidéo disponible pour le moment";
-            videoCard.classList.remove('done');
-            videoBonus.innerText = '+3 pts';
-        } else if (videoDoneToday) {
+        videoNote.innerText = `${videoCount}/${VIDEO_DAILY_LIMIT} aujourd'hui`;
+        if (videoCount >= VIDEO_DAILY_LIMIT) {
             videoCard.classList.add('done');
             videoBonus.innerText = '✓ Fait';
-            videoNote.innerText = "Revenez demain pour un nouveau bonus";
             doneCount++;
         } else {
             videoCard.classList.remove('done');
-            videoBonus.innerText = '+3 pts';
-            videoNote.innerText = "Regardez 1 min pour gagner des points";
+            videoBonus.innerText = '+2 pts';
         }
     }
 
