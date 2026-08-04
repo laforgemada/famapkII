@@ -425,7 +425,7 @@
         <div class="logo-box">
 
             <div class="logo-icon">
-				<img src="../logo/logo.png" alt="Apokalypsy Logo" width="45" height="45">
+				<img src="/famapkII/logo/logo.png" alt="Apokalypsy Logo" width="45" height="45">
 			</div>
 
             <div class="logo-text">
@@ -862,6 +862,17 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    const isGitHubPages = window.location.hostname.includes("github.io");
+    const basePath = isGitHubPages ? "/famapkII" : "";
+    
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = basePath + '/css/espace_personnel.css';
+    document.head.appendChild(link);
+</script>
 
 <script>
 const API_BASE_URL = 'https://apokalypsy.com';
@@ -2681,15 +2692,7 @@ function setStreakDisplay(count) {
 }
 </script>
 
-<script>
-    const isGitHubPages = window.location.hostname.includes("github.io");
-    const basePath = isGitHubPages ? "/famapkII" : "";
-    
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = basePath + '/css/espace_personnel.css';
-    document.head.appendChild(link);
-</script>
+
 
 </body>
 </html>
