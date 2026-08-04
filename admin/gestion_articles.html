@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apokalypsy - Gestion des Articles</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -176,10 +176,71 @@
             width: 40px;
             text-align: center !important;
         }
+
+        /* Styles pour les messages flash */
+        #flash-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 350px;
+        }
+
+        .flash-message {
+            background: #ffffff;
+            color: #1e293b;
+            padding: 14px 18px;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+            border-left: 4px solid #3b82f6;
+            animation: slideIn 0.3s ease forwards;
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        .flash-message.success {
+            border-left-color: #10b981;
+        }
+
+        .flash-message.success i {
+            color: #10b981;
+        }
+
+        .flash-message.error {
+            border-left-color: #ef4444;
+        }
+
+        .flash-message.error i {
+            color: #ef4444;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideOut {
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
     </style>
 </head>
 
 <body>
+
+<!-- Conteneur des messages flash -->
+<div id="flash-container"></div>
 
 <div id="sidebar-placeholder"></div>
 <div id="header-placeholder"></div>
@@ -345,6 +406,32 @@
     const API_BASE = "https://apokalypsy.com/api/articles";
 
     let allArticles = [];
+
+    // =========================
+    // SYSTEME DE MESSAGES FLASH
+    // =========================
+    function showFlash(message, type = 'success') {
+        const container = document.getElementById('flash-container');
+        
+        const flash = document.createElement('div');
+        flash.className = `flash-message ${type}`;
+        
+        const icon = type === 'success' 
+            ? '<i class="fa-solid fa-circle-check fa-lg"></i>' 
+            : '<i class="fa-solid fa-circle-exclamation fa-lg"></i>';
+            
+        flash.innerHTML = `${icon} <span>${message}</span>`;
+        
+        container.appendChild(flash);
+        
+        // Disparition automatique après 3.5 secondes
+        setTimeout(() => {
+            flash.style.animation = 'slideOut 0.3s ease forwards';
+            setTimeout(() => {
+                flash.remove();
+            }, 300);
+        }, 3500);
+    }
 
     // =========================
     // LOAD COMPONENTS
@@ -583,7 +670,6 @@
     }
 
     // Supprime tous les articles sélectionnés
-   // Supprime tous les articles sélectionnés
     async function deleteSelectedArticles() {
         const checkedBoxes = document.querySelectorAll('.article-checkbox:checked');
         if (checkedBoxes.length === 0) return;
@@ -592,36 +678,30 @@
 
         const btnBulkDelete = document.getElementById('btnBulkDelete');
         
-        // 1. On sauvegarde le texte initial du bouton ("Supprimer la sélection (X)")
         const originalBtnHTML = btnBulkDelete.innerHTML;
 
         btnBulkDelete.disabled = true;
         btnBulkDelete.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Suppression...`;
 
-        // Récupération de tous les IDs cochés
         const idsToDelete = Array.from(checkedBoxes).map(cb => cb.value);
 
         try {
-            // Envoi des requêtes de suppression en parallèle
             const deletePromises = idsToDelete.map(id => 
                 fetch(`${API_BASE}/delete/${id}`, { method: 'POST' })
             );
 
-            // On attend que toutes les requêtes soient traitées par le serveur
             await Promise.all(deletePromises);
 
-            alert("Les articles sélectionnés ont été supprimés.");
+            showFlash(`${checkedBoxes.length} articles supprimés avec succès.`, 'success');
 
         } catch (err) {
             console.error("Erreur lors de la suppression :", err);
-            alert("Une erreur est survenue lors de la suppression groupée.");
+            showFlash("Une erreur est survenue lors de la suppression groupée.", 'error');
         } finally {
-            // 2. Quoiqu'il arrive, on remet le bouton à son état normal et on le cache
             btnBulkDelete.disabled = false;
             btnBulkDelete.innerHTML = originalBtnHTML;
             btnBulkDelete.style.display = 'none';
             
-            // 3. On laisse 300ms au serveur/BDD pour respirer avant de recharger la liste
             setTimeout(() => {
                 fetchArticles();
             }, 300);
@@ -756,9 +836,8 @@
                 throw new Error("Erreur API");
             }
 
-            alert(id
-                ? "Article mis à jour !"
-                : "Article publié !");
+            // Remplacement de l'alerte par le message flash
+            showFlash(id ? "Article mis à jour avec succès !" : "Article publié avec succès !", 'success');
 
             this.reset();
 
@@ -777,7 +856,7 @@
 
             console.error(err);
 
-            alert("Erreur serveur.");
+            showFlash("Erreur serveur lors de l'enregistrement.", 'error');
 
         }finally{
 
@@ -803,14 +882,15 @@
                 throw new Error("Erreur suppression");
             }
 
-            alert("Article supprimé.");
+            // Remplacement de l'alerte par le message flash
+            showFlash("Article supprimé avec succès.", 'success');
 
             fetchArticles();
 
         }catch(err){
 
             console.error(err);
-            alert("Erreur suppression.");
+            showFlash("Erreur lors de la suppression.", 'error');
         }
     }
 

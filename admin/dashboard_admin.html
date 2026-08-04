@@ -116,6 +116,53 @@
                 </div>
             </div>
         </section>
+
+        <!-- GESTION DE LA MISE À JOUR APK -->
+        <section class="profile-card" style="flex-direction: column; align-items: stretch; gap: 16px;">
+            <div>
+                <h2 style="font-size: 1.4rem; margin: 0 0 4px;">📱 Mise à jour de l'application (APK)</h2>
+                <p style="margin: 0; color: var(--muted, #64748b); font-size: 0.9rem;">
+                    Collez le lien de téléchargement du fichier APK (ou de la page de téléchargement).
+                    Une fois validé, une notification <strong>« Nouvelle version disponible »</strong> est envoyée
+                    à tous les utilisateurs dans leur espace personnel. En cliquant dessus, ils pourront
+                    télécharger l'application ou scanner un QR code pour la partager.
+                </p>
+            </div>
+
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <input
+                    type="url"
+                    id="appUpdateUrlInput"
+                    placeholder="https://apokalypsy.com/downloads/apokalypsy-latest.apk"
+                    style="flex: 1; min-width: 260px; padding: 10px 14px; border-radius: 10px; border: 1px solid #e2e8f0; font-family: inherit; font-size: 0.95rem;"
+                />
+                <button
+                    id="appUpdateSaveBtn"
+                    onclick="saveAppUpdateUrl()"
+                    style="padding: 10px 20px; border-radius: 10px; border: none; background: var(--primary, #6366f1); color: #fff; font-weight: 600; cursor: pointer;"
+                >
+                    Publier la mise à jour
+                </button>
+            </div>
+
+            <p id="appUpdateStatus" style="margin: 0; font-size: 0.85rem; color: var(--muted, #64748b);"></p>
+
+            <div id="appUpdatePreviewWrap" style="display:none; align-items:center; gap:18px; flex-wrap:wrap;">
+                <div>
+                    <label style="display:block; margin-bottom:8px; font-size:0.85rem; color: var(--muted, #64748b);">
+                        QR code actuellement partagé aux utilisateurs :
+                    </label>
+                    <img
+                        id="appUpdateQrPreview"
+                        src=""
+                        alt="QR code de téléchargement"
+                        style="width:140px; height:140px; border-radius:12px; border:1px solid #e2e8f0; background:#fff; padding:8px;"
+                    />
+                </div>
+                <a id="appUpdateLinkPreview" href="#" target="_blank" rel="noopener"
+                   style="font-size:0.85rem; word-break:break-all; color: var(--primary, #6366f1);"></a>
+            </div>
+        </section>
     </main>
 	
 
@@ -137,6 +184,7 @@
         initDashboard();
         setActiveLink();
         loadVideoBonusUrl();
+        loadAppUpdateUrl();
     }
 
     /* ==========================================
@@ -234,6 +282,105 @@
         } finally {
             btn.disabled = false;
             btn.textContent = 'Valider';
+        }
+    }
+
+    /* ==========================================
+       GESTION DE LA MISE À JOUR APK
+       ========================================== */
+
+    function setAppUpdateStatus(message, isError = false) {
+        const el = document.getElementById('appUpdateStatus');
+        if (!el) return;
+        el.textContent = message;
+        el.style.color = isError ? 'var(--danger, #dc2626)' : 'var(--muted, #64748b)';
+    }
+
+    // Génère l'URL d'une image de QR code pointant vers le lien fourni
+    function buildQrCodeImageUrl(targetUrl, size = 220) {
+        return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(targetUrl)}`;
+    }
+
+    function showAppUpdatePreview(url) {
+        const wrap = document.getElementById('appUpdatePreviewWrap');
+        const img = document.getElementById('appUpdateQrPreview');
+        const link = document.getElementById('appUpdateLinkPreview');
+        if (!url) {
+            wrap.style.display = 'none';
+            return;
+        }
+        img.src = buildQrCodeImageUrl(url);
+        link.href = url;
+        link.textContent = url;
+        wrap.style.display = 'flex';
+    }
+
+    // Charge le lien APK actuellement enregistré côté serveur pour préremplir le champ
+    async function loadAppUpdateUrl() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/settings/app-update`);
+            if (!response.ok) throw new Error('Réponse serveur invalide');
+            const data = await response.json();
+            if (data && data.url) {
+                document.getElementById('appUpdateUrlInput').value = data.url;
+                showAppUpdatePreview(data.url);
+                setAppUpdateStatus('Ce lien est actuellement actif et partagé à tous les utilisateurs.');
+            } else {
+                setAppUpdateStatus("Aucun lien de mise à jour n'est configuré pour le moment.");
+            }
+        } catch (error) {
+            console.error('Impossible de charger le lien de mise à jour :', error);
+            setAppUpdateStatus(
+                'Impossible de contacter le serveur pour charger le lien actuel.',
+                true
+            );
+        }
+    }
+
+    // Valide et publie le nouveau lien de mise à jour APK côté serveur.
+    // Le serveur est responsable d'envoyer ensuite la notification en temps réel
+    // (SSE, type "app_update") à tous les utilisateurs connectés.
+    async function saveAppUpdateUrl() {
+        const input = document.getElementById('appUpdateUrlInput');
+        const url = input.value.trim();
+
+        if (!url || !/^https?:\/\//i.test(url)) {
+            setAppUpdateStatus('Lien invalide. Il doit commencer par http:// ou https://.', true);
+            return;
+        }
+
+        const btn = document.getElementById('appUpdateSaveBtn');
+        btn.disabled = true;
+        btn.textContent = 'Publication...';
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${API_BASE_URL}/api/admin/settings/app-update`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ url })
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                showAppUpdatePreview(url);
+                setAppUpdateStatus('✅ Mise à jour publiée : tous les utilisateurs vont recevoir une notification.');
+            } else {
+                setAppUpdateStatus(
+                    `Erreur : ${result.message || "impossible de publier la mise à jour."}`,
+                    true
+                );
+            }
+        } catch (error) {
+            console.error('Erreur lors de la publication de la mise à jour :', error);
+            setAppUpdateStatus('Impossible de contacter le serveur. Réessayez plus tard.', true);
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Publier la mise à jour';
         }
     }
 
