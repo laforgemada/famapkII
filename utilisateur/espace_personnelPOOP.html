@@ -79,9 +79,6 @@
 .video-fake-player p { position: relative; font-size: 0.9rem; opacity: .9; margin: 0; }
 .video-status-text { font-size: 0.8rem; color: var(--muted, #64748b); text-align: center; margin: 4px 0 14px; }
 
-/* Icône de notification pour la mise à jour de l'application (APK) */
-.notif-item-icon.app_update { background: rgba(124,58,237,0.12); color: #7c3aed; }
-
 .daily-goal-wrap {
     display: flex; align-items: center; gap: 10px; margin-top: 12px;
     background: rgba(255,255,255,0.12); border-radius: 14px; padding: 10px 14px;
@@ -544,7 +541,6 @@
     color: #ffffff;
 }
 </style>
-
 </head>
 
 <body>
@@ -620,12 +616,12 @@
         </div>
 
         <!-- Badge de Série de Connexion (Désactivé pour le moment) -->
- 
+<!-- 
 <div class="streak-badge" id="streakBadge">
     <i data-feather="zap"></i>
     <span id="streakText">0 jour de suite</span>
 </div>
-
+-->
 
         <h1 class="hero-title" id="welcome-user-title" aria-live="polite">
             <span class="skeleton skel-title" style="background:rgba(255,255,255,0.25);height:32px;width:220px;" aria-hidden="true"></span>
@@ -984,39 +980,6 @@
             </div>
             <div class="video-progress-bar"><div class="video-progress-fill" id="videoProgressFill"></div></div>
             <p id="videoStatusText" class="video-status-text">Regardez au moins 1 minute pour gagner vos points.</p>
-        </div>
-    </div>
-</div>
-
-<!-- Modale de mise à jour de l'application (APK) -->
-<div class="modal-overlay" id="appUpdateModal" onclick="closeModalOnOverlay(event, 'appUpdateModal')">
-    <div class="modal-box" role="dialog" aria-modal="true" aria-label="Nouvelle mise à jour disponible">
-        <div class="modal-header">
-            <h3>🚀 Nouvelle mise à jour disponible</h3>
-            <button class="modal-close-btn" aria-label="Fermer" onclick="closeModal('appUpdateModal')">
-                <i data-feather="x"></i>
-            </button>
-        </div>
-        <div class="modal-body" style="text-align:center;">
-            <p style="margin:0 0 18px; color: var(--muted, #64748b); font-size:0.92rem;">
-                Une nouvelle version de l'application est disponible. Téléchargez-la maintenant ou partagez-la
-                en scannant le QR code ci-dessous.
-            </p>
-
-            <a id="appUpdateDownloadBtn" href="#" target="_blank" rel="noopener"
-               style="display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:13px 18px; border-radius:12px; background: var(--primary, #7c3aed); color:#fff; font-weight:700; text-decoration:none; font-size:0.95rem; margin-bottom:20px; box-sizing:border-box;">
-                <i data-feather="download"></i> Télécharger l'application
-            </a>
-
-            <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
-                <img
-                    id="appUpdateQrImg"
-                    src=""
-                    alt="QR code de téléchargement"
-                    style="width:180px; height:180px; border-radius:14px; border:1.5px solid rgba(124,58,237,0.18); background:#fff; padding:10px;"
-                />
-                <span style="font-size:0.78rem; color: var(--muted, #94a3b8);">Scannez pour partager l'application</span>
-            </div>
         </div>
     </div>
 </div>
@@ -1421,8 +1384,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Récupère la vidéo bonus définie par l'admin (visible même en mode invité,
     // mais les points ne sont attribués qu'aux utilisateurs connectés)
     fetchVideoBonusSettings().then(() => updateEarnCardsState());
-    // Récupère le dernier lien de mise à jour publié (repli si une notif SSE arrive sans URL)
-    fetchAppUpdateSettings();
 
     if (currentUsername) {
         loadLoyaltyData();
@@ -1578,18 +1539,7 @@ function initRealtimeNotifications() {
             let iconName = 'book-open';
             let directLink = '../../index.html';
 
-            if (
-                data.type === 'app_update' ||
-                data.message.toLowerCase().includes('application') ||
-                data.message.toLowerCase().includes('apk')
-            ) {
-                // Nouvelle version de l'application : ouvrira une popup (téléchargement + QR code)
-                // au clic, au lieu de naviguer vers un lien classique.
-                iconType = 'app_update';
-                iconName = 'smartphone';
-                directLink = '#';
-                if (data.url) currentAppUpdateUrl = data.url;
-            } else if (data.type === 'new_badge' || data.message.includes('badge') || data.message.includes('Trophée')) {
+            if (data.type === 'new_badge' || data.message.includes('badge') || data.message.includes('Trophée')) {
                 iconType = 'badge';
                 iconName = 'award';
                 directLink = '#';
@@ -1607,8 +1557,7 @@ function initRealtimeNotifications() {
                 message: data.message,
                 time: 'À l\'instant',
                 unread: true,
-                link: directLink,
-                apkUrl: iconType === 'app_update' ? (data.url || currentAppUpdateUrl || null) : null
+                link: directLink
             });
 
             notificationCount = loadedNotificationsArray.length;
@@ -1699,18 +1648,8 @@ function renderVerticalDropdownMenu() {
         return;
     }
 
-    container.innerHTML = loadedNotificationsArray.map(notif => {
-        const isAppUpdate = notif.type === 'app_update';
-        // Pour une mise à jour d'app : pas de navigation, on ouvre la popup
-        // (téléchargement + QR code) avec le lien embarqué dans la notif.
-        const href = isAppUpdate ? 'javascript:void(0)' : notif.link;
-        const safeUrl = isAppUpdate && notif.apkUrl ? `'${notif.apkUrl.replace(/'/g, "\\'")}'` : 'null';
-        const clickHandler = isAppUpdate
-            ? `markOneAsRead(${notif.id}); openAppUpdateModal(${safeUrl})`
-            : `markOneAsRead(${notif.id})`;
-
-        return `
-        <a href="${href}" class="notif-item ${notif.unread ? 'unread' : ''}" onclick="${clickHandler}">
+    container.innerHTML = loadedNotificationsArray.map(notif => `
+        <a href="${notif.link}" class="notif-item ${notif.unread ? 'unread' : ''}" onclick="markOneAsRead(${notif.id})">
             <div class="notif-item-icon ${notif.type}">
                 <i data-feather="${notif.icon}"></i>
             </div>
@@ -1719,8 +1658,7 @@ function renderVerticalDropdownMenu() {
                 <span class="notif-time">${notif.time}</span>
             </div>
         </a>
-    `;
-    }).join('');
+    `).join('');
 
     feather.replace();
 }
@@ -2033,54 +1971,6 @@ async function fetchVideoBonusSettings() {
     }
     currentVideoUrl = getCache('video_bonus_url_cache');
     return currentVideoUrl;
-}
-
-/**
- * MISE À JOUR DE L'APPLICATION (APK)
- * ==========================================
- * Récupère le lien de téléchargement actuellement publié par l'admin.
- * Sert de repli si une notification SSE arrive sans URL embarquée.
- */
-let currentAppUpdateUrl = null;
-
-async function fetchAppUpdateSettings() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/settings/app-update`);
-        if (response.ok) {
-            const data = await response.json();
-            if (data && data.url) {
-                currentAppUpdateUrl = data.url;
-                setCache('app_update_url_cache', data.url);
-                return currentAppUpdateUrl;
-            }
-        }
-    } catch (e) {
-        console.warn("Mise à jour APK : serveur injoignable, utilisation du cache local.", e);
-    }
-    currentAppUpdateUrl = getCache('app_update_url_cache');
-    return currentAppUpdateUrl;
-}
-
-/**
- * Ouvre la popup de mise à jour : branche le bouton de téléchargement et le
- * QR code sur le lien fourni (celui de la notification, ou à défaut le
- * dernier lien connu récupéré depuis le serveur).
- */
-function openAppUpdateModal(url) {
-    const targetUrl = url || currentAppUpdateUrl;
-    if (!targetUrl) {
-        showToast("Le lien de la nouvelle version n'est pas disponible pour le moment.", "error");
-        return;
-    }
-
-    const downloadBtn = document.getElementById('appUpdateDownloadBtn');
-    const qrImg = document.getElementById('appUpdateQrImg');
-    if (downloadBtn) downloadBtn.href = targetUrl;
-    if (qrImg) qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(targetUrl)}`;
-
-    const modal = document.getElementById('appUpdateModal');
-    if (modal) modal.classList.add('show');
-    feather.replace();
 }
 
 async function watchVideoAd() {
@@ -2922,6 +2812,7 @@ function setStreakDisplay(count) {
     }
 }
 </script>
+
 
 
 </body>
