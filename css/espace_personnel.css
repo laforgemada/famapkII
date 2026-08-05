@@ -1,24 +1,29 @@
 :root{
-    /* Variables de la "REFONTE STREAMING DARK UI" comme thème par défaut */
-    --bg:#0a0a0d;
-    --surface:#151519;
-    --surface-2:#1d1d24;
-    --surface-3:#26262e;
-    --text:#f5f5f7;
-    --muted:#93939f;
-    --primary:#22c55e;
-    --primary-2:#16a34a;
+    --primary:#1E3A8A;
     --secondary:#7c3aed;
     --accent:#f59e0b;
     --pink:#ec4899;
     --success:#22c55e;
     --danger:#ef4444;
-    --glass:rgba(10,10,13,0.82);
-    --border:rgba(255,255,255,0.08);
+    --bg:#f1f5f9;
+    --surface:#ffffff;
+    --text:#0f172a;
+    --muted:#64748b;
+    --glass:rgba(255,255,255,0.75);
 
-    --gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 60%, #0f9d58 100%);
-    --hero: linear-gradient(135deg, #16171d 0%, #1a1b22 45%, #241b33 100%);
-    --shadow: 0 18px 40px rgba(0,0,0,0.45);
+    --gradient:
+    linear-gradient(
+        135deg,
+        #1E3A8A 0%,
+        #4338ca 50%,
+        #7c3aed 100%
+    );
+
+    --hero:
+    linear-gradient(135deg, #1E3A8A 0%, #18181c 50%, #488aec 100%);
+
+    --shadow:
+    0 15px 35px rgba(15,23,42,0.08);
 }
 
 *{
@@ -36,23 +41,21 @@ body{
     padding-bottom:120px;
 }
 
-/* Styles généraux pour harmoniser l'apparence par défaut avec le mode sombre */
-html, body {
-    background:var(--bg);
-    color:var(--text);
-}
+/* =========================
+HEADER PREMIUM
+========================= */
 
-/* ---------- Header ---------- */
 .top-nav{
     position:fixed;
     top:0;
     width:100%;
     z-index:1000;
-    background:rgba(10,10,13,0.85); /* Utilise la variable du root via glass ou une valeur explicite */
-    backdrop-filter:blur(20px);
-    border-bottom:1px solid var(--border);
-    box-shadow:0 4px 24px rgba(0,0,0,0.4);
+    background:var(--glass); /* Translucent white */
+    backdrop-filter:blur(25px); /* Stronger blur */
+    border-bottom:1px solid rgba(0,0,0,0.08); /* Darker border for contrast */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05); /* Subtle shadow */
 }
+
 .nav-content{
     display:flex;
     justify-content:space-between;
@@ -83,13 +86,20 @@ html, body {
     border-radius: 50%; /* Pour correspondre au style circulaire */
 }
 
-.logo-text{ color:var(--text); }
+.logo-text{
+    color:var(--text); /* Adapté pour un fond de header plus clair */
+}
+
 .logo-title{
     font-weight:900;
     letter-spacing:1px;
     font-size:0.95rem;
 }
-.logo-sub{ color:var(--muted); }
+
+.logo-sub{
+    font-size:0.7rem;
+    color:var(--muted); /* Adapté pour un fond de header plus clair */
+}
 
 .nav-right{
     display:flex;
@@ -101,9 +111,9 @@ html, body {
     width:42px;
     height:42px;
     border-radius:14px;
-    border:1px solid var(--border);
-    background:var(--surface-2);
-    color:var(--text);
+    border:none;
+    background:rgba(15,23,42,0.05); /* Fond subtilement foncé pour contraste */
+    color:var(--text); /* Couleur de texte sombre */
     display:flex;
     align-items:center;
     justify-content:center;
@@ -111,7 +121,9 @@ html, body {
     cursor:pointer;
     transition: background 0.2s ease, transform 0.2s ease;
 }
-.nav-btn:hover{ background:var(--surface-3); }
+.nav-btn:hover {
+    background:rgba(15,23,42,0.1); /* Légèrement plus foncé au survol */
+}
 .nav-btn:active {
     transform: scale(0.95);
 }
@@ -128,14 +140,14 @@ html, body {
     border: none;
     padding: 0;
     background: var(--gradient); /* Gradient pour un look premium */
-    color: #06210f;
+    color: white;
     font-size: 0.85rem;
     font-weight: 800;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(34,197,94,0.2);
+    box-shadow: 0 4px 12px rgba(124,58,237,0.2);
     cursor: pointer;
     transition: transform 0.2s ease;
 }
@@ -160,7 +172,7 @@ html, body {
     display:none;
     align-items:center;
     justify-content:center;
-    border: 2px solid var(--bg);
+    border: 2px solid #0f172a;
 }
 
 /* =====================================
@@ -176,9 +188,9 @@ DROPDOWN NOTIFICATIONS (AJOUTÉ)
     top: 55px;
     right: 0;
     width: 340px;
-    background: rgba(21,21,25,0.98);
+    background: rgba(15, 23, 42, 0.96);
     backdrop-filter: blur(20px);
-    border: 1px solid var(--border);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 24px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.3);
     display: none;
@@ -206,7 +218,7 @@ DROPDOWN NOTIFICATIONS (AJOUTÉ)
 
 .notif-header h3 {
     margin: 0;
-    color: var(--text);
+    color: white;
     font-size: 1.05rem;
     font-weight: 800;
 }
@@ -222,7 +234,7 @@ DROPDOWN NOTIFICATIONS (AJOUTÉ)
     display: flex;
     gap: 12px;
     padding: 0 20px 12px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .notif-tab {
@@ -236,7 +248,7 @@ DROPDOWN NOTIFICATIONS (AJOUTÉ)
 
 .notif-tab.active {
     background: rgba(255, 255, 255, 0.12);
-    color: var(--text);
+    color: white;
 }
 
 .notif-list {
@@ -282,9 +294,9 @@ DROPDOWN NOTIFICATIONS (AJOUTÉ)
 }
 
 /* Différenciation thématique des icônes */
-.notif-item-icon.article { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+.notif-item-icon.article { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
 .notif-item-icon.badge { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
-.notif-item-icon.chat { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+.notif-item-icon.chat { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
 
 .notif-details {
     display: flex;
@@ -294,14 +306,14 @@ DROPDOWN NOTIFICATIONS (AJOUTÉ)
 }
 
 .notif-message {
-    color: rgba(245,245,247,0.9);
+    color: rgba(255, 255, 255, 0.9);
     font-size: 0.8rem;
     line-height: 1.4;
     font-weight: 500;
 }
 
 .notif-message strong {
-    color: var(--text);
+    color: white;
     font-weight: 700;
 }
 
@@ -334,8 +346,8 @@ WELCOME HERO
     color:white;
     position:relative;
     overflow:hidden;
-    box-shadow:var(--shadow);
-    border:1px solid var(--border);
+    box-shadow:
+    0 25px 50px rgba(124,58,237,0.28);
 }
 
 .hero-card::before{
@@ -369,14 +381,12 @@ WELCOME HERO
     display:inline-flex;
     align-items:center;
     gap:8px;
-    background:rgba(34,197,94,0.14);
-    color:#4ade80;
+    background:rgba(255,255,255,0.12);
     padding:8px 14px;
     border-radius:100px;
     font-size:0.75rem;
     font-weight:700;
     margin-bottom:18px;
-    border:1px solid rgba(34,197,94,0.3);
 }
 
 .hero-title{
@@ -387,7 +397,7 @@ WELCOME HERO
 }
 
 .hero-text{
-    color:rgba(245,245,247,0.7);
+    color:rgba(255,255,255,0.85);
     line-height:1.6;
     font-size:0.92rem;
     margin-bottom:25px;
@@ -401,7 +411,7 @@ WELCOME HERO
 
 .hero-btn{
     border:none;
-    border-radius:100px; /* Mis à jour pour correspondre au design streaming */
+    border-radius:16px;
     padding:14px 18px;
     font-weight:800;
     cursor:pointer;
@@ -421,14 +431,14 @@ WELCOME HERO
 }
 
 .primary-btn{
-    background:var(--primary);
-    color:#06210f;
+    background:white;
+    color:var(--primary);
 }
 
 .secondary-btn{
-    background:rgba(255,255,255,0.08);
+    background:rgba(255,255,255,0.12);
     color:white;
-    border:1px solid rgba(255,255,255,0.14);
+    border:1px solid rgba(255,255,255,0.2);
 }
 
 /* =========================
@@ -454,7 +464,6 @@ CARDS
     position:relative;
     overflow:hidden;
     scroll-margin-top:100px;
-    border:1px solid var(--border);
 }
 
 /* =========================
@@ -488,7 +497,7 @@ IMPACT
     width:90px;
     height:90px;
     border-radius:50%;
-    background:var(--surface);
+    background:white;
 }
 
 .progress-content{
@@ -518,21 +527,19 @@ IMPACT
     display:inline-flex;
     align-items:center;
     gap:6px;
-    background:rgba(34,197,94,0.14);
-    color:#4ade80;
+    background:#ede9fe;
+    color:#7c3aed;
     padding:7px 12px;
     border-radius:100px;
     font-size:0.7rem;
     font-weight:800;
     margin-bottom:12px;
-    border:1px solid rgba(34,197,94,0.28);
 }
 
 .impact-title{
     font-size:1.25rem;
     font-weight:900;
     margin-bottom:10px;
-    color:var(--text);
 }
 
 .impact-desc{
@@ -552,22 +559,21 @@ IMPACT
     border-radius:20px;
     padding:18px 12px;
     text-align:center;
-    border:1px solid var(--border);
 }
 
 .box-blue{
-    background:rgba(59,130,246,0.14);
-    color:#60a5fa;
+    background:#dbeafe;
+    color:#2563eb;
 }
 
 .box-orange{
-    background:rgba(245,158,11,0.14);
-    color:#fbbf24;
+    background:#fef3c7;
+    color:#d97706;
 }
 
 .box-green{
-    background:rgba(34,197,94,0.14);
-    color:#4ade80;
+    background:#dcfce7;
+    color:#16a34a;
 }
 
 .box-value{
@@ -600,10 +606,10 @@ ACTIVITY
 .activity-date-header {
     font-size: 0.95rem;
     font-weight: 800;
-    color: var(--muted);
+    color: var(--primary);
     margin-bottom: 15px;
     padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--bg);
 }
 
 /* Style de la barre de défilement (peut être appliqué au body ou à un conteneur défilant principal si nécessaire) */
@@ -622,7 +628,7 @@ ACTIVITY - PAGINATION
     flex-wrap: wrap;
     margin-top: 20px;
     padding-top: 16px;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--bg);
 }
 
 .activity-page-nav {
@@ -634,17 +640,17 @@ ACTIVITY - PAGINATION
     flex-shrink: 0;
     border: none;
     border-radius: 14px;
-    background: var(--surface-2);
+    background: rgba(15,23,42,0.05);
     color: var(--text);
     cursor: pointer;
     transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 .activity-page-nav i { width: 18px; height: 18px; }
 .activity-page-nav:hover:not(:disabled) {
-    background: var(--primary);
-    color: #06210f;
+    background: var(--secondary);
+    color: #fff;
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(34,197,94,0.28);
+    box-shadow: 0 6px 16px rgba(124,58,237,0.28);
 }
 .activity-page-nav:disabled {
     opacity: 0.35;
@@ -671,13 +677,13 @@ ACTIVITY - PAGINATION
     transition: background 0.2s ease, color 0.2s ease;
 }
 .activity-page-btn:hover {
-    background: rgba(34,197,94,0.1);
-    color: var(--primary);
+    background: rgba(124,58,237,0.1);
+    color: var(--secondary);
 }
 .activity-page-btn.active {
-    background: var(--primary);
-    color: #06210f;
-    box-shadow: 0 4px 12px rgba(34,197,94,0.35);
+    background: var(--secondary);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(124,58,237,0.35);
 }
 
 .activity-page-ellipsis {
@@ -722,8 +728,8 @@ ACTIVITY - PAGINATION
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(34,197,94,0.14);
-    color: var(--primary);
+    background: rgba(124,58,237,0.1);
+    color: var(--secondary);
     margin-bottom: 6px;
 }
 .activity-empty-icon i { width: 22px; height: 22px; }
@@ -740,10 +746,10 @@ ACTIVITY - PAGINATION
 
 /* Nouvelles couleurs pour les icônes d'activité */
 .icon-orange-activity {
-    background: linear-gradient(135deg,var(--accent),#d97706);
+    background: linear-gradient(135deg,#f59e0b,#d97706);
 }
 .icon-green-activity {
-    background: linear-gradient(135deg,var(--primary),var(--primary-2));
+    background: linear-gradient(135deg,#22c55e,#16a34a);
 }
 
 /* Animations des éléments d'activité */
@@ -763,8 +769,7 @@ ACTIVITY - PAGINATION
     gap:14px;
     padding:14px;
     border-radius:18px;
-    background:var(--surface-2);
-    border:1px solid var(--border);
+    background:#f8fafc;
 }
 
 .activity-icon{
@@ -783,11 +788,11 @@ ACTIVITY - PAGINATION
 }
 
 .icon-purple{
-    background:linear-gradient(135deg,var(--secondary),#6d28d9);
+    background:linear-gradient(135deg,#7c3aed,#6d28d9);
 }
 
 .icon-pink{
-    background:linear-gradient(135deg,var(--pink),#db2777);
+    background:linear-gradient(135deg,#ec4899,#db2777);
 }
 
 .activity-icon i{
@@ -802,7 +807,6 @@ ACTIVITY - PAGINATION
 .activity-title{
     font-weight:800;
     margin-bottom:5px;
-    color:var(--text);
 }
 
 .activity-text{
@@ -824,14 +828,13 @@ TROPHIES
 .trophy-title{
     font-size:1.2rem;
     font-weight:900;
-    color:var(--text);
 }
 
 .progress-btn{
-    background:rgba(124,58,237,0.16);
-    color:#c4b5fd;
+    background:#eff6ff;
+    color:#2563eb;
     padding:10px 14px;
-    border-radius:100px; /* Mis à jour pour correspondre au design streaming */
+    border-radius:14px;
     font-size:0.75rem;
     font-weight:800;
 }
@@ -844,10 +847,10 @@ TROPHIES
 
 
 .trophy-card{
-    border-radius:20px; /* Mis à jour pour correspondre au design streaming */
+    border-radius:24px;
     overflow:hidden;
-    background:var(--surface-2);
-    border:1px solid var(--border);
+    background:white;
+    border:1px solid #e2e8f0;
     transition:transform 0.3s ease, box-shadow 0.3s ease; /* Ajout d'une transition pour le shadow */
     cursor: pointer; /* Indique que la carte est interactive */
 }
@@ -859,7 +862,7 @@ TROPHIES
 
 /* Styles pour les trophées débloqués (pas verrouillés) */
 .trophy-card:not(.locked) {
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1); /* Ombre par défaut pour les débloqués, ajustée pour un fond sombre */
+    box-shadow: 0 8px 20px rgba(67, 56, 192, 0.1); /* Ombre par défaut pour les débloqués */
 }
 
 .trophy-top{
@@ -871,8 +874,8 @@ TROPHIES
 .trophy-footer{
     padding:14px;
     text-align:center;
-    background:var(--surface-3);
-    color:var(--text);
+    background:#0f172a;
+    color:white;
 }
 
 .trophy-footer h4{
@@ -882,8 +885,7 @@ TROPHIES
 
 .trophy-footer p{
     font-size:0.7rem;
-    opacity:1;
-    color:var(--muted);
+    opacity:0.85;
 }
 
 .locked{
@@ -892,13 +894,7 @@ TROPHIES
 }
 
 .locked .trophy-footer{
-    background:rgba(255,255,255,0.05);
-    color:var(--muted);
-}
-.trophy-lock-badge{
-    background:var(--surface-3);
-    border:1px solid var(--border);
-    color:var(--text);
+    background:#94a3b8;
 }
 
 /* =========================
@@ -946,14 +942,13 @@ BOTTOM NAV
     left:15px;
     right:15px;
     bottom:15px;
-    background:rgba(12,12,15,0.96);
-    backdrop-filter:blur(20px);
+    background:rgba(255,255,255,0.96);
+    backdrop-filter:blur(15px);
     border-radius:28px;
     display:flex;
     justify-content:space-around;
     padding:14px 10px;
-    box-shadow:0 20px 45px rgba(0,0,0,0.55);
-    border:1px solid var(--border);
+    box-shadow:0 15px 35px rgba(0,0,0,0.12);
     z-index:1000;
 }
 
@@ -982,13 +977,13 @@ BOTTOM NAV
     width:46px;
     height:46px;
     border-radius:16px;
-    background:var(--gradient);
-    color:#06210f;
+    background:var(--hero);
+    color:white;
     display:flex;
     align-items:center;
     justify-content:center;
     margin-top:-28px;
-    box-shadow:0 12px 24px rgba(34,197,94,0.35);
+    box-shadow:0 12px 24px rgba(124,58,237,0.35);
 }
 
 /* =====================================
@@ -998,8 +993,8 @@ AJOUT DU STYLE COMPATIBLE POUR LE BONUS
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
-    border: 1px solid var(--border);
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid #e2e8f0;
 }
 .loyalty-info {
     display: flex;
@@ -1010,7 +1005,7 @@ AJOUT DU STYLE COMPATIBLE POUR LE BONUS
     width: 52px;
     height: 52px;
     border-radius: 18px;
-    background: rgba(245,158,11,0.16);
+    background: #fef3c7;
     color: var(--accent);
     display: flex;
     align-items: center;
@@ -1033,13 +1028,13 @@ AJOUT DU STYLE COMPATIBLE POUR LE BONUS
 .loyalty-action-btn {
     border: none;
     background: var(--gradient);
-    color: #06210f;
+    color: white;
     padding: 12px 20px;
-    border-radius: 100px; /* Mis à jour pour correspondre au design streaming */
+    border-radius: 16px;
     font-weight: 800;
     font-size: 0.85rem;
     cursor: pointer;
-    box-shadow: 0 10px 22px rgba(34,197,94,0.28);
+    box-shadow: 0 8px 16px rgba(67, 56, 192, 0.2);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -1049,8 +1044,8 @@ AJOUT DU STYLE COMPATIBLE POUR LE BONUS
     transform: scale(0.95);
 }
 .loyalty-action-btn:disabled {
-    background: var(--surface-3);
-    color: var(--muted);
+    background: #e2e8f0;
+    color: #94a3b8;
     box-shadow: none;
     cursor: not-allowed;
 }
@@ -1091,13 +1086,13 @@ a:focus-visible,
 }
 
 /* =========================
-NOTIFICATIONS - THÈME CLAIR HARMONISÉ (maintenant thème sombre par défaut)
+NOTIFICATIONS - THÈME CLAIR HARMONISÉ
 ========================= */
 
 .notif-dropdown {
-    background: rgba(21,21,25,0.98); /* Utilise la variable surface du root */
-    border: 1px solid var(--border);
-    box-shadow: 0 20px 45px rgba(0,0,0,0.3);
+    background: rgba(255,255,255,0.98);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 20px 45px rgba(15,23,42,0.15);
 }
 
 .notif-header h3 {
@@ -1105,7 +1100,7 @@ NOTIFICATIONS - THÈME CLAIR HARMONISÉ (maintenant thème sombre par défaut)
 }
 
 .notif-tabs {
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .notif-tab {
@@ -1113,17 +1108,17 @@ NOTIFICATIONS - THÈME CLAIR HARMONISÉ (maintenant thème sombre par défaut)
 }
 
 .notif-tab.active {
-    background: rgba(255,255,255,0.12); /* Fond actif légèrement plus clair pour un bon contraste */
-    color: var(--text);
+    background: #ede9fe;
+    color: var(--secondary);
 }
 
 .notif-item {
-    border-bottom: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid #f1f5f9;
 }
 
 .notif-item:hover,
 .notif-item:focus-visible {
-    background: rgba(255,255,255,0.05);
+    background: #f8fafc;
 }
 
 .notif-message {
@@ -1138,7 +1133,7 @@ NOTIFICATIONS - THÈME CLAIR HARMONISÉ (maintenant thème sombre par défaut)
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.08); /* Fond icône vide, adapté au thème sombre */
+    background: #f1f5f9;
     color: var(--muted);
     display: flex;
     align-items: center;
@@ -1151,7 +1146,7 @@ SKELETON LOADERS
 ========================= */
 
 .skeleton {
-    background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface-3) 37%, var(--surface-2) 63%);
+    background: linear-gradient(90deg, #e2e8f0 25%, #eef2f6 37%, #e2e8f0 63%);
     background-size: 400% 100%;
     animation: skeletonShine 1.4s ease infinite;
     border-radius: 10px;
@@ -1184,7 +1179,7 @@ SKELETON LOADERS
     gap: 14px;
     padding: 14px;
     border-radius: 18px;
-    background: var(--surface-2);
+    background: #f8fafc;
 }
 
 .skel-circle {
@@ -1224,9 +1219,8 @@ TOASTS
     pointer-events: auto;
     max-width: 380px;
     width: 100%;
-    background: var(--surface);
-    border:1px solid var(--border);
-    color: var(--text);
+    background: #0f172a;
+    color: white;
     padding: 14px 16px;
     border-radius: 16px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.25);
@@ -1286,7 +1280,7 @@ MODALES (Recherche / Profil)
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.65);
+    background: rgba(15,23,42,0.5);
     backdrop-filter: blur(4px);
     z-index: 15000;
     display: none;
@@ -1301,13 +1295,12 @@ MODALES (Recherche / Profil)
 }
 
 .modal-box {
-    background: var(--surface);
+    background: white;
     border-radius: 26px;
     width: 100%;
     max-width: 420px;
     box-shadow: 0 30px 60px rgba(0,0,0,0.25);
     overflow: hidden;
-    border:1px solid var(--border);
 }
 
 .modal-header {
@@ -1315,13 +1308,12 @@ MODALES (Recherche / Profil)
     align-items: center;
     justify-content: space-between;
     padding: 20px 22px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .modal-header h3 {
     font-size: 1.05rem;
     font-weight: 800;
-    color: var(--text);
 }
 
 .modal-close-btn {
@@ -1329,7 +1321,7 @@ MODALES (Recherche / Profil)
     height: 36px;
     border-radius: 12px;
     border: none;
-    background: var(--surface-2);
+    background: #f1f5f9;
     color: var(--text);
     display: flex;
     align-items: center;
@@ -1346,11 +1338,10 @@ MODALES (Recherche / Profil)
     display: flex;
     align-items: center;
     gap: 10px;
-    background: var(--surface-2);
+    background: #f1f5f9;
     border-radius: 14px;
     padding: 12px 16px;
     margin-bottom: 16px;
-    border:1px solid var(--border);
 }
 
 .search-input-wrap i {
@@ -1383,14 +1374,14 @@ MODALES (Recherche / Profil)
 
 .search-result-item:hover,
 .search-result-item:focus-visible {
-    background: var(--surface-2);
+    background: #f8fafc;
 }
 
 .search-result-icon {
     width: 42px;
     height: 42px;
     border-radius: 14px;
-    background: rgba(124,58,237,0.16);
+    background: #ede9fe;
     color: var(--secondary);
     display: flex;
     align-items: center;
@@ -1401,7 +1392,6 @@ MODALES (Recherche / Profil)
 .search-result-text strong {
     display: block;
     font-size: 0.88rem;
-    color: var(--text);
 }
 
 .search-result-text span {
@@ -1421,14 +1411,14 @@ MODALES (Recherche / Profil)
     height: 76px;
     border-radius: 50%;
     background: var(--gradient);
-    color: #06210f;
+    color: white;
     font-size: 1.4rem;
     font-weight: 800;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto 16px;
-    box-shadow: 0 10px 24px rgba(34,197,94,0.3);
+    box-shadow: 0 10px 24px rgba(124,58,237,0.3);
 }
 
 .profile-modal-name {
@@ -1436,7 +1426,6 @@ MODALES (Recherche / Profil)
     font-size: 1.1rem;
     font-weight: 800;
     margin-bottom: 4px;
-    color: var(--text);
 }
 
 .profile-modal-level {
@@ -1451,10 +1440,9 @@ MODALES (Recherche / Profil)
     align-items: center;
     gap: 12px;
     padding: 12px 14px;
-    background: var(--surface-2);
+    background: #f8fafc;
     border-radius: 16px;
     margin-bottom: 10px;
-    border:1px solid var(--border);
 }
 
 .profile-modal-row i {
@@ -1467,14 +1455,13 @@ MODALES (Recherche / Profil)
 .profile-modal-row span {
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--text);
 }
 
 .profile-modal-logout {
     width: 100%;
     margin-top: 10px;
     border: none;
-    background: rgba(239,68,68,0.2);
+    background: #fee2e2;
     color: var(--danger);
     padding: 13px;
     border-radius: 14px;
@@ -1494,47 +1481,103 @@ MODALES (Recherche / Profil)
 }
 
 /* =========================
-MODE SOMBRE (une version encore plus foncée de l'interface)
+MODE SOMBRE
 ========================= */
 
 html[data-theme="dark"] {
-    --bg:#000000; /* Noir absolu */
-    --surface:#0a0a0d; /* Surface très foncée */
-    --surface-2:#111115;
-    --surface-3:#1c1c20;
-    --text:#e0e0e0; /* Texte légèrement plus clair pour le contraste */
-    --muted:#7a7a85;
-    --border:rgba(255,255,255,0.05); /* Bordure plus subtile */
-
-    --shadow: 0 18px 40px rgba(0,0,0,0.6); /* Ombre plus intense */
-
-    /* Override les styles qui ne sont pas gérés par les variables */
-    .top-nav {
-        border-bottom-color: var(--border);
-        box-shadow: 0 4px 24px rgba(0,0,0,0.6);
-    }
-    .notif-dropdown, .modal-box, .toast {
-        border-color: var(--border);
-    }
-    .bottom-bar {
-        border-color: var(--border);
-        box-shadow:0 20px 45px rgba(0,0,0,0.7);
-    }
-    .loyalty-section {
-        border-color: var(--border);
-    }
-    .card {
-        border-color: var(--border);
-    }
-
-    /* Gestion des icônes de basculement de thème */
-    .theme-toggle .feather-moon { display:inline-flex; } /* Montrer la lune en mode sombre foncé (pour revenir au mode moins foncé) */
-    .theme-toggle .feather-sun { display:none; } /* Cacher le soleil en mode sombre foncé */
+    --bg:#0f172a;
+    --surface:#1e293b;
+    --text:#f1f5f9;
+    --muted:#94a3b8;
+    --glass:rgba(15,23,42,0.75);
 }
 
-/* Gestion des icônes de basculement de thème pour le mode par défaut (maintenant sombre "light") */
-.theme-toggle .feather-sun { display:inline-flex; } /* Montrer le soleil en mode par défaut (pour passer au mode sombre foncé) */
-.theme-toggle .feather-moon { display:none; } /* Cacher la lune en mode par défaut */
+html[data-theme="dark"] .top-nav {
+    border-bottom:1px solid rgba(255,255,255,0.08);
+    box-shadow:0 4px 20px rgba(0,0,0,0.25);
+}
+
+html[data-theme="dark"] .nav-btn {
+    background:rgba(255,255,255,0.08);
+}
+html[data-theme="dark"] .nav-btn:hover {
+    background:rgba(255,255,255,0.14);
+}
+
+html[data-theme="dark"] .bottom-bar {
+    background:rgba(30,41,59,0.96);
+    box-shadow:0 15px 35px rgba(0,0,0,0.35);
+}
+
+html[data-theme="dark"] .activity-item {
+    background:#273449;
+}
+
+html[data-theme="dark"] .progress-circle::before {
+    background:var(--surface);
+}
+
+html[data-theme="dark"] .trophy-card {
+    background:var(--surface);
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+html[data-theme="dark"] .loyalty-section {
+    background:linear-gradient(135deg, #1e293b 0%, #182233 100%);
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+html[data-theme="dark"] .notif-dropdown {
+    background:rgba(30,41,59,0.98);
+    border:1px solid rgba(255,255,255,0.08);
+}
+html[data-theme="dark"] .notif-tabs { border-bottom:1px solid rgba(255,255,255,0.08); }
+html[data-theme="dark"] .notif-item { border-bottom:1px solid rgba(255,255,255,0.06); }
+html[data-theme="dark"] .notif-item:hover { background:rgba(255,255,255,0.05); }
+html[data-theme="dark"] .notif-empty-icon { background:rgba(255,255,255,0.08); }
+
+html[data-theme="dark"] .modal-box {
+    background:var(--surface);
+}
+html[data-theme="dark"] .modal-header {
+    border-bottom:1px solid rgba(255,255,255,0.08);
+}
+html[data-theme="dark"] .modal-close-btn {
+    background:rgba(255,255,255,0.08);
+}
+html[data-theme="dark"] .search-input-wrap,
+html[data-theme="dark"] .profile-modal-row {
+    background:rgba(255,255,255,0.06);
+}
+html[data-theme="dark"] .search-result-item:hover {
+    background:rgba(255,255,255,0.06);
+}
+
+html[data-theme="dark"] .skeleton,
+html[data-theme="dark"] .skel-activity-item {
+    background:#273449;
+}
+html[data-theme="dark"] .skeleton {
+    background:linear-gradient(90deg,#273449 25%,#334155 37%,#273449 63%);
+    background-size:400% 100%;
+}
+
+html[data-theme="dark"] .theme-toggle .feather-moon { display:none; }
+html[data-theme="dark"] .theme-toggle .feather-sun { display:inline-flex; }
+.theme-toggle .feather-sun { display:none; }
+
+html[data-theme="dark"] .activity-pagination {
+    border-top-color: rgba(255,255,255,0.08);
+}
+html[data-theme="dark"] .activity-page-nav {
+    background: rgba(255,255,255,0.08);
+}
+html[data-theme="dark"] .activity-page-nav:hover:not(:disabled) {
+    background: var(--secondary);
+}
+html[data-theme="dark"] .activity-empty-icon {
+    background: rgba(124,58,237,0.18);
+}
 
 /* =========================
 INDICATEUR STREAK
@@ -1586,7 +1629,7 @@ CÉLÉBRATION TROPHÉE DÉBLOQUÉ
 @keyframes trophyPop{
     0%{ transform:scale(1); }
     35%{ transform:scale(1.08); box-shadow:0 0 0 10px rgba(245,158,11,0.35); }
-    100%{ transform:scale(1); box-shadow:0 8px 20px rgba(0,0,0,0.1); }
+    100%{ transform:scale(1); box-shadow:0 8px 20px rgba(67,56,192,0.1); }
 }
 
 .confetti-overlay{
@@ -1632,7 +1675,6 @@ RESPONSIVE
         font-size:1.5rem;
     }
 
-    /* Loyauté / Bonus Quotidien - Rendu responsive */
     .loyalty-section {
         flex-direction: column;
         gap: 16px;
@@ -1646,25 +1688,6 @@ RESPONSIVE
         width: 100%;
         justify-content: center;
     }
-
-    /* Trophées - Rendu responsive avec défilement horizontal */
-    .trophy-grid{
-        display:flex; /* Assure que c'est une flexbox */
-        flex-wrap:nowrap; /* Empêche le retour à la ligne */
-        gap:14px;
-        overflow-x:auto; /* Permet le défilement horizontal */
-        scroll-snap-type:x mandatory;
-        padding-bottom:6px; /* Espace pour la barre de défilement */
-        margin-left:-18px; /* Pour aligner avec les marges du conteneur parent */
-        margin-right:-18px;
-        padding-left:18px;
-        padding-right:18px;
-    }
-    .trophy-grid::-webkit-scrollbar{ height:0; } /* Cache la scrollbar sur Webkit */
-    .trophy-card{
-        flex:0 0 132px; /* Force la largeur des cartes et empêche le rétrécissement */
-        scroll-snap-align:start; /* Facilite le défilement par carte */
-    }
 }
 
 @media (max-width: 480px) {
@@ -1676,4 +1699,3 @@ RESPONSIVE
         width: calc(100% - 20px);
     }
 }
-

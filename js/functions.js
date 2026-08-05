@@ -267,6 +267,17 @@ function renderArticles(){
             year:'numeric'
         });
 
+        // Détection de la langue active (Priorité au sélecteur du header, puis au localStorage, puis au tag HTML, puis 'mg')
+        const langSelect = document.getElementById('langSwitcher');
+        const currentLang = (langSelect ? langSelect.value : null) || localStorage.getItem('lang') || document.documentElement.lang || 'mg';
+        
+        let readMoreText = "Vaky bebe kokoa";
+        if (currentLang === 'fr') {
+            readMoreText = "Lire plus";
+        } else if (currentLang === 'en') {
+            readMoreText = "Read more";
+        }
+
         container.insertAdjacentHTML('beforeend',`
             <div class="bible-card">
                 <div class="card-image" style="background-image:url('${img}')"></div>
@@ -280,6 +291,13 @@ function renderArticles(){
                     </div>
                     <div class="card-title">${escapeHTML(article.title)}</div>
                     <div class="card-text">${escapeHTML(article.content).substring(0,110)}...</div>
+                    
+                    <button class="btn-read-more" 
+                        data-title="${escapeHTML(article.title)}" 
+                        data-content="${escapeHTML(article.content)}" 
+                        data-image="${img}">
+                        ${readMoreText} <i data-feather="arrow-right"></i>
+                    </button>
                 </div>
             </div>
         `);
@@ -443,3 +461,54 @@ window.onload = () => {
     fetchArticles();
     fetchGlobalStats();
 };
+/* =========================
+   GESTION DU MODAL D'ARTICLE
+========================= */
+/* =========================
+   GESTION DU MODAL D'ARTICLE
+========================= */
+function openArticleModal(title, content, image) {
+    const modal = document.getElementById('article-modal');
+    const modalImg = document.getElementById('modal-article-img');
+    const modalTitle = document.getElementById('modal-article-title');
+    const modalText = document.getElementById('modal-article-text');
+
+    modalTitle.innerText = decodeURIComponent(title);
+    modalText.innerHTML = decodeURIComponent(content);
+
+    if (image && image !== 'null' && image !== '') {
+        modalImg.src = image;
+        modalImg.style.display = 'block';
+    } else {
+        modalImg.style.display = 'none';
+    }
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    if (window.feather) feather.replace();
+}
+
+function closeArticleModal() {
+    const modal = document.getElementById('article-modal');
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+// Fermeture au clic en dehors de la boîte du modal
+window.addEventListener('click', (e) => {
+    const modal = document.getElementById('article-modal');
+    if (e.target === modal) {
+        closeArticleModal();
+    }
+});
+
+// Écouteur global pour intercepter les clics sur les boutons "Vaky bebe kokoa"
+document.addEventListener('click', function(event) {
+    const btn = event.target.closest('.btn-read-more');
+    if (btn) {
+        const title = btn.getAttribute('data-title');
+        const content = btn.getAttribute('data-content');
+        const image = btn.getAttribute('data-image');
+        openArticleModal(title, content, image);
+    }
+});
