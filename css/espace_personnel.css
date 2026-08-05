@@ -1,29 +1,24 @@
 :root{
-    --primary:#3465e0; /* Un bleu plus vif */
-    --secondary:#8a4dff; /* Un violet plus lumineux */
-    --accent:#ffb300; /* Un ambre plus éclatant */
-    --pink:#ff61b8; /* Un rose plus vif */
-    --success:#2ecc71; /* Un vert frais */
-    --danger:#e74c3c; /* Un rouge impactant */
-    --bg:#f8faff; /* Arrière-plan très clair et frais */
-    --surface:#ffffff; /* Surface blanche nette */
-    --text:#1a202c; /* Texte sombre pour un bon contraste */
-    --muted:#718096; /* Texte atténué légèrement plus sombre */
-    --glass:rgba(255,255,255,0.85); /* Plus opaque et lumineux */
+    /* Variables de la "REFONTE STREAMING DARK UI" comme thème par défaut */
+    --bg:#0a0a0d;
+    --surface:#151519;
+    --surface-2:#1d1d24;
+    --surface-3:#26262e;
+    --text:#f5f5f7;
+    --muted:#93939f;
+    --primary:#22c55e;
+    --primary-2:#16a34a;
+    --secondary:#7c3aed;
+    --accent:#f59e0b;
+    --pink:#ec4899;
+    --success:#22c55e;
+    --danger:#ef4444;
+    --glass:rgba(10,10,13,0.82);
+    --border:rgba(255,255,255,0.08);
 
-    --gradient:
-    linear-gradient(
-        135deg,
-        #3465e0 0%,
-        #5e4ce0 50%,
-        #8a4dff 100%
-    );
-
-    --hero:
-    linear-gradient(135deg, #3465e0 0%, #2a2a33 50%, #6a9aff 100%); /* Héro avec un point sombre central */
-
-    --shadow:
-    0 18px 40px rgba(15,23,42,0.12); /* Ombre légèrement plus prononcée */
+    --gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 60%, #0f9d58 100%);
+    --hero: linear-gradient(135deg, #16171d 0%, #1a1b22 45%, #241b33 100%);
+    --shadow: 0 18px 40px rgba(0,0,0,0.45);
 }
 
 *{
@@ -41,21 +36,23 @@ body{
     padding-bottom:120px;
 }
 
-/* =========================
-HEADER PREMIUM
-========================= */
+/* Styles généraux pour harmoniser l'apparence par défaut avec le mode sombre */
+html, body {
+    background:var(--bg);
+    color:var(--text);
+}
 
+/* ---------- Header ---------- */
 .top-nav{
     position:fixed;
     top:0;
     width:100%;
     z-index:1000;
-    background:var(--glass); /* Translucent white */
-    backdrop-filter:blur(25px); /* Stronger blur */
-    border-bottom:1px solid rgba(0,0,0,0.08); /* Darker border for contrast */
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05); /* Subtle shadow */
+    background:rgba(10,10,13,0.85); /* Utilise la variable du root via glass ou une valeur explicite */
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+    box-shadow:0 4px 24px rgba(0,0,0,0.4);
 }
-
 .nav-content{
     display:flex;
     justify-content:space-between;
@@ -86,20 +83,13 @@ HEADER PREMIUM
     border-radius: 50%; /* Pour correspondre au style circulaire */
 }
 
-.logo-text{
-    color:var(--text); /* Adapté pour un fond de header plus clair */
-}
-
+.logo-text{ color:var(--text); }
 .logo-title{
     font-weight:900;
     letter-spacing:1px;
     font-size:0.95rem;
 }
-
-.logo-sub{
-    font-size:0.7rem;
-    color:var(--muted); /* Adapté pour un fond de header plus clair */
-}
+.logo-sub{ color:var(--muted); }
 
 .nav-right{
     display:flex;
@@ -111,9 +101,9 @@ HEADER PREMIUM
     width:42px;
     height:42px;
     border-radius:14px;
-    border:none;
-    background:rgba(15,23,42,0.05); /* Fond subtilement foncé pour contraste */
-    color:var(--text); /* Couleur de texte sombre */
+    border:1px solid var(--border);
+    background:var(--surface-2);
+    color:var(--text);
     display:flex;
     align-items:center;
     justify-content:center;
@@ -121,9 +111,7 @@ HEADER PREMIUM
     cursor:pointer;
     transition: background 0.2s ease, transform 0.2s ease;
 }
-.nav-btn:hover {
-    background:rgba(15,23,42,0.1); /* Légèrement plus foncé au survol */
-}
+.nav-btn:hover{ background:var(--surface-3); }
 .nav-btn:active {
     transform: scale(0.95);
 }
@@ -140,14 +128,14 @@ HEADER PREMIUM
     border: none;
     padding: 0;
     background: var(--gradient); /* Gradient pour un look premium */
-    color: white;
+    color: #06210f;
     font-size: 0.85rem;
     font-weight: 800;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(124,58,237,0.2);
+    box-shadow: 0 4px 12px rgba(34,197,94,0.2);
     cursor: pointer;
     transition: transform 0.2s ease;
 }
@@ -172,7 +160,7 @@ HEADER PREMIUM
     display:none;
     align-items:center;
     justify-content:center;
-    border: 2px solid #0f172a;
+    border: 2px solid var(--bg);
 }
 
 /* =====================================
@@ -188,9 +176,9 @@ DROPDOWN NOTIFICATIONS (AJOUTÉ)
     top: 55px;
     right: 0;
     width: 340px;
-    background: rgba(15, 23, 42, 0.96);
+    background: rgba(21,21,25,0.98);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border);
     border-radius: 24px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.3);
     display: none;
@@ -218,7 +206,7 @@ DROPDOWN NOTIFICATIONS (AJOUTÉ)
 
 .notif-header h3 {
     margin: 0;
-    color: white;
+    color: var(--text);
     font-size: 1.05rem;
     font-weight: 800;
 }
@@ -234,7 +222,7 @@ DROPDOWN NOTIFICATIONS (AJOUTÉ)
     display: flex;
     gap: 12px;
     padding: 0 20px 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--border);
 }
 
 .notif-tab {
@@ -248,7 +236,7 @@ DROPDOWN NOTIFICATIONS (AJOUTÉ)
 
 .notif-tab.active {
     background: rgba(255, 255, 255, 0.12);
-    color: white;
+    color: var(--text);
 }
 
 .notif-list {
@@ -294,9 +282,9 @@ DROPDOWN NOTIFICATIONS (AJOUTÉ)
 }
 
 /* Différenciation thématique des icônes */
-.notif-item-icon.article { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+.notif-item-icon.article { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
 .notif-item-icon.badge { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
-.notif-item-icon.chat { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+.notif-item-icon.chat { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
 
 .notif-details {
     display: flex;
@@ -306,14 +294,14 @@ DROPDOWN NOTIFICATIONS (AJOUTÉ)
 }
 
 .notif-message {
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(245,245,247,0.9);
     font-size: 0.8rem;
     line-height: 1.4;
     font-weight: 500;
 }
 
 .notif-message strong {
-    color: white;
+    color: var(--text);
     font-weight: 700;
 }
 
@@ -346,8 +334,8 @@ WELCOME HERO
     color:white;
     position:relative;
     overflow:hidden;
-    box-shadow:
-    0 25px 50px rgba(124,58,237,0.28);
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
 }
 
 .hero-card::before{
@@ -381,12 +369,14 @@ WELCOME HERO
     display:inline-flex;
     align-items:center;
     gap:8px;
-    background:rgba(255,255,255,0.12);
+    background:rgba(34,197,94,0.14);
+    color:#4ade80;
     padding:8px 14px;
     border-radius:100px;
     font-size:0.75rem;
     font-weight:700;
     margin-bottom:18px;
+    border:1px solid rgba(34,197,94,0.3);
 }
 
 .hero-title{
@@ -397,7 +387,7 @@ WELCOME HERO
 }
 
 .hero-text{
-    color:rgba(255,255,255,0.85);
+    color:rgba(245,245,247,0.7);
     line-height:1.6;
     font-size:0.92rem;
     margin-bottom:25px;
@@ -411,7 +401,7 @@ WELCOME HERO
 
 .hero-btn{
     border:none;
-    border-radius:16px;
+    border-radius:100px; /* Mis à jour pour correspondre au design streaming */
     padding:14px 18px;
     font-weight:800;
     cursor:pointer;
@@ -431,14 +421,14 @@ WELCOME HERO
 }
 
 .primary-btn{
-    background:white;
-    color:var(--primary);
+    background:var(--primary);
+    color:#06210f;
 }
 
 .secondary-btn{
-    background:rgba(255,255,255,0.12);
+    background:rgba(255,255,255,0.08);
     color:white;
-    border:1px solid rgba(255,255,255,0.2);
+    border:1px solid rgba(255,255,255,0.14);
 }
 
 /* =========================
@@ -464,6 +454,7 @@ CARDS
     position:relative;
     overflow:hidden;
     scroll-margin-top:100px;
+    border:1px solid var(--border);
 }
 
 /* =========================
@@ -497,7 +488,7 @@ IMPACT
     width:90px;
     height:90px;
     border-radius:50%;
-    background:white;
+    background:var(--surface);
 }
 
 .progress-content{
@@ -527,19 +518,21 @@ IMPACT
     display:inline-flex;
     align-items:center;
     gap:6px;
-    background:#ede9fe;
-    color:#7c3aed;
+    background:rgba(34,197,94,0.14);
+    color:#4ade80;
     padding:7px 12px;
     border-radius:100px;
     font-size:0.7rem;
     font-weight:800;
     margin-bottom:12px;
+    border:1px solid rgba(34,197,94,0.28);
 }
 
 .impact-title{
     font-size:1.25rem;
     font-weight:900;
     margin-bottom:10px;
+    color:var(--text);
 }
 
 .impact-desc{
@@ -559,21 +552,22 @@ IMPACT
     border-radius:20px;
     padding:18px 12px;
     text-align:center;
+    border:1px solid var(--border);
 }
 
 .box-blue{
-    background:#dbeafe;
-    color:#2563eb;
+    background:rgba(59,130,246,0.14);
+    color:#60a5fa;
 }
 
 .box-orange{
-    background:#fef3c7;
-    color:#d97706;
+    background:rgba(245,158,11,0.14);
+    color:#fbbf24;
 }
 
 .box-green{
-    background:#dcfce7;
-    color:#16a34a;
+    background:rgba(34,197,94,0.14);
+    color:#4ade80;
 }
 
 .box-value{
@@ -606,10 +600,10 @@ ACTIVITY
 .activity-date-header {
     font-size: 0.95rem;
     font-weight: 800;
-    color: var(--primary);
+    color: var(--muted);
     margin-bottom: 15px;
     padding-bottom: 8px;
-    border-bottom: 1px solid var(--bg);
+    border-bottom: 1px solid var(--border);
 }
 
 /* Style de la barre de défilement (peut être appliqué au body ou à un conteneur défilant principal si nécessaire) */
@@ -628,7 +622,7 @@ ACTIVITY - PAGINATION
     flex-wrap: wrap;
     margin-top: 20px;
     padding-top: 16px;
-    border-top: 1px solid var(--bg);
+    border-top: 1px solid var(--border);
 }
 
 .activity-page-nav {
@@ -640,17 +634,17 @@ ACTIVITY - PAGINATION
     flex-shrink: 0;
     border: none;
     border-radius: 14px;
-    background: rgba(15,23,42,0.05);
+    background: var(--surface-2);
     color: var(--text);
     cursor: pointer;
     transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 .activity-page-nav i { width: 18px; height: 18px; }
 .activity-page-nav:hover:not(:disabled) {
-    background: var(--secondary);
-    color: #fff;
+    background: var(--primary);
+    color: #06210f;
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(124,58,237,0.28);
+    box-shadow: 0 6px 16px rgba(34,197,94,0.28);
 }
 .activity-page-nav:disabled {
     opacity: 0.35;
@@ -677,13 +671,13 @@ ACTIVITY - PAGINATION
     transition: background 0.2s ease, color 0.2s ease;
 }
 .activity-page-btn:hover {
-    background: rgba(124,58,237,0.1);
-    color: var(--secondary);
+    background: rgba(34,197,94,0.1);
+    color: var(--primary);
 }
 .activity-page-btn.active {
-    background: var(--secondary);
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(124,58,237,0.35);
+    background: var(--primary);
+    color: #06210f;
+    box-shadow: 0 4px 12px rgba(34,197,94,0.35);
 }
 
 .activity-page-ellipsis {
@@ -728,8 +722,8 @@ ACTIVITY - PAGINATION
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(124,58,237,0.1);
-    color: var(--secondary);
+    background: rgba(34,197,94,0.14);
+    color: var(--primary);
     margin-bottom: 6px;
 }
 .activity-empty-icon i { width: 22px; height: 22px; }
@@ -746,10 +740,10 @@ ACTIVITY - PAGINATION
 
 /* Nouvelles couleurs pour les icônes d'activité */
 .icon-orange-activity {
-    background: linear-gradient(135deg,#f59e0b,#d97706);
+    background: linear-gradient(135deg,var(--accent),#d97706);
 }
 .icon-green-activity {
-    background: linear-gradient(135deg,#22c55e,#16a34a);
+    background: linear-gradient(135deg,var(--primary),var(--primary-2));
 }
 
 /* Animations des éléments d'activité */
@@ -769,7 +763,8 @@ ACTIVITY - PAGINATION
     gap:14px;
     padding:14px;
     border-radius:18px;
-    background:#f8fafc;
+    background:var(--surface-2);
+    border:1px solid var(--border);
 }
 
 .activity-icon{
@@ -788,11 +783,11 @@ ACTIVITY - PAGINATION
 }
 
 .icon-purple{
-    background:linear-gradient(135deg,#7c3aed,#6d28d9);
+    background:linear-gradient(135deg,var(--secondary),#6d28d9);
 }
 
 .icon-pink{
-    background:linear-gradient(135deg,#ec4899,#db2777);
+    background:linear-gradient(135deg,var(--pink),#db2777);
 }
 
 .activity-icon i{
@@ -807,6 +802,7 @@ ACTIVITY - PAGINATION
 .activity-title{
     font-weight:800;
     margin-bottom:5px;
+    color:var(--text);
 }
 
 .activity-text{
@@ -828,13 +824,14 @@ TROPHIES
 .trophy-title{
     font-size:1.2rem;
     font-weight:900;
+    color:var(--text);
 }
 
 .progress-btn{
-    background:#eff6ff;
-    color:#2563eb;
+    background:rgba(124,58,237,0.16);
+    color:#c4b5fd;
     padding:10px 14px;
-    border-radius:14px;
+    border-radius:100px; /* Mis à jour pour correspondre au design streaming */
     font-size:0.75rem;
     font-weight:800;
 }
@@ -847,10 +844,10 @@ TROPHIES
 
 
 .trophy-card{
-    border-radius:24px;
+    border-radius:20px; /* Mis à jour pour correspondre au design streaming */
     overflow:hidden;
-    background:white;
-    border:1px solid #e2e8f0;
+    background:var(--surface-2);
+    border:1px solid var(--border);
     transition:transform 0.3s ease, box-shadow 0.3s ease; /* Ajout d'une transition pour le shadow */
     cursor: pointer; /* Indique que la carte est interactive */
 }
@@ -862,7 +859,7 @@ TROPHIES
 
 /* Styles pour les trophées débloqués (pas verrouillés) */
 .trophy-card:not(.locked) {
-    box-shadow: 0 8px 20px rgba(67, 56, 192, 0.1); /* Ombre par défaut pour les débloqués */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1); /* Ombre par défaut pour les débloqués, ajustée pour un fond sombre */
 }
 
 .trophy-top{
@@ -874,8 +871,8 @@ TROPHIES
 .trophy-footer{
     padding:14px;
     text-align:center;
-    background:#0f172a;
-    color:white;
+    background:var(--surface-3);
+    color:var(--text);
 }
 
 .trophy-footer h4{
@@ -885,7 +882,8 @@ TROPHIES
 
 .trophy-footer p{
     font-size:0.7rem;
-    opacity:0.85;
+    opacity:1;
+    color:var(--muted);
 }
 
 .locked{
@@ -894,7 +892,13 @@ TROPHIES
 }
 
 .locked .trophy-footer{
-    background:#94a3b8;
+    background:rgba(255,255,255,0.05);
+    color:var(--muted);
+}
+.trophy-lock-badge{
+    background:var(--surface-3);
+    border:1px solid var(--border);
+    color:var(--text);
 }
 
 /* =========================
@@ -942,13 +946,14 @@ BOTTOM NAV
     left:15px;
     right:15px;
     bottom:15px;
-    background:rgba(255,255,255,0.96);
-    backdrop-filter:blur(15px);
+    background:rgba(12,12,15,0.96);
+    backdrop-filter:blur(20px);
     border-radius:28px;
     display:flex;
     justify-content:space-around;
     padding:14px 10px;
-    box-shadow:0 15px 35px rgba(0,0,0,0.12);
+    box-shadow:0 20px 45px rgba(0,0,0,0.55);
+    border:1px solid var(--border);
     z-index:1000;
 }
 
@@ -977,13 +982,13 @@ BOTTOM NAV
     width:46px;
     height:46px;
     border-radius:16px;
-    background:var(--hero);
-    color:white;
+    background:var(--gradient);
+    color:#06210f;
     display:flex;
     align-items:center;
     justify-content:center;
     margin-top:-28px;
-    box-shadow:0 12px 24px rgba(124,58,237,0.35);
+    box-shadow:0 12px 24px rgba(34,197,94,0.35);
 }
 
 /* =====================================
@@ -993,8 +998,8 @@ AJOUT DU STYLE COMPATIBLE POUR LE BONUS
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    border: 1px solid #e2e8f0;
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--border);
 }
 .loyalty-info {
     display: flex;
@@ -1005,7 +1010,7 @@ AJOUT DU STYLE COMPATIBLE POUR LE BONUS
     width: 52px;
     height: 52px;
     border-radius: 18px;
-    background: #fef3c7;
+    background: rgba(245,158,11,0.16);
     color: var(--accent);
     display: flex;
     align-items: center;
@@ -1028,13 +1033,13 @@ AJOUT DU STYLE COMPATIBLE POUR LE BONUS
 .loyalty-action-btn {
     border: none;
     background: var(--gradient);
-    color: white;
+    color: #06210f;
     padding: 12px 20px;
-    border-radius: 16px;
+    border-radius: 100px; /* Mis à jour pour correspondre au design streaming */
     font-weight: 800;
     font-size: 0.85rem;
     cursor: pointer;
-    box-shadow: 0 8px 16px rgba(67, 56, 192, 0.2);
+    box-shadow: 0 10px 22px rgba(34,197,94,0.28);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -1044,8 +1049,8 @@ AJOUT DU STYLE COMPATIBLE POUR LE BONUS
     transform: scale(0.95);
 }
 .loyalty-action-btn:disabled {
-    background: #e2e8f0;
-    color: #94a3b8;
+    background: var(--surface-3);
+    color: var(--muted);
     box-shadow: none;
     cursor: not-allowed;
 }
@@ -1086,13 +1091,13 @@ a:focus-visible,
 }
 
 /* =========================
-NOTIFICATIONS - THÈME CLAIR HARMONISÉ
+NOTIFICATIONS - THÈME CLAIR HARMONISÉ (maintenant thème sombre par défaut)
 ========================= */
 
 .notif-dropdown {
-    background: rgba(255,255,255,0.98);
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 20px 45px rgba(15,23,42,0.15);
+    background: rgba(21,21,25,0.98); /* Utilise la variable surface du root */
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.3);
 }
 
 .notif-header h3 {
@@ -1100,7 +1105,7 @@ NOTIFICATIONS - THÈME CLAIR HARMONISÉ
 }
 
 .notif-tabs {
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--border);
 }
 
 .notif-tab {
@@ -1108,17 +1113,17 @@ NOTIFICATIONS - THÈME CLAIR HARMONISÉ
 }
 
 .notif-tab.active {
-    background: #ede9fe;
-    color: var(--secondary);
+    background: rgba(255,255,255,0.12); /* Fond actif légèrement plus clair pour un bon contraste */
+    color: var(--text);
 }
 
 .notif-item {
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
 }
 
 .notif-item:hover,
 .notif-item:focus-visible {
-    background: #f8fafc;
+    background: rgba(255,255,255,0.05);
 }
 
 .notif-message {
@@ -1133,7 +1138,7 @@ NOTIFICATIONS - THÈME CLAIR HARMONISÉ
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    background: #f1f5f9;
+    background: rgba(255,255,255,0.08); /* Fond icône vide, adapté au thème sombre */
     color: var(--muted);
     display: flex;
     align-items: center;
@@ -1146,7 +1151,7 @@ SKELETON LOADERS
 ========================= */
 
 .skeleton {
-    background: linear-gradient(90deg, #e2e8f0 25%, #eef2f6 37%, #e2e8f0 63%);
+    background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface-3) 37%, var(--surface-2) 63%);
     background-size: 400% 100%;
     animation: skeletonShine 1.4s ease infinite;
     border-radius: 10px;
@@ -1179,7 +1184,7 @@ SKELETON LOADERS
     gap: 14px;
     padding: 14px;
     border-radius: 18px;
-    background: #f8fafc;
+    background: var(--surface-2);
 }
 
 .skel-circle {
@@ -1219,8 +1224,9 @@ TOASTS
     pointer-events: auto;
     max-width: 380px;
     width: 100%;
-    background: #0f172a;
-    color: white;
+    background: var(--surface);
+    border:1px solid var(--border);
+    color: var(--text);
     padding: 14px 16px;
     border-radius: 16px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.25);
@@ -1280,7 +1286,7 @@ MODALES (Recherche / Profil)
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(15,23,42,0.5);
+    background: rgba(0,0,0,0.65);
     backdrop-filter: blur(4px);
     z-index: 15000;
     display: none;
@@ -1295,12 +1301,13 @@ MODALES (Recherche / Profil)
 }
 
 .modal-box {
-    background: white;
+    background: var(--surface);
     border-radius: 26px;
     width: 100%;
     max-width: 420px;
     box-shadow: 0 30px 60px rgba(0,0,0,0.25);
     overflow: hidden;
+    border:1px solid var(--border);
 }
 
 .modal-header {
@@ -1308,12 +1315,13 @@ MODALES (Recherche / Profil)
     align-items: center;
     justify-content: space-between;
     padding: 20px 22px;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--border);
 }
 
 .modal-header h3 {
     font-size: 1.05rem;
     font-weight: 800;
+    color: var(--text);
 }
 
 .modal-close-btn {
@@ -1321,7 +1329,7 @@ MODALES (Recherche / Profil)
     height: 36px;
     border-radius: 12px;
     border: none;
-    background: #f1f5f9;
+    background: var(--surface-2);
     color: var(--text);
     display: flex;
     align-items: center;
@@ -1338,10 +1346,11 @@ MODALES (Recherche / Profil)
     display: flex;
     align-items: center;
     gap: 10px;
-    background: #f1f5f9;
+    background: var(--surface-2);
     border-radius: 14px;
     padding: 12px 16px;
     margin-bottom: 16px;
+    border:1px solid var(--border);
 }
 
 .search-input-wrap i {
@@ -1374,14 +1383,14 @@ MODALES (Recherche / Profil)
 
 .search-result-item:hover,
 .search-result-item:focus-visible {
-    background: #f8fafc;
+    background: var(--surface-2);
 }
 
 .search-result-icon {
     width: 42px;
     height: 42px;
     border-radius: 14px;
-    background: #ede9fe;
+    background: rgba(124,58,237,0.16);
     color: var(--secondary);
     display: flex;
     align-items: center;
@@ -1392,6 +1401,7 @@ MODALES (Recherche / Profil)
 .search-result-text strong {
     display: block;
     font-size: 0.88rem;
+    color: var(--text);
 }
 
 .search-result-text span {
@@ -1411,14 +1421,14 @@ MODALES (Recherche / Profil)
     height: 76px;
     border-radius: 50%;
     background: var(--gradient);
-    color: white;
+    color: #06210f;
     font-size: 1.4rem;
     font-weight: 800;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto 16px;
-    box-shadow: 0 10px 24px rgba(124,58,237,0.3);
+    box-shadow: 0 10px 24px rgba(34,197,94,0.3);
 }
 
 .profile-modal-name {
@@ -1426,6 +1436,7 @@ MODALES (Recherche / Profil)
     font-size: 1.1rem;
     font-weight: 800;
     margin-bottom: 4px;
+    color: var(--text);
 }
 
 .profile-modal-level {
@@ -1440,9 +1451,10 @@ MODALES (Recherche / Profil)
     align-items: center;
     gap: 12px;
     padding: 12px 14px;
-    background: #f8fafc;
+    background: var(--surface-2);
     border-radius: 16px;
     margin-bottom: 10px;
+    border:1px solid var(--border);
 }
 
 .profile-modal-row i {
@@ -1455,13 +1467,14 @@ MODALES (Recherche / Profil)
 .profile-modal-row span {
     font-size: 0.85rem;
     font-weight: 600;
+    color: var(--text);
 }
 
 .profile-modal-logout {
     width: 100%;
     margin-top: 10px;
     border: none;
-    background: #fee2e2;
+    background: rgba(239,68,68,0.2);
     color: var(--danger);
     padding: 13px;
     border-radius: 14px;
@@ -1481,308 +1494,47 @@ MODALES (Recherche / Profil)
 }
 
 /* =========================
-MODE SOMBRE
+MODE SOMBRE (une version encore plus foncée de l'interface)
 ========================= */
 
 html[data-theme="dark"] {
-    /* Variables issues de la "REFONTE STREAMING DARK UI" */
-    --bg:#0a0a0d;
-    --surface:#151519;
-    --surface-2:#1d1d24;
-    --surface-3:#26262e;
-    --text:#f5f5f7;
-    --muted:#93939f;
-    --primary:#22c55e;
-    --primary-2:#16a34a;
-    --secondary:#7c3aed;
-    --accent:#f59e0b;
-    --pink:#ec4899;
-    --success:#22c55e;
-    --danger:#ef4444;
-    --glass:rgba(10,10,13,0.82);
-    --border:rgba(255,255,255,0.08);
+    --bg:#000000; /* Noir absolu */
+    --surface:#0a0a0d; /* Surface très foncée */
+    --surface-2:#111115;
+    --surface-3:#1c1c20;
+    --text:#e0e0e0; /* Texte légèrement plus clair pour le contraste */
+    --muted:#7a7a85;
+    --border:rgba(255,255,255,0.05); /* Bordure plus subtile */
 
-    --gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 60%, #0f9d58 100%);
-    --hero: linear-gradient(135deg, #16171d 0%, #1a1b22 45%, #241b33 100%);
-    --shadow: 0 18px 40px rgba(0,0,0,0.45);
+    --shadow: 0 18px 40px rgba(0,0,0,0.6); /* Ombre plus intense */
 
-    /* Styles généraux pour le corps en mode sombre */
-    background:var(--bg) !important;
-    color:var(--text) !important;
-
-    /* ---------- Header ---------- */
-    .top-nav{
-        background:rgba(10,10,13,0.85) !important;
-        backdrop-filter:blur(20px);
-        border-bottom:1px solid var(--border) !important;
-        box-shadow:0 4px 24px rgba(0,0,0,0.4) !important;
+    /* Override les styles qui ne sont pas gérés par les variables */
+    .top-nav {
+        border-bottom-color: var(--border);
+        box-shadow: 0 4px 24px rgba(0,0,0,0.6);
     }
-    .logo-text{ color:var(--text) !important; }
-    .logo-sub{ color:var(--muted) !important; }
-    .nav-btn{
-        background:var(--surface-2) !important;
-        color:var(--text) !important;
-        border:1px solid var(--border);
+    .notif-dropdown, .modal-box, .toast {
+        border-color: var(--border);
     }
-    .nav-btn:hover{ background:var(--surface-3) !important; }
-    .notif-badge{ border-color:var(--bg) !important; }
-
-    .notif-dropdown{
-        background:rgba(21,21,25,0.98) !important;
-        border:1px solid var(--border) !important;
+    .bottom-bar {
+        border-color: var(--border);
+        box-shadow:0 20px 45px rgba(0,0,0,0.7);
     }
-    .notif-tabs{ border-bottom:1px solid var(--border) !important; }
-    .notif-item{ border-bottom:1px solid rgba(255,255,255,0.05) !important; }
-    .notif-item:hover{ background:rgba(255,255,255,0.05) !important; }
-    .notif-empty-icon{ background:rgba(255,255,255,0.08) !important; }
-
-    /* ---------- Hero ---------- */
-    .hero-card{
-        background:var(--hero) !important;
-        box-shadow:0 25px 55px rgba(0,0,0,0.5) !important;
-        border:1px solid var(--border);
+    .loyalty-section {
+        border-color: var(--border);
     }
-    .hero-mini{
-        background:rgba(34,197,94,0.14) !important;
-        color:#4ade80 !important;
-        border:1px solid rgba(34,197,94,0.3);
-    }
-    .hero-text{ color:rgba(245,245,247,0.7) !important; }
-    .primary-btn{
-        background:var(--primary) !important;
-        color:#06210f !important;
-        border-radius:100px !important;
-    }
-    .secondary-btn{
-        background:rgba(255,255,255,0.08) !important;
-        border:1px solid rgba(255,255,255,0.14) !important;
-        border-radius:100px !important;
-    }
-    .hero-btn{ border-radius:100px !important; }
-
-    .daily-goal-wrap{ background:rgba(255,255,255,0.08) !important; }
-    .daily-goal-track{ background:rgba(255,255,255,0.16) !important; }
-
-    /* ---------- Cartes génériques ---------- */
-    .card{
-        background:var(--surface) !important;
-        border:1px solid var(--border);
-        border-radius:24px !important;
-    }
-
-    /* Pastilles de section façon "genre pill" du design de référence */
-    .section-badge{
-        background:rgba(34,197,94,0.14) !important;
-        color:#4ade80 !important;
-        border:1px solid rgba(34,197,94,0.28);
-        border-radius:100px !important;
-    }
-    .impact-title, .trophy-title{ color:var(--text) !important; }
-    .impact-desc{ color:var(--muted) !important; }
-
-    .progress-circle::before{ background:var(--surface) !important; }
-    .circle-sub{ color:var(--muted) !important; }
-
-    .impact-box{ border:1px solid var(--border); }
-    .box-blue{ background:rgba(59,130,246,0.14) !important; color:#60a5fa !important; }
-    .box-orange{ background:rgba(245,158,11,0.14) !important; color:#fbbf24 !important; }
-    .box-green{ background:rgba(34,197,94,0.14) !important; color:#4ade80 !important; }
-
-    /* ---------- Loyauté / bonus ---------- */
-    .loyalty-section{
-        background:linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%) !important;
-        border:1px solid var(--border) !important;
-    }
-    .loyalty-icon-box{ background:rgba(245,158,11,0.16) !important; }
-    .loyalty-score h3{ color:var(--text) !important; }
-    .loyalty-score p{ color:var(--muted) !important; }
-    .loyalty-action-btn{
-        background:var(--gradient) !important;
-        color:#06210f !important;
-        border-radius:100px !important;
-        box-shadow:0 10px 22px rgba(34,197,94,0.28) !important;
-    }
-    .loyalty-action-btn:disabled{
-        background:var(--surface-3) !important;
-        color:var(--muted) !important;
-    }
-    .streak-badge{
-        background:rgba(249,115,22,0.14) !important;
-        border:1px solid rgba(249,115,22,0.28) !important;
-        color:#fdba74 !important;
-    }
-    .streak-label{ color:var(--muted) !important; }
-
-    /* ---------- Activités ---------- */
-    .activity-item{
-        background:var(--surface-2) !important;
-        border:1px solid var(--border);
-        border-radius:18px;
-    }
-    .activity-title{ color:var(--text) !important; }
-    .activity-text{ color:var(--muted) !important; }
-    .activity-date-header{ color:var(--muted) !important; }
-    .activity-empty-icon{ background:rgba(34,197,94,0.14) !important; }
-    .activity-empty-state span{ color:var(--muted) !important; }
-    .activity-page-nav{ background:var(--surface-2) !important; color:var(--text) !important; }
-    .activity-page-nav:hover:not(:disabled){ background:var(--primary) !important; color:#06210f !important; }
-    .activity-page-btn{ color:var(--muted) !important; }
-    .activity-page-btn.active{ background:var(--primary) !important; color:#06210f !important; }
-    .activity-page-meta{ color:var(--muted) !important; }
-    .activity-pagination{ border-top:1px solid var(--border) !important; }
-
-
-    /* ---------- Opportunités de points : rangée horizontale type "Derniers films" ---------- */
-    .earn-points-section{
-        background:linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%) !important;
-        border:1px solid var(--border) !important;
-    }
-    .earn-grid{
-        display:flex !important;
-        flex-wrap:nowrap !important;
-        gap:14px !important;
-        overflow-x:auto;
-        scroll-snap-type:x mandatory;
-        padding-bottom:6px;
-        margin-top:18px !important;
-    }
-    .earn-grid::-webkit-scrollbar{ height:0; }
-    .earn-card{
-        background:var(--surface-2) !important;
-        border:1px solid var(--border) !important;
-        flex:0 0 220px;
-        scroll-snap-align:start;
-        border-radius:20px !important;
-    }
-    .earn-card:hover{
-        background:var(--surface-3) !important;
-        border-color:rgba(34,197,94,0.4) !important;
-    }
-    .earn-title{ color:var(--text) !important; }
-    .earn-card-note{ color:var(--muted) !important; }
-    .earn-bonus{
-        background:rgba(34,197,94,0.14) !important;
-        color:#4ade80 !important;
-    }
-    .earn-card:hover .earn-bonus{
-        background:var(--primary) !important;
-        color:#06210f !important;
-    }
-    .earn-card.done{ background:rgba(255,255,255,0.03) !important; border-color:var(--border) !important; }
-    .earn-icon-blue{ background:rgba(59,130,246,0.16) !important; }
-    .earn-icon-purple{ background:rgba(124,58,237,0.16) !important; }
-    .earn-icon-green{ background:rgba(34,197,94,0.16) !important; }
-    .earn-icon-pink{ background:rgba(236,72,153,0.16) !important; }
-
-    /* ---------- Trophées : rangée horizontale type "posters" ---------- */
-    .progress-btn{
-        background:rgba(124,58,237,0.16) !important;
-        color:#c4b5fd !important;
-        border-radius:100px !important;
-    }
-    .trophy-grid{
-        display:flex !important;
-        flex-wrap:nowrap !important;
-        gap:14px !important;
-        overflow-x:auto;
-        scroll-snap-type:x mandatory;
-        padding-bottom:6px;
-    }
-    .trophy-grid::-webkit-scrollbar{ height:0; }
-    .trophy-card{
-        background:var(--surface-2) !important;
-        border:1px solid var(--border) !important;
-        border-radius:20px !important;
-        flex:0 0 132px;
-        scroll-snap-align:start;
-    }
-    .trophy-footer{ background:var(--surface-3) !important; color:var(--text) !important; }
-    .trophy-footer p{ color:var(--muted) !important; opacity:1; }
-    .locked .trophy-footer{ background:rgba(255,255,255,0.05) !important; color:var(--muted) !important; }
-    .trophy-lock-badge{
-        background:var(--surface-3) !important;
-        border:1px solid var(--border) !important;
-        color:var(--text);
-    }
-
-    /* ---------- Barre de navigation basse (façon app de streaming) ---------- */
-    .bottom-bar{
-        background:rgba(12,12,15,0.96) !important;
-        backdrop-filter:blur(20px);
-        border:1px solid var(--border);
-        box-shadow:0 20px 45px rgba(0,0,0,0.55) !important;
-    }
-    .bottom-item{ color:var(--muted) !important; }
-    .bottom-item.active{ color:var(--primary) !important; }
-    .bottom-item.active .nav-icon{
-        background:var(--gradient) !important;
-        box-shadow:0 12px 24px rgba(34,197,94,0.35) !important;
-        color:#06210f !important;
-    }
-
-    /* ---------- Modales ---------- */
-    .modal-overlay{ background:rgba(0,0,0,0.65) !important; }
-    .modal-box{
-        background:var(--surface) !important;
-        border:1px solid var(--border);
-    }
-    .modal-header{ border-bottom:1px solid var(--border) !important; }
-    .modal-header h3{ color:var(--text) !important; }
-    .modal-close-btn{ background:var(--surface-2) !important; color:var(--text) !important; }
-    .search-input-wrap, .profile-modal-row{
-        background:var(--surface-2) !important;
-        border:1px solid var(--border);
-    }
-    .search-input-wrap input{ color:var(--text) !important; }
-    .search-result-item:hover{ background:var(--surface-2) !important; }
-    .search-result-text strong{ color:var(--text) !important; }
-    .search-empty{ color:var(--muted) !important; }
-    .profile-modal-name{ color:var(--text) !important; }
-    .profile-modal-level{ color:var(--muted) !important; }
-    .profile-modal-row span{ color:var(--text) !important; }
-
-    /* ---------- Sondage / Quiz / Vidéo bonus ---------- */
-    .poll-option-btn{
-        background:var(--surface-2) !important;
-        border:1.5px solid var(--border) !important;
-        color:var(--text) !important;
-    }
-    .poll-option-btn:hover:not(:disabled){
-        border-color:var(--primary) !important;
-        background:rgba(34,197,94,0.1) !important;
-    }
-    .poll-option-btn.selected:not(.correct):not(.wrong){
-        border-color:var(--primary) !important;
-        background:rgba(34,197,94,0.12) !important;
-    }
-    .quiz-progress-bar, .video-progress-bar{ background:var(--surface-2) !important; }
-    .quiz-progress-fill, .video-progress-fill{ background:var(--gradient) !important; }
-    .quiz-step-label{ color:#4ade80 !important; }
-    .quiz-result-desc, .video-status-text{ color:var(--muted) !important; }
-
-    /* ---------- Squelettes de chargement ---------- */
-    .skeleton, .skel-activity-item{ background:var(--surface-2) !important; }
-    .skeleton{
-        background:linear-gradient(90deg,var(--surface-2) 25%,var(--surface-3) 37%,var(--surface-2) 63%) !important;
-        background-size:400% 100%;
-    }
-
-    /* ---------- Toasts ---------- */
-    .toast{
-        background:var(--surface) !important;
-        border:1px solid var(--border) !important;
-        color:var(--text) !important;
+    .card {
+        border-color: var(--border);
     }
 
     /* Gestion des icônes de basculement de thème */
-    .theme-toggle .feather-moon { display:inline-flex; } /* Montrer la lune en mode sombre */
-    .theme-toggle .feather-sun { display:none; } /* Cacher le soleil en mode sombre */
-} /* Fin de html[data-theme="dark"] */
+    .theme-toggle .feather-moon { display:inline-flex; } /* Montrer la lune en mode sombre foncé (pour revenir au mode moins foncé) */
+    .theme-toggle .feather-sun { display:none; } /* Cacher le soleil en mode sombre foncé */
+}
 
-/* Règle pour le thème clair (par défaut) pour masquer l'icône du soleil */
-/* Le bouton de thème doit montrer la lune par défaut */
-.theme-toggle .feather-sun { display:none; }
-.theme-toggle .feather-moon { display:inline-flex; }
+/* Gestion des icônes de basculement de thème pour le mode par défaut (maintenant sombre "light") */
+.theme-toggle .feather-sun { display:inline-flex; } /* Montrer le soleil en mode par défaut (pour passer au mode sombre foncé) */
+.theme-toggle .feather-moon { display:none; } /* Cacher la lune en mode par défaut */
 
 /* =========================
 INDICATEUR STREAK
@@ -1834,7 +1586,7 @@ CÉLÉBRATION TROPHÉE DÉBLOQUÉ
 @keyframes trophyPop{
     0%{ transform:scale(1); }
     35%{ transform:scale(1.08); box-shadow:0 0 0 10px rgba(245,158,11,0.35); }
-    100%{ transform:scale(1); box-shadow:0 8px 20px rgba(67,56,192,0.1); }
+    100%{ transform:scale(1); box-shadow:0 8px 20px rgba(0,0,0,0.1); }
 }
 
 .confetti-overlay{
@@ -1880,6 +1632,7 @@ RESPONSIVE
         font-size:1.5rem;
     }
 
+    /* Loyauté / Bonus Quotidien - Rendu responsive */
     .loyalty-section {
         flex-direction: column;
         gap: 16px;
@@ -1892,6 +1645,25 @@ RESPONSIVE
     .loyalty-action-btn {
         width: 100%;
         justify-content: center;
+    }
+
+    /* Trophées - Rendu responsive avec défilement horizontal */
+    .trophy-grid{
+        display:flex; /* Assure que c'est une flexbox */
+        flex-wrap:nowrap; /* Empêche le retour à la ligne */
+        gap:14px;
+        overflow-x:auto; /* Permet le défilement horizontal */
+        scroll-snap-type:x mandatory;
+        padding-bottom:6px; /* Espace pour la barre de défilement */
+        margin-left:-18px; /* Pour aligner avec les marges du conteneur parent */
+        margin-right:-18px;
+        padding-left:18px;
+        padding-right:18px;
+    }
+    .trophy-grid::-webkit-scrollbar{ height:0; } /* Cache la scrollbar sur Webkit */
+    .trophy-card{
+        flex:0 0 132px; /* Force la largeur des cartes et empêche le rétrécissement */
+        scroll-snap-align:start; /* Facilite le défilement par carte */
     }
 }
 
