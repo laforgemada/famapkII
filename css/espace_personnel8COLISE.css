@@ -1766,50 +1766,40 @@ RESPONSIVE
     border:1px solid rgba(22,163,74,0.25);
 }
 
-/* ---- Opportunités de points : grille 2 colonnes, tout est visible d'un coup d'œil ---- */
+/* ---- Opportunités de points : rangée horizontale défilante ---- */
 .earn-grid{
-    display:grid !important;
-    grid-template-columns:repeat(2, 1fr) !important;
-    gap:12px !important;
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    gap:14px !important;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scroll-snap-type:x mandatory;
+    padding:2px 2px 10px;
     margin-top:18px !important;
+    scrollbar-width:none;
 }
+.earn-grid::-webkit-scrollbar{ display:none; height:0; }
 .earn-card{
-    width:100%;
+    flex:0 0 min(220px, 68vw);
+    scroll-snap-align:start;
     border-radius:var(--radius-md);
-    flex-direction:column !important;
-    align-items:flex-start !important;
-    gap:10px !important;
-    min-height:150px;
-}
-.earn-card .earn-content{ width:100%; }
-.earn-card .earn-title{
-    white-space:normal;
-    font-size:clamp(0.85rem, 3.6vw, 0.95rem);
-    line-height:1.25;
-}
-.earn-card .earn-card-note{
-    white-space:normal;
-    overflow:visible;
-    text-overflow:clip;
-    display:-webkit-box;
-    -webkit-line-clamp:2;
-    -webkit-box-orient:vertical;
-    overflow:hidden;
-    line-height:1.35;
-}
-.earn-card .earn-bonus{
-    margin-top:auto;
-    align-self:flex-start;
 }
 
-/* ---- Trophées : grille 2 colonnes, aucune ambiguïté sur ce qui reste à débloquer ---- */
+/* ---- Trophées : rangée horizontale défilante ---- */
 .trophy-grid{
-    display:grid !important;
-    grid-template-columns:repeat(2, 1fr) !important;
-    gap:12px !important;
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    gap:14px !important;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scroll-snap-type:x mandatory;
+    padding:2px 2px 10px;
+    scrollbar-width:none;
 }
+.trophy-grid::-webkit-scrollbar{ display:none; height:0; }
 .trophy-card{
-    width:100%;
+    flex:0 0 min(140px, 40vw);
+    scroll-snap-align:start;
     border-radius:var(--radius-md);
 }
 .trophy-top{ padding:24px 8px; font-size:clamp(2.1rem,8vw,2.8rem); }
@@ -1855,7 +1845,8 @@ i[data-feather]{ stroke-width:2.1; }
     .hero-btn{ width:100%; }
     .bottom-item span{ font-size:0.62rem; }
     .card{ padding:16px; }
-    .earn-grid, .trophy-grid{ gap:8px !important; }
+    .trophy-grid .trophy-card{ flex-basis:120px; }
+    .earn-grid .earn-card{ flex-basis:74vw; }
 }
 
 /* ---- Très grands mobiles / petites tablettes : on borne la largeur utile ---- */
