@@ -141,7 +141,7 @@ body{
 }
 
 .lang-select option{
-    color:var(--text-main, #0f172a);
+    color:#181716;
 }
 
 .auth-buttons{
