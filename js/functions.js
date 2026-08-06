@@ -271,9 +271,9 @@ function renderArticles(){
         const langSelect = document.getElementById('langSwitcher');
         const currentLang = (langSelect ? langSelect.value : null) || localStorage.getItem('lang') || document.documentElement.lang || 'mg';
         
-        let readMoreText = "Vaky bebe kokoa";
+        let readMoreText = "Hijery ny lahatsoratra";
         if (currentLang === 'fr') {
-            readMoreText = "Lire plus";
+            readMoreText = "Voir l'article";
         } else if (currentLang === 'en') {
             readMoreText = "Read more";
         }
