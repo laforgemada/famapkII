@@ -149,7 +149,7 @@ HEADER PREMIUM
     border-radius: 50%;
     border: none;
     padding: 0;
-    background: var(--gradient); /* Gradient pour un look premium */
+    background: #4aadde; /* Gradient pour un look premium */
     color: white;
     font-size: 0.85rem;
     font-weight: 800;
@@ -442,7 +442,7 @@ WELCOME HERO
 
 .primary-btn{
     background:white;
-    color:var(--primary);
+    color:#4aadde;
 }
 
 .secondary-btn{
@@ -519,7 +519,7 @@ IMPACT
 .circle-text{
     font-size:1.6rem;
     font-weight:900;
-    color:var(--primary);
+    color:#ff0039;
 }
 
 .circle-sub{
@@ -616,7 +616,7 @@ ACTIVITY
 .activity-date-header {
     font-size: 0.95rem;
     font-weight: 800;
-    color: var(--primary);
+    color: #4aadde;
     margin-bottom: 15px;
     padding-bottom: 8px;
     border-bottom: 1px solid var(--bg);
@@ -980,14 +980,14 @@ BOTTOM NAV
 }
 
 .bottom-item.active{
-    color:var(--primary);
+    color:#4aadde;
 }
 
 .bottom-item.active .nav-icon{
     width:46px;
     height:46px;
     border-radius:16px;
-    background:var(--hero);
+    background:#4aadde;
     color:white;
     display:flex;
     align-items:center;
@@ -1037,8 +1037,7 @@ AJOUT DU STYLE COMPATIBLE POUR LE BONUS
 }
 .loyalty-action-btn {
     border: none;
-    background: var(--gradient);
-    color: white;
+    color: black;
     padding: 12px 20px;
     border-radius: 16px;
     font-weight: 800;
@@ -1737,13 +1736,8 @@ RESPONSIVE
 .hero-card::after{
     background:radial-gradient(circle, rgba(34,197,94,0.22) 0%, rgba(34,197,94,0) 70%);
 }
-.hero-mini{
-    background:rgba(34,197,94,0.22);
-    color:#86efac;
-    border:1px solid rgba(34,197,94,0.35);
-}
+
 .primary-btn{
-    background:var(--primary-2, var(--primary));
     color:#06210f;
     border-radius:var(--radius-pill);
     box-shadow:0 10px 22px rgba(22,163,74,0.35);
@@ -1762,7 +1756,7 @@ RESPONSIVE
 /* ---- Pastille de section façon "tag genre" ---- */
 .section-badge{
     background:rgba(22,163,74,0.14);
-    color:var(--primary);
+    color:#4aadde;
     border:1px solid rgba(22,163,74,0.25);
 }
 
@@ -1845,7 +1839,7 @@ i[data-feather]{ stroke-width:2.1; }
     padding:4px 2px;
 }
 .bottom-item.active .nav-icon{
-    background:var(--gradient);
+    background:#4aadde;
     box-shadow:0 12px 24px rgba(22,163,74,0.4);
 }
 
@@ -1903,7 +1897,6 @@ html[data-theme="dark"] .box-orange{ background:rgba(245,158,11,0.16); color:#fb
 html[data-theme="dark"] .box-green{ background:rgba(34,197,94,0.16); color:#4ade80; }
 
 html[data-theme="dark"] .loyalty-action-btn{
-    background:var(--gradient);
     color:#06210f;
     box-shadow:0 10px 22px rgba(34,197,94,0.3);
 }
@@ -1918,12 +1911,12 @@ html[data-theme="dark"] .streak-badge{
 }
 
 html[data-theme="dark"] .activity-item{ background:var(--surface-2); border:1px solid var(--border); }
-html[data-theme="dark"] .activity-page-btn.active{ background:var(--primary); color:#06210f; }
+html[data-theme="dark"] .activity-page-btn.active{ background:#4aadde; color:#06210f; }
 
 html[data-theme="dark"] .earn-card{ border:1px solid var(--border); background:var(--surface-2); }
 html[data-theme="dark"] .earn-card:hover{ border-color:rgba(34,197,94,0.4); background:var(--surface-3); }
 html[data-theme="dark"] .earn-bonus{ background:rgba(34,197,94,0.16); color:#4ade80; }
-html[data-theme="dark"] .earn-card:hover .earn-bonus{ background:var(--primary); color:#06210f; }
+html[data-theme="dark"] .earn-card:hover .earn-bonus{ background:#4aadde; color:#06210f; }
 html[data-theme="dark"] .earn-icon-blue{ background:linear-gradient(135deg,#3b82f6,#1d4ed8); }
 html[data-theme="dark"] .earn-icon-purple{ background:linear-gradient(135deg,#8b5cf6,#6d28d9); }
 html[data-theme="dark"] .earn-icon-green{ background:linear-gradient(135deg,#10b981,#047857); }
@@ -1943,7 +1936,7 @@ html[data-theme="dark"] .search-input-wrap input,
 html[data-theme="dark"] .profile-modal-name{ color:var(--text); }
 
 html[data-theme="dark"] .poll-option-btn{ background:var(--surface-2); border:1.5px solid var(--border); color:var(--text); }
-html[data-theme="dark"] .poll-option-btn:hover:not(:disabled){ border-color:var(--primary); background:rgba(34,197,94,0.1); }
+html[data-theme="dark"] .poll-option-btn:hover:not(:disabled){ border-color:#4aadde; background:rgba(34,197,94,0.1); }
 html[data-theme="dark"] .quiz-progress-fill,
 html[data-theme="dark"] .video-progress-fill{ background:var(--gradient); }
 html[data-theme="dark"] .quiz-step-label{ color:#4ade80; }

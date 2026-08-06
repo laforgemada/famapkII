@@ -545,6 +545,54 @@
 }
 </style>
 
+<style>
+.streak-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #ff4b2b, #ff0000);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 30px;
+    font-weight: bold;
+    box-shadow: 0 0 15px rgba(255, 50, 0, 0.6);
+    animation: badgePulse 2s infinite;
+}
+
+.fire-icon {
+    font-size: 28px;
+    display: inline-block;
+    animation: fireAnimation 0.8s infinite alternate;
+    filter: drop-shadow(0 0 8px orange);
+}
+
+/* Mouvement de la flamme */
+@keyframes fireAnimation {
+    0% {
+        transform: scale(1) rotate(-5deg);
+    }
+    50% {
+        transform: scale(1.15) rotate(5deg);
+    }
+    100% {
+        transform: scale(1) rotate(-5deg);
+    }
+}
+
+/* Effet lumineux du badge */
+@keyframes badgePulse {
+    0% {
+        box-shadow: 0 0 10px rgba(255, 60, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 25px rgba(255, 60, 0, 0.9);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(255, 60, 0, 0.4);
+    }
+}
+</style>
+
 </head>
 
 <body>
@@ -621,10 +669,7 @@
 
         <!-- Badge de Série de Connexion (Désactivé pour le moment) -->
  
-<div class="streak-badge" id="streakBadge">
-    <i data-feather="zap"></i>
-    <span id="streakText">0 jour de suite</span>
-</div>
+
 
 
         <h1 class="hero-title" id="welcome-user-title" aria-live="polite">
@@ -636,6 +681,10 @@
             les enseignements bibliques, les discussions
             chrétiennes et les contenus exclusifs.
         </p>
+<div class="streak-badge" id="streakBadge">
+    <span class="fire-icon">🔥</span>
+    <span id="streakText">0 jour de suite</span>
+</div>
 
         <div class="daily-goal-wrap" id="dailyGoalWrap" style="display:none;">
             <span class="daily-goal-label" id="dailyGoalLabel">0/4 activités aujourd'hui</span>
@@ -2756,7 +2805,7 @@ function renderUserStats() {
     const progressCircle = document.querySelector('.progress-circle');
     if (progressCircle) {
         progressCircle.style.background =
-            `conic-gradient(#7c3aed 0% ${progress}%, #e2e8f0 ${progress}% 100%)`;
+            `conic-gradient(rgb(107 143 209) 0%, rgb(11 176 255) 34%, rgb(226, 232, 240) 34%, rgb(226, 232, 240) 100%)`;
     }
 
     // Mise à jour des statistiques d'activité spécifiques avec les données réelles
