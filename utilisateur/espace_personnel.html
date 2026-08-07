@@ -273,9 +273,11 @@
 }
 
 .earn-card:not(.done):hover {
-    transform: translateY(-5px);
-    border-color: rgba(124, 58, 237, 0.35);
-    box-shadow: 0 12px 28px rgba(124, 58, 237, 0.12);
+    transform: translateY(-7px);
+    border-color: var(--primary-2); /* Couleur plus vive au survol */
+    box-shadow: 0 18px 36px rgba(var(--primary-2-rgb), 0.25); /* Ombre plus prononcée et colorée */
+    /* Ajout d'une animation subtile au survol */
+    animation: cardGlow 1.5s infinite alternate ease-in-out;
 }
 
 .earn-card:not(.done):hover::before {
@@ -284,6 +286,26 @@
 
 .earn-card:not(.done):active {
     transform: translateY(-2px) scale(0.98);
+    box-shadow: 0 8px 20px rgba(var(--primary-2-rgb), 0.1);
+}
+
+@keyframes cardGlow {
+    0% { box-shadow: 0 12px 28px rgba(var(--primary-2-rgb), 0.12); }
+    100% { box-shadow: 0 18px 36px rgba(var(--primary-2-rgb), 0.25), 0 0 15px rgba(var(--primary-2-rgb), 0.4); }
+}
+
+/* Nouvelles variables pour les couleurs RVB si elles ne sont pas déjà définies */
+:root {
+    --primary-2-rgb: 34, 197, 94; /* Exemple pour #22c55e */
+}
+
+html[data-theme="dark"] .earn-card:not(.done):hover {
+    border-color: var(--primary-2);
+    box-shadow: 0 18px 36px rgba(var(--primary-2-rgb), 0.25);
+}
+html[data-theme="dark"] @keyframes cardGlow {
+    0% { box-shadow: 0 12px 28px rgba(var(--primary-2-rgb), 0.12); }
+    100% { box-shadow: 0 18px 36px rgba(var(--primary-2-rgb), 0.25), 0 0 15px rgba(var(--primary-2-rgb), 0.4); }
 }
 
 /* État accompli (Fait) */
@@ -1881,35 +1903,49 @@ function markActionDoneToday(action) {
     setCache(earnKey(action), true);
 }
 
-const pollBank = [
-    { q: "Quel moment de la journée préfères-tu pour lire la Bible ?", options: ["Le matin", "Le midi", "Le soir", "La nuit"] },
-    { q: "Qu'est-ce qui nourrit le plus ta foi au quotidien ?", options: ["La prière", "La lecture biblique", "La communauté", "La méditation"] },
-    { q: "Quel fruit de l'Esprit aimerais-tu voir grandir en toi cette semaine ?", options: ["La patience", "La paix", "La joie", "L'amour"] },
-    { q: "Comment préfères-tu échanger ta foi avec les autres ?", options: ["En petit groupe", "En tête-à-tête", "Sur le chat", "En famille"] },
-    { q: "Quel type de contenu aimerais-tu voir davantage sur Apokalypsy ?", options: ["Études bibliques", "Témoignages", "Prières guidées", "Quiz et jeux"] },
-    { q: "Qu'est-ce qui te motive le plus à revenir chaque jour ?", options: ["La progression", "Les versets du jour", "La communauté", "Les points de fidélité"] }
+// Questions par défaut en cas d'échec de l'API
+const defaultPolls = [
+    { question: "Quel moment de la journée préfères-tu pour lire la Bible ?", options: ["Le matin", "Le midi", "Le soir", "La nuit"] },
+    { question: "Qu'est-ce qui nourrit le plus ta foi au quotidien ?", options: ["La prière", "La lecture biblique", "La communauté", "La méditation"] },
+    { question: "Quel fruit de l'Esprit aimerais-tu voir grandir en toi cette semaine ?", options: ["La patience", "La paix", "La joie", "L'amour"] }
 ];
 
-const quizBank = [
-    { q: "Combien Jésus avait-il de disciples proches ?", options: ["7", "12", "10", "3"], correct: 1 },
-    { q: "Qui a construit l'arche pour survivre au déluge ?", options: ["Abraham", "Moïse", "Noé", "David"], correct: 2 },
-    { q: "Dans quel livre trouve-t-on les Dix Commandements ?", options: ["Genèse", "Exode", "Lévitique", "Nombres"], correct: 1 },
-    { q: "Qui a vaincu le géant Goliath ?", options: ["Saül", "Samson", "David", "Salomon"], correct: 2 },
-    { q: "Quel est le premier livre de la Bible ?", options: ["Exode", "Psaumes", "Genèse", "Matthieu"], correct: 2 },
-    { q: "Sur quelle mer Jésus a-t-il marché ?", options: ["Mer Rouge", "Mer de Galilée", "Mer Morte", "Méditerranée"], correct: 1 },
-    { q: "Combien de jours et de nuits a duré le déluge ?", options: ["7", "40", "100", "12"], correct: 1 }
+const defaultQuizzes = [
+    { question: "Combien Jésus avait-il de disciples proches ?", options: ["7", "12", "10", "3"], correct: 1 },
+    { question: "Qui a construit l'arche pour survivre au déluge ?", options: ["Abraham", "Moïse", "Noé", "David"], correct: 2 },
+    { question: "Dans quel livre trouve-t-on les Dix Commandements ?", options: ["Genèse", "Exode", "Lévitique", "Nombres"], correct: 1 }
 ];
 
-/* ---------- SONDAGE QUOTIDIEN ---------- */
-function startDailyPoll() {
+/* ---------- SONDAGE QUOTIDIEN DYNAMIQUE ---------- */
+let currentPoll = null; // Stocke le sondage actuel
+
+async function startDailyPoll() {
     if (!currentUsername) { showToast("Veuillez vous connecter pour participer.", "error"); return; }
     if (isActionDoneToday('poll')) { showToast("Vous avez déjà répondu au sondage aujourd'hui. Revenez demain !", "info"); return; }
 
-    const item = pollBank[getDayOfYear() % pollBank.length];
-    setText('pollQuestionText', item.q);
+    try {
+        const response = await fetch(DAILY_POLL_API_URL); // Utilisation de l'API
+        const data = await response.json();
+        if (data.success && data.poll) {
+            currentPoll = data.poll;
+        } else {
+            console.warn("API de sondage non disponible, utilisation des questions par défaut.");
+            currentPoll = defaultPolls[Math.floor(Math.random() * defaultPolls.length)]; // Question aléatoire par défaut
+        }
+    } catch (error) {
+        console.error("Erreur lors de la récupération du sondage quotidien :", error);
+        currentPoll = defaultPolls[Math.floor(Math.random() * defaultPolls.length)]; // Question aléatoire par défaut en cas d'erreur réseau
+    }
+
+    if (!currentPoll) {
+        showToast("Impossible de charger le sondage pour le moment.", "error");
+        return;
+    }
+
+    setText('pollQuestionText', currentPoll.question);
 
     const list = document.getElementById('pollOptionsList');
-    list.innerHTML = item.options.map((opt, i) => `
+    list.innerHTML = currentPoll.options.map((opt, i) => `
         <button class="poll-option-btn" onclick="submitPollAnswer(${i})">${opt}</button>
     `).join('');
 
@@ -1931,19 +1967,45 @@ async function submitPollAnswer(index) {
     setTimeout(() => closeModal('pollModal'), 700);
 }
 
-/* ---------- QUIZ BIBLIQUE ---------- */
+/* ---------- QUIZ BIBLIQUE DYNAMIQUE ---------- */
 let quizState = { questions: [], step: 0, correctCount: 0 };
 
-function startBibleQuiz() {
+async function startBibleQuiz() {
     if (!currentUsername) { showToast("Veuillez vous connecter pour participer.", "error"); return; }
     if (isActionDoneToday('quiz')) { showToast("Vous avez déjà fait le quiz aujourd'hui. Revenez demain !", "info"); return; }
 
-    const seed = getDayOfYear();
-    const picked = [];
-    for (let i = 0; i < 3; i++) {
-        picked.push(quizBank[(seed + i * 2) % quizBank.length]);
+    try {
+        const response = await fetch(BIBLE_QUIZ_API_URL); // Utilisation de l'API
+        const data = await response.json();
+        if (data.success && Array.isArray(data.quiz) && data.quiz.length > 0) {
+            quizState = { questions: data.quiz, step: 0, correctCount: 0 };
+        } else {
+            console.warn("API de quiz non disponible ou vide, utilisation des questions par défaut.");
+            // Sélectionne 3 questions aléatoires parmi les questions par défaut
+            const pickedDefaults = [];
+            const availableIndices = Array.from({ length: defaultQuizzes.length }, (_, i) => i);
+            for (let i = 0; i < 3 && availableIndices.length > 0; i++) {
+                const randomIndex = Math.floor(Math.random() * availableIndices.length);
+                pickedDefaults.push(defaultQuizzes[availableIndices.splice(randomIndex, 1)[0]]);
+            }
+            quizState = { questions: pickedDefaults, step: 0, correctCount: 0 };
+        }
+    } catch (error) {
+        console.error("Erreur lors de la récupération du quiz biblique :", error);
+        // Sélectionne 3 questions aléatoires parmi les questions par défaut en cas d'erreur réseau
+        const pickedDefaults = [];
+        const availableIndices = Array.from({ length: defaultQuizzes.length }, (_, i) => i);
+        for (let i = 0; i < 3 && availableIndices.length > 0; i++) {
+            const randomIndex = Math.floor(Math.random() * availableIndices.length);
+            pickedDefaults.push(defaultQuizzes[availableIndices.splice(randomIndex, 1)[0]]);
+        }
+        quizState = { questions: pickedDefaults, step: 0, correctCount: 0 };
     }
-    quizState = { questions: picked, step: 0, correctCount: 0 };
+
+    if (quizState.questions.length === 0) {
+        showToast("Impossible de charger le quiz pour le moment.", "error");
+        return;
+    }
 
     document.getElementById('quizResultBox').style.display = 'none';
     document.getElementById('quizQuestionText').style.display = '';
@@ -1959,10 +2021,10 @@ function renderQuizStep() {
     const q = questions[step];
 
     setText('quizStepLabel', `Question ${step + 1}/${questions.length}`);
-    setText('quizQuestionText', q.q);
+    setText('quizQuestionText', q.question); // 'question' au lieu de 'q'
 
     const progressFill = document.getElementById('quizProgressFill');
-    if (progressFill) progressFill.style.width = `${(step / questions.length) * 100}%`;
+    if (progressFill) progressFill.style.width = `${((step + 1) / questions.length) * 100}%`; // Barre de progression incluant l'étape actuelle
 
     const list = document.getElementById('quizOptionsList');
     list.innerHTML = q.options.map((opt, i) => `

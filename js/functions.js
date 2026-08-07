@@ -59,6 +59,9 @@ const translations = {
 const API_URL = 'https://apokalypsy.com/api/articles/list';
 const LEADERBOARD_API_URL = 'https://apokalypsy.com/api/users/leaderboard';
 const STATS_API_URL = 'https://apokalypsy.com/api/global/stats';
+// Nouveaux points d'API pour le sondage et le quiz dynamiques
+const DAILY_POLL_API_URL = `${API_BASE_URL}/api/daily-poll`;
+const BIBLE_QUIZ_API_URL = `${API_BASE_URL}/api/bible-quiz`;
 
 let allArticles = [];
 let currentCategoryIndex = 0; 
