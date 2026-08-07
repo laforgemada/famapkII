@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Espace Membre</title>
-<base href="/famapkII/">
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <link rel="icon" type="image/png" href="/famapkII/logo/logo.png">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
@@ -24,14 +23,17 @@
     })();
 
     // Charger le CSS de la page en utilisant basePath (dynamiquement via JS)
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = basePath + '/css/espace_personnel.css';
-    document.head.appendChild(link);
-</script>
+    const linkCss = document.createElement('link');
+    linkCss.rel = 'stylesheet';
+    linkCss.href = basePath + '/css/espace_personnel.css';
+    document.head.appendChild(linkCss);
 
-<!-- Charger les fonctions globales avant le script inline qui les utilise -->
-<script src="${basePath}/js/functions.js"></script>
+    // Charger les fonctions globales (functions.js) dynamiquement AVANT le script inline principal
+    const scriptFunctions = document.createElement('script');
+    scriptFunctions.src = basePath + '/js/functions.js';
+    scriptFunctions.defer = true; // Utilise defer pour ne pas bloquer le rendu
+    document.head.appendChild(scriptFunctions);
+</script>
 
 
 
