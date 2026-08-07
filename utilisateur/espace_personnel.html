@@ -22,10 +22,13 @@
             document.documentElement.setAttribute('data-theme', theme);
         } catch (e) {}
     })();
-</script>
 
-<!-- Charger le CSS de la page en utilisant basePath -->
-<link rel="stylesheet" href="${basePath}/css/espace_personnel.css">
+    // Charger le CSS de la page en utilisant basePath (dynamiquement via JS)
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = basePath + '/css/espace_personnel.css';
+    document.head.appendChild(link);
+</script>
 
 <!-- Charger les fonctions globales avant le script inline qui les utilise -->
 <script src="${basePath}/js/functions.js"></script>
