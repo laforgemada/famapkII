@@ -188,9 +188,13 @@
                 const data = await response.json();
 
                 if (response.ok && data.status === 'success') {
-                    localStorage.setItem('user_name', data.userData.username);
-                    localStorage.setItem('user_full_data', JSON.stringify(data.userData));
-                    localStorage.setItem('token', data.token);
+
+					// Sauvegarde du token API pour les requêtes sécurisées
+					localStorage.setItem('token', data.token);
+
+					// Sauvegarde des informations utilisateur
+					localStorage.setItem('user_name', data.userData.username);
+					localStorage.setItem('user_full_data', JSON.stringify(data.userData));
                     
                     const roles = data.userData.roles;
 
