@@ -10,6 +10,10 @@
 <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
 <script src="https://unpkg.com/feather-icons" defer></script>
 <script>
+    // Définir basePath de manière globale pour les chargements de ressources.
+    const isGitHubPages = window.location.hostname.includes("github.io");
+    const basePath = isGitHubPages ? "/famapkII" : "";
+
     // Appliqué immédiatement (avant le CSS/rendu) pour éviter le flash de thème clair
     (function() {
         try {
@@ -19,6 +23,12 @@
         } catch (e) {}
     })();
 </script>
+
+<!-- Charger le CSS de la page en utilisant basePath -->
+<link rel="stylesheet" href="${basePath}/css/espace_personnel.css">
+
+<!-- Charger les fonctions globales avant le script inline qui les utilise -->
+<script src="${basePath}/js/functions.js"></script>
 
 
 
@@ -1093,17 +1103,8 @@ html[data-theme="dark"] @keyframes cardGlow {
 </div>
 
 
-<script>
-    const isGitHubPages = window.location.hostname.includes("github.io");
-    const basePath = isGitHubPages ? "/famapkII" : "";
-    
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = basePath + '/css/espace_personnel.css';
-    document.head.appendChild(link);
-</script>
 
-<script>
+<script defer>
 const DEBUG = true; // API_BASE_URL est maintenant défini dans functions.js
 
 let currentUsername = null;
