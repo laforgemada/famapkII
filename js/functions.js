@@ -1,4 +1,6 @@
 
+const API_BASE_URL = 'https://apokalypsy.com'; // Définition de API_BASE_URL pour être disponible globalement
+
 const translations = {
     mg:{
         connexion:"Miditra",
