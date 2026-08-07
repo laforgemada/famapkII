@@ -152,6 +152,23 @@
     </div>
 
     <script>
+// Connexion avec Google
+function handleSocialLogin(provider) {
+
+    if (provider === 'google') {
+
+        const redirectUrl =
+            window.location.origin +
+            '/utilisateur/espace_personnel.html';
+
+
+        window.location.href =
+            'https://apokalypsy.com/connect/google?redirect=' +
+            encodeURIComponent(redirectUrl);
+
+    }
+
+}
 document.getElementById('loginForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
