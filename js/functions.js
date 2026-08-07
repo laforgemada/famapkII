@@ -56,6 +56,14 @@ const translations = {
     }
 };
 
+// ⚠️ API_BASE_URL n'est PAS défini ici : espace_personnel.html le déclare
+// désormais localement (voir commentaire dans ce fichier), car il charge
+// functions.js dynamiquement et rien ne garantit l'ordre d'exécution entre
+// les deux. Le déclarer aussi ici causerait un SyntaxError
+// "Identifier 'API_BASE_URL' has already been declared" dès qu'une page
+// charge les deux scripts. Si une future page a besoin de cette constante
+// SANS déclarer sa propre copie locale, ajoute-la ici à ce moment-là.
+
 const API_URL = 'https://apokalypsy.com/api/articles/list';
 const LEADERBOARD_API_URL = 'https://apokalypsy.com/api/users/leaderboard';
 const STATS_API_URL = 'https://apokalypsy.com/api/global/stats';
@@ -436,7 +444,8 @@ async function fetchGlobalStats() {
    LOGOUT
 ========================= */
 function logout(){
-    const lang = document.getElementById('langSwitcher').value;
+    const langEl = document.getElementById('langSwitcher');
+    const lang = langEl ? langEl.value : (localStorage.getItem('app_lang') || 'fr');
     const t = translations[lang];
 
     if(confirm(t.confirmLogout)){
@@ -457,9 +466,14 @@ window.onload = () => {
     // Appelle changeLanguage pour appliquer les traductions initiales et les badges de catégorie.
     changeLanguage(); 
 
-    fetchLeaderboard();
-    fetchArticles();
-    fetchGlobalStats();
+    // Ces trois fonctions ciblent des éléments qui n'existent que sur la page
+    // d'accueil (index.html). functions.js étant partagé par plusieurs pages
+    // (espace_personnel.html, bible.html...), on vérifie que ces éléments
+    // sont bien présents avant d'appeler ces fonctions, sinon elles
+    // plantaient avec "Cannot set properties of null" sur les autres pages.
+    if (document.getElementById('leaderboard-podium')) fetchLeaderboard();
+    if (document.getElementById('articles-container')) fetchArticles();
+    if (document.getElementById('stat-members') || document.getElementById('stat-articles')) fetchGlobalStats();
 };
 /* =========================
    GESTION DU MODAL D'ARTICLE

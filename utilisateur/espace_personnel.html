@@ -31,7 +31,15 @@
     // Charger les fonctions globales (functions.js) dynamiquement AVANT le script inline principal
     const scriptFunctions = document.createElement('script');
     scriptFunctions.src = basePath + '/js/functions.js';
-    scriptFunctions.defer = true; // Utilise defer pour ne pas bloquer le rendu
+    // ⚠️ "defer" n'a AUCUN EFFET sur un <script> créé dynamiquement en JS
+    // (defer ne fonctionne que pour les scripts déjà présents dans le HTML
+    // au moment du parsing). Un script injecté ainsi s'exécute par défaut en
+    // mode "async", donc sans garantie d'ordre ni d'avoir fini AVANT que
+    // DOMContentLoaded ne se déclenche et n'utilise ses fonctions/constantes.
+    // "async = false" est la technique standard pour forcer un script injecté
+    // dynamiquement à s'exécuter dans l'ordre et à bloquer DOMContentLoaded
+    // jusqu'à ce qu'il soit chargé, exactement comme "defer" l'aurait fait.
+    scriptFunctions.async = false;
     document.head.appendChild(scriptFunctions);
 </script>
 
@@ -686,10 +694,6 @@ html[data-theme="dark"] @keyframes cardGlow {
                 ??
             </button>
 
-            <button class="nav-btn" aria-label="Se déconnecter" onclick="logout()">
-                <i data-feather="log-out"></i>
-            </button>
-
         </div>
 
     </div>
@@ -1002,7 +1006,21 @@ html[data-theme="dark"] @keyframes cardGlow {
                 <span id="profileModalChapters">0 chapitres lus</span>
             </div>
 
-            <button class="profile-modal-logout" onclick="logout()">
+            <button class="profile-modal-logout" onclick="requestEspaceLogout()">
+                <i data-feather="log-out"></i> Se déconnecter
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation de déconnexion (remplace window.confirm(), non fiable dans certaines WebView Android) -->
+<div class="modal-overlay" id="logoutConfirmModal" onclick="closeModalOnOverlay(event, 'logoutConfirmModal')">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-label="Confirmer la déconnexion" style="max-width:340px; text-align:center; padding:28px 22px;">
+        <p style="font-weight:800; font-size:1rem; margin:0 0 6px;">Se déconnecter ?</p>
+        <p style="color:var(--muted); font-size:0.85rem; margin:0 0 22px;">Vous devrez vous reconnecter pour retrouver votre espace.</p>
+        <div style="display:flex; gap:10px;">
+            <button onclick="closeModal('logoutConfirmModal')" style="flex:1; border:1px solid var(--border, #e2e8f0); background:transparent; color:var(--text-main, inherit); font-weight:700; padding:12px; border-radius:14px; cursor:pointer;">Annuler</button>
+            <button class="profile-modal-logout" onclick="performEspaceLogout()" style="flex:1; margin:0;">
                 <i data-feather="log-out"></i> Se déconnecter
             </button>
         </div>
@@ -1103,7 +1121,17 @@ html[data-theme="dark"] @keyframes cardGlow {
 
 
 <script defer>
-const DEBUG = true; // API_BASE_URL est maintenant défini dans functions.js
+const DEBUG = true;
+
+// Défini ICI, localement, plutôt que dans functions.js : cette page charge
+// functions.js de façon dynamique/asynchrone, donc rien ne garantissait que
+// functions.js ait fini de s'exécuter avant que ce script n'en ait besoin
+// (d'où les erreurs "API_BASE_URL is not defined" malgré le correctif dans
+// functions.js). En le définissant directement ici, comme le fait déjà
+// bible.html, on élimine complètement ce problème d'ordre de chargement.
+const API_BASE_URL = 'https://apokalypsy.com';
+const DAILY_POLL_API_URL = `${API_BASE_URL}/api/poll/today`;
+const BIBLE_QUIZ_API_URL = `${API_BASE_URL}/api/quiz/today`;
 
 let currentUsername = null;
 let loyaltyData = null;
@@ -1439,6 +1467,7 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
         closeModal('searchModal');
         closeModal('profileModal');
+        closeModal('logoutConfirmModal');
         const dropdown = document.getElementById('notifDropdown');
         if (dropdown) {
             dropdown.classList.remove('show');
@@ -1816,18 +1845,34 @@ if (window.Notification && Notification.permission !== "denied" && Notification.
     Notification.requestPermission();
 }
 
-function logout(){
-    if(confirm("Voulez-vous quitter votre session ?")){
-        localStorage.removeItem('user_name');
-        localStorage.removeItem('user_role');
-        localStorage.removeItem('token');
-        
-        // Détection automatique du chemin de base pour GitHub Pages ou Localhost
-        const isGitHubPages = window.location.hostname.includes("github.io");
-        const basePath = isGitHubPages ? "/famapkII" : "";
-        
-        window.location.href = basePath + "/index.html";
+function requestEspaceLogout(){
+    // Nom volontairement unique (pas "logout") : functions.js, chargé sur
+    // cette même page, déclare AUSSI une fonction globale "logout()" (pour
+    // la page d'accueil, avec sa propre logique liée au sélecteur de
+    // langue). En JavaScript, deux fonctions globales du même nom se
+    // écrasent l'une l'autre — celle chargée en dernier gagne. C'est ce qui
+    // provoquait le crash "Cannot read properties of null (reading 'value')" :
+    // la fonction logout() de functions.js s'exécutait à la place de la
+    // nôtre. On utilise donc un nom garanti unique sur cette page.
+    const modal = document.getElementById('logoutConfirmModal');
+    if (modal) {
+        modal.classList.add('show');
+    } else {
+        // Filet de sécurité si jamais la modale n'existe pas sur une page.
+        performEspaceLogout();
     }
+}
+
+function performEspaceLogout(){
+    localStorage.removeItem('user_name');
+    localStorage.removeItem('user_role');
+    localStorage.removeItem('token');
+
+    // Détection automatique du chemin de base pour GitHub Pages ou Localhost
+    const isGitHubPages = window.location.hostname.includes("github.io");
+    const basePath = isGitHubPages ? "/famapkII" : "";
+
+    window.location.href = basePath + "/index.html";
 }
 
 /* =========================
