@@ -1169,6 +1169,33 @@ let userPoints = {
     prayerMinutes: 0 // Dérivé des points totaux pour l'instant
 };
 
+const params = new URLSearchParams(window.location.search);
+
+const googleToken = params.get('token');
+const googleUser = params.get('user');
+
+
+if (googleToken) {
+
+    localStorage.setItem('token', googleToken);
+
+    console.log(
+        "Token Google enregistré :",
+        googleToken
+    );
+}
+
+
+if (googleUser) {
+
+    localStorage.setItem(
+        'user_name',
+        googleUser
+    );
+}
+
+
+
 /* =========================
 DEBUG GLOBAL
 ========================= */
