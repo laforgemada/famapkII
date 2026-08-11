@@ -159,13 +159,17 @@
             border-color: rgba(255,255,255,0.12);
         }
 
-        html[data-theme="dark"] .chapter-select-wrap {
+        html[data-theme="dark"] .chapter-chip {
             border-color: var(--border);
             background: var(--surface-2);
+        }
+        html[data-theme="dark"] .chapter-chip:hover{
+            background: var(--surface-3, #26272f);
         }
 
         html[data-theme="dark"] .book-icon,
         html[data-theme="dark"] .num,
+        html[data-theme="dark"] .chapter-chip.active,
         html[data-theme="dark"] .book-filter-btn,
         html[data-theme="dark"] .btn-reset,
         html[data-theme="dark"] .grid-item.selected{
@@ -991,58 +995,32 @@
             box-shadow:0 12px 30px rgba(22,163,74,0.4);
         }
 
-        .chapter-select-wrap{
-            position:relative;
+        .chapter-chips{
             display:flex;
-            align-items:center;
-            gap:10px;
-            margin:14px 20px 10px;
-            padding:4px 4px 4px 16px;
-            background:var(--surface);
+            flex-wrap:wrap;
+            gap:8px;
+            padding:14px 20px 10px;
+        }
+        .chapter-chip{
             border:1px solid var(--border);
-            border-radius:var(--radius-pill, 100px);
-        }
-        .chapter-select-label{
-            font-size:0.78rem;
-            font-weight:800;
+            background:var(--surface);
             color:var(--text-muted);
-            white-space:nowrap;
+            font-weight:800;
+            font-size:0.8rem;
+            width:38px;
+            height:38px;
+            border-radius:12px;
+            cursor:pointer;
+            transition:0.2s ease;
         }
-        .chapter-select{
-            flex:1;
-            appearance:none;
-            -webkit-appearance:none;
-            border:none;
+        .chapter-chip:hover{
+            background:var(--bg);
+        }
+        .chapter-chip.active{
             background:var(--gradient);
             color:white;
-            font-weight:800;
-            font-size:0.85rem;
-            padding:10px 34px 10px 16px;
-            border-radius:var(--radius-pill, 100px);
-            cursor:pointer;
+            border:none;
             box-shadow:0 6px 15px rgba(22,163,74,0.25);
-        }
-        .chapter-select:focus{
-            outline:2px solid rgba(22,163,74,0.4);
-            outline-offset:2px;
-        }
-        /* Le <select> lui-même (fermé) reste en pilule verte, mais la liste
-           déroulante qui s'ouvre est rendue par le navigateur/l'OS avec un
-           fond blanc par défaut : sans cette règle, le texte blanc hérité
-           devient invisible sur ce fond blanc une fois la liste ouverte. */
-        .chapter-select option{
-            background:#ffffff;
-            color:#0f172a;
-        }
-        .chapter-select-icon{
-            position:absolute;
-            right:16px;
-            top:50%;
-            transform:translateY(-50%);
-            width:16px;
-            height:16px;
-            color:white;
-            pointer-events:none;
         }
 
         .chapter-tools{
@@ -2545,13 +2523,14 @@ i[data-feather]{ stroke-width:2.1; }
 
 /* ---- Boutons clés en pilule, cohérents avec le reste de l'app ---- */
 .book-filter-btn, .selector-close-btn{ border-radius:var(--radius-pill); }
+.chapter-chip{ border-radius:var(--radius-pill); }
 #validateReadBtn{ border-radius:var(--radius-pill); }
 .guest-banner{ border-radius:var(--radius-md); }
 .points-badge{ border-radius:var(--radius-pill); }
 
 /* ---- Zones tactiles confortables (Android) ---- */
 .nav-btn{ min-width:44px; min-height:44px; }
-.chapter-select{ min-height:40px; }
+.chapter-chip{ min-width:40px; min-height:40px; }
 .grid-item{ min-height:44px; display:flex; align-items:center; justify-content:center; }
 
 /* ---- Petits écrans (≤380px) ---- */
@@ -2875,22 +2854,6 @@ const UI_LABELS = {
     en: { search: "Search a book...", at: "Old Testament", nt: "New Testament" }
 };
 
-// Nombre réel de chapitres par livre (fait biblique fixe, indépendant de
-// l'API). Sert uniquement à détecter une réponse/cache incomplet (ex :
-// Genèse doit avoir 50 chapitres) et à forcer un nouveau téléchargement
-// plutôt que de faire confiance indéfiniment à des données tronquées.
-const CANONICAL_CHAPTER_COUNTS = [
-    50,40,27,36,34,24,21,4,
-    31,24,22,25,29,36,10,
-    13,10,42,150,31,12,8,
-    66,52,5,48,12,14,3,9,
-    1,4,7,3,3,3,2,14,4,
-    28,16,24,21,28,16,16,13,
-    6,6,4,4,5,3,
-    6,4,3,1,13,5,5,3,
-    5,1,1,1,22
-];
-
 // data{} garde la même forme qu'avant pour ne pas casser le reste du code :
 // data[lang].books[i] = { name, number, chapters: null (pas encore chargé) | [...] }
 const data = {};
@@ -2912,73 +2875,23 @@ const data = {};
 // Récupère un livre complet (tous ses chapitres) depuis l'API, avec cache mémoire + localStorage.
 async function fetchLiveBook(langCode, bookNumber) {
     const cacheKey = `bibleLive_${langCode}_${bookNumber}`;
-    const expectedChapters = CANONICAL_CHAPTER_COUNTS[bookNumber - 1];
-    const code = TRANSLATION_CODES[langCode];
-
-    let normalized = null;
 
     const stored = localStorage.getItem(cacheKey);
     if (stored) {
-        try {
-            const cached = JSON.parse(stored);
-            if (!expectedChapters || (cached.chapters && cached.chapters.length >= expectedChapters)) {
-                return cached;
-            }
-            // Cache incomplet (bug précédent, ou réponse API tronquée déjà
-            // enregistrée par le passé) : on part de ce qu'on a et on
-            // complète ci-dessous, au lieu de tout retélécharger.
-            normalized = cached;
-            console.warn(`Cache incomplet pour le livre ${bookNumber} (${cached.chapters ? cached.chapters.length : 0}/${expectedChapters} chapitres) : complément en cours.`);
-        } catch (e) { /* cache corrompu, on ignore et on retélécharge */ }
+        try { return JSON.parse(stored); } catch (e) { /* cache corrompu, on retente le réseau */ }
     }
 
-    if (!normalized) {
-        const url = `${BIBLE_API_BASE}/${code}/${bookNumber}.json`;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Erreur réseau (${response.status})`);
-        const raw = await response.json();
-        normalized = normalizeLiveBookResponse(raw);
-    }
+    const code = TRANSLATION_CODES[langCode];
+    const url = `${BIBLE_API_BASE}/${code}/${bookNumber}.json`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Erreur réseau (${response.status})`);
+    const raw = await response.json();
+    const normalized = normalizeLiveBookResponse(raw);
 
-    // BUG CORRIGÉ : pour les gros livres (ex : Genèse, 50 chapitres),
-    // l'endpoint "livre entier" de l'API peut renvoyer une réponse tronquée
-    // (limite de taille/temps côté serveur). Plutôt que d'abandonner ou de
-    // se contenter d'une partie du livre, on va chercher individuellement
-    // chaque chapitre manquant via l'endpoint "un seul chapitre".
-    if (expectedChapters && normalized.chapters.length < expectedChapters) {
-        const haveChapters = new Set(normalized.chapters.map(c => c.chapter));
-        const missing = [];
-        for (let c = 1; c <= expectedChapters; c++) {
-            if (!haveChapters.has(c)) missing.push(c);
-        }
-        console.warn(`Livre ${bookNumber} incomplet (${normalized.chapters.length}/${expectedChapters}) : récupération individuelle de ${missing.length} chapitre(s) manquant(s) (${missing.join(', ')}).`);
-
-        const fetchedMissing = await Promise.all(missing.map(async (chapNum) => {
-            try {
-                const chapUrl = `${BIBLE_API_BASE}/${code}/${bookNumber}/${chapNum}.json`;
-                const chapResponse = await fetch(chapUrl);
-                if (!chapResponse.ok) return null;
-                const chapRaw = await chapResponse.json();
-                const chapNormalized = normalizeLiveBookResponse(chapRaw);
-                return chapNormalized.chapters[0] || null;
-            } catch (e) {
-                console.warn(`Échec du chargement du chapitre ${chapNum} du livre ${bookNumber} :`, e);
-                return null;
-            }
-        }));
-
-        fetchedMissing.forEach(ch => { if (ch) normalized.chapters.push(ch); });
-        normalized.chapters.sort((a, b) => a.chapter - b.chapter);
-    }
-
-    if (expectedChapters && normalized.chapters.length < expectedChapters) {
-        console.warn(`Livre ${bookNumber} toujours incomplet après complément (${normalized.chapters.length}/${expectedChapters}) : non mis en cache, nouvelle tentative au prochain chargement.`);
-    } else {
-        try {
-            localStorage.setItem(cacheKey, JSON.stringify(normalized));
-        } catch (e) {
-            console.warn("Cache localStorage plein, le livre ne sera pas mis en cache :", e);
-        }
+    try {
+        localStorage.setItem(cacheKey, JSON.stringify(normalized));
+    } catch (e) {
+        console.warn("Cache localStorage plein, le livre ne sera pas mis en cache :", e);
     }
 
     return normalized;
@@ -4195,13 +4108,11 @@ function render(){
                 const activeChapterNum = openChapterByBook[i] || b.chapters[0].chapter;
                 const chapterObj = b.chapters.find(ch => ch.chapter === activeChapterNum);
 
-                html += `<div class="chapter-select-wrap">
-                    <label class="chapter-select-label" for="chapterSelect-${i}">Chapitre</label>
-                    <select class="chapter-select" id="chapterSelect-${i}" onclick="event.stopPropagation()" onchange="event.stopPropagation(); openChapter(${i}, parseInt(this.value, 10))">
-                        ${b.chapters.map(ch => `<option value="${ch.chapter}" ${ch.chapter === activeChapterNum ? 'selected' : ''}>Chapitre ${ch.chapter}</option>`).join('')}
-                    </select>
-                    <i data-feather="chevron-down" class="chapter-select-icon"></i>
-                </div>`;
+                html += `<div class="chapter-chips">`;
+                b.chapters.forEach(ch => {
+                    html += `<button class="chapter-chip ${ch.chapter === activeChapterNum ? 'active' : ''}" onclick="event.stopPropagation(); openChapter(${i}, ${ch.chapter})">${ch.chapter}</button>`;
+                });
+                html += `</div>`;
 
                 if (chapterObj) {
                     const filterKey = `${i}_${activeChapterNum}`;

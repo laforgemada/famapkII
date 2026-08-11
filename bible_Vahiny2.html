@@ -1026,14 +1026,6 @@
             outline:2px solid rgba(22,163,74,0.4);
             outline-offset:2px;
         }
-        /* Le <select> lui-même (fermé) reste en pilule verte, mais la liste
-           déroulante qui s'ouvre est rendue par le navigateur/l'OS avec un
-           fond blanc par défaut : sans cette règle, le texte blanc hérité
-           devient invisible sur ce fond blanc une fois la liste ouverte. */
-        .chapter-select option{
-            background:#ffffff;
-            color:#0f172a;
-        }
         .chapter-select-icon{
             position:absolute;
             right:16px;
@@ -2913,66 +2905,35 @@ const data = {};
 async function fetchLiveBook(langCode, bookNumber) {
     const cacheKey = `bibleLive_${langCode}_${bookNumber}`;
     const expectedChapters = CANONICAL_CHAPTER_COUNTS[bookNumber - 1];
-    const code = TRANSLATION_CODES[langCode];
-
-    let normalized = null;
 
     const stored = localStorage.getItem(cacheKey);
     if (stored) {
         try {
             const cached = JSON.parse(stored);
+            // BUG CORRIGÉ : le cache était auparavant considéré comme
+            // valide pour toujours, même s'il avait été enregistré depuis
+            // une réponse réseau incomplète (ex : Genèse mise en cache avec
+            // seulement 24 chapitres au lieu de 50). On vérifie maintenant
+            // le nombre de chapitres avant de faire confiance au cache.
             if (!expectedChapters || (cached.chapters && cached.chapters.length >= expectedChapters)) {
                 return cached;
             }
-            // Cache incomplet (bug précédent, ou réponse API tronquée déjà
-            // enregistrée par le passé) : on part de ce qu'on a et on
-            // complète ci-dessous, au lieu de tout retélécharger.
-            normalized = cached;
-            console.warn(`Cache incomplet pour le livre ${bookNumber} (${cached.chapters ? cached.chapters.length : 0}/${expectedChapters} chapitres) : complément en cours.`);
-        } catch (e) { /* cache corrompu, on ignore et on retélécharge */ }
+            console.warn(`Cache incomplet pour le livre ${bookNumber} (${cached.chapters ? cached.chapters.length : 0}/${expectedChapters} chapitres) : nouveau téléchargement.`);
+        } catch (e) { /* cache corrompu, on retente le réseau */ }
     }
 
-    if (!normalized) {
-        const url = `${BIBLE_API_BASE}/${code}/${bookNumber}.json`;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Erreur réseau (${response.status})`);
-        const raw = await response.json();
-        normalized = normalizeLiveBookResponse(raw);
-    }
-
-    // BUG CORRIGÉ : pour les gros livres (ex : Genèse, 50 chapitres),
-    // l'endpoint "livre entier" de l'API peut renvoyer une réponse tronquée
-    // (limite de taille/temps côté serveur). Plutôt que d'abandonner ou de
-    // se contenter d'une partie du livre, on va chercher individuellement
-    // chaque chapitre manquant via l'endpoint "un seul chapitre".
-    if (expectedChapters && normalized.chapters.length < expectedChapters) {
-        const haveChapters = new Set(normalized.chapters.map(c => c.chapter));
-        const missing = [];
-        for (let c = 1; c <= expectedChapters; c++) {
-            if (!haveChapters.has(c)) missing.push(c);
-        }
-        console.warn(`Livre ${bookNumber} incomplet (${normalized.chapters.length}/${expectedChapters}) : récupération individuelle de ${missing.length} chapitre(s) manquant(s) (${missing.join(', ')}).`);
-
-        const fetchedMissing = await Promise.all(missing.map(async (chapNum) => {
-            try {
-                const chapUrl = `${BIBLE_API_BASE}/${code}/${bookNumber}/${chapNum}.json`;
-                const chapResponse = await fetch(chapUrl);
-                if (!chapResponse.ok) return null;
-                const chapRaw = await chapResponse.json();
-                const chapNormalized = normalizeLiveBookResponse(chapRaw);
-                return chapNormalized.chapters[0] || null;
-            } catch (e) {
-                console.warn(`Échec du chargement du chapitre ${chapNum} du livre ${bookNumber} :`, e);
-                return null;
-            }
-        }));
-
-        fetchedMissing.forEach(ch => { if (ch) normalized.chapters.push(ch); });
-        normalized.chapters.sort((a, b) => a.chapter - b.chapter);
-    }
+    const code = TRANSLATION_CODES[langCode];
+    const url = `${BIBLE_API_BASE}/${code}/${bookNumber}.json`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Erreur réseau (${response.status})`);
+    const raw = await response.json();
+    const normalized = normalizeLiveBookResponse(raw);
 
     if (expectedChapters && normalized.chapters.length < expectedChapters) {
-        console.warn(`Livre ${bookNumber} toujours incomplet après complément (${normalized.chapters.length}/${expectedChapters}) : non mis en cache, nouvelle tentative au prochain chargement.`);
+        // On ne met PAS en cache une réponse incomplète : on préfère
+        // réessayer au prochain chargement plutôt que de figer une version
+        // tronquée du livre pour toujours.
+        console.warn(`Réponse API incomplète pour le livre ${bookNumber} (${normalized.chapters.length}/${expectedChapters} chapitres) : non mise en cache.`);
     } else {
         try {
             localStorage.setItem(cacheKey, JSON.stringify(normalized));
