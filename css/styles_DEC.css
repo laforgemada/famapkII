@@ -76,23 +76,18 @@ body{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    gap:10px;
     padding:0 clamp(10px, 4vw, 16px); /* Espacement horizontal fluide */
-    max-width:100%;
-    box-sizing:border-box;
 }
 
 .logo-area{
     display:flex;
     align-items:center;
-    gap:clamp(8px, 2.5vw, 12px);
-    min-width:0; /* Indispensable pour qu'un enfant flex puisse vraiment rétrécir/tronquer son texte */
-    flex:1 1 auto;
+    gap:12px;
 }
 
 .logo-icon{
-    width:clamp(38px, 11vw, 50px);
-    height:clamp(38px, 11vw, 50px);
+    width:50px;
+    height:50px;
     border-radius:50%;
     display:flex;
     align-items:center;
@@ -111,42 +106,26 @@ body{
 .logo-text{
     display:flex;
     flex-direction:column;
-    min-width:0; /* Permet à .logo / .logo-sub de tronquer plutôt que déborder */
-    overflow:hidden;
 }
 
 .logo{
     color:white;
-    font-size:clamp(0.78rem, 3.6vw, 0.95rem);
+    font-size:0.95rem;
     font-weight:900;
-    letter-spacing:clamp(0.5px, 0.4vw, 2px);
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    max-width:100%;
+    letter-spacing:2px;
 }
 
 .logo-sub{
     color:rgba(255,255,255,0.7);
     font-size:0.68rem;
     font-weight:700;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    max-width:100%;
 }
 
 .right-zone{
     display:flex;
     align-items:center;
-    gap:clamp(6px, 2vw, 10px);
-    flex-shrink:0;
-    max-width:62%; /* Laisse toujours la priorité au logo plutôt que d'écraser tout l'espace */
-    overflow-x:auto; /* Filet de sécurité : si vraiment ça ne tient pas, ça défile plutôt que de casser la mise en page */
-    -webkit-overflow-scrolling:touch;
-    scrollbar-width:none;
+    gap:10px;
 }
-.right-zone::-webkit-scrollbar{ display:none; }
 
 .lang-select{
     background:
@@ -155,11 +134,10 @@ body{
     border:
         1px solid rgba(255,255,255,0.16);
     border-radius:14px;
-    padding:clamp(6px, 2vw, 8px) clamp(6px, 2vw, 10px);
+    padding:8px 10px;
     font-size:0.74rem;
     font-weight:800;
     outline:none;
-    flex-shrink:0;
 }
 
 .lang-select option{
@@ -169,14 +147,13 @@ body{
 .auth-buttons{
     display:flex;
     align-items:center;
-    gap:clamp(5px, 1.5vw, 8px);
-    flex-shrink:0;
+    gap:8px;
 }
 
 .top-btn{
     border:none;
     border-radius:15px;
-    padding:clamp(8px, 2.4vw, 10px) clamp(9px, 3vw, 14px);
+    padding:10px 14px;
     display:flex;
     align-items:center;
     gap:6px;
@@ -185,17 +162,6 @@ body{
     cursor:pointer;
     transition:0.2s;
     box-shadow:var(--shadow-soft);
-    white-space:nowrap;
-    flex-shrink:0;
-}
-
-/* Sur très petit écran, les libellés texte des boutons du header
-   (ex: "Connexion", "Tableau de bord") s'effacent pour ne garder que
-   l'icône : ça évite le débordement sans jamais couper le texte à moitié. */
-@media (max-width:380px){
-    .top-btn{ padding:9px; }
-    .top-btn span{ display:none; }
-    .logo-sub{ display:none; }
 }
 
 .top-btn:active{
