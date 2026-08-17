@@ -2602,6 +2602,17 @@ i[data-feather]{ stroke-width:2.1; }
 
 /* ---- S'assure que le contenu ne passe jamais sous la barre basse ---- */
 body{ padding-bottom:calc(120px + var(--safe-bottom)); }
+
+        .chapter-title {
+            font-size: 1.15rem;
+            font-weight: 900;
+            color: var(--text-main); /* Couleur du texte principal */
+            text-align: center;
+            margin-bottom: 20px; /* Espace sous le titre */
+            padding-top: 10px; /* Espace au-dessus du titre */
+            letter-spacing: 0.5px;
+        }
+
     </style>
 </head>
 
@@ -4057,6 +4068,8 @@ function render(){
                     const filterKey = `${i}_${activeChapterNum}`;
                     const filter = activeFilters[filterKey];
                     const isFiltered = filter !== undefined;
+
+                    html += `<div class="chapter-title">${d.chapterLabel} ${activeChapterNum}</div>`; // Ajout du titre du chapitre
 
                     html += `<div class="chapter-tools chapter-tools-top">
                         <button class="book-filter-btn" onclick="openVerseFilterSelector(${i}, ${activeChapterNum});" title="Filtrer les versets" aria-label="Filtrer les versets de ce chapitre">

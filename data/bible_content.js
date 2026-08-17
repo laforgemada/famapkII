@@ -7,6 +7,7 @@ export const fullBibleContent = {
         search: "Hikaroka boky...",
         at: "Testamenta Taloha",
         nt: "Testamenta Vaovao",
+        chapterLabel: "Toko",
         books: [
             {
                 name: "Genesisy",
@@ -49,6 +50,7 @@ export const fullBibleContent = {
         search: "Rechercher un livre...",
         at: "Ancien Testament",
         nt: "Nouveau Testament",
+        chapterLabel: "Chapitre",
         books: [
             {
                 name: "Genèse",
@@ -91,6 +93,7 @@ export const fullBibleContent = {
         search: "Search a book...",
         at: "Old Testament",
         nt: "New Testament",
+        chapterLabel: "Chapter",
         books: [
             {
                 name: "Genesis",
