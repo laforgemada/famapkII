@@ -3409,7 +3409,7 @@ async function sendAllBibleReads() {
     }
 }
 
-function toggleVerseSelectionForRead(bookIdx, chapterNum, verseIdx, element) {
+window.toggleVerseSelectionForRead = function(bookIdx, chapterNum, verseIdx, element) {
     if (!currentUsername) {
         showToast("Veuillez vous connecter pour marquer les versets.", "error");
         return;
