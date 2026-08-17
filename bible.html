@@ -2847,7 +2847,7 @@ function applyVerseFontSize(sizeRem) {
     localStorage.setItem('verseFontSize', String(sizeRem));
 }
 
-function adjustVerseFontSize(direction) {
+window.adjustVerseFontSize = function(direction) {
     const current = parseFloat(localStorage.getItem('verseFontSize')) || 0.95;
     let index = VERSE_FONT_SIZES.indexOf(current);
     if (index === -1) index = VERSE_FONT_SIZES.indexOf(0.95);
@@ -2867,7 +2867,7 @@ function adjustVerseFontSize(direction) {
  * MODE SOMBRE
  * ==========================================
  */
-function toggleTheme() {
+window.toggleTheme = function() {
     const html = document.documentElement;
     const current = html.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
     const next = current === 'dark' ? 'light' : 'dark';
@@ -3128,7 +3128,7 @@ function initRealtimeNotifications() {
     });
 }
 
-function toggleNotifMenu(event) {
+window.toggleNotifMenu = function(event) {
     event.stopPropagation();
     const dropdown = document.getElementById('notifDropdown');
     if (dropdown) dropdown.classList.toggle('show');
@@ -3170,7 +3170,7 @@ function renderVerticalDropdownMenu() {
 
 // Les notifications de "chat" doivent ouvrir le même overlay de chat que le reste
 // du site (voir l'unification faite plus tôt), pas naviguer vers une page à part.
-function handleNotifClick(event, id, type) {
+window.handleNotifClick = function(event, id, type) {
     markOneAsRead(id);
     if (type === 'chat') {
         event.preventDefault();
@@ -3189,7 +3189,7 @@ function markOneAsRead(id) {
     }
 }
 
-function markAllAsRead(event) {
+window.markAllAsRead = function(event) {
     event.stopPropagation();
     loadedNotificationsArray.forEach(n => n.unread = false);
     notificationCount = 0;
@@ -3197,7 +3197,7 @@ function markAllAsRead(event) {
     renderVerticalDropdownMenu();
 }
 
-function logout(){
+window.logout = function(){
     let cancelled = false;
 
     showToast("Déconnexion...", "success", "Annuler", () => {
@@ -3265,7 +3265,7 @@ function openChapter(bookIdx, chapterNum) {
     render();
 }
 
-function openVerseFilterSelector(index, chapterNum){
+window.openVerseFilterSelector = function(index, chapterNum){
     currentBookIdx = index;
     currentChapterNum = chapterNum;
     startRange = null;
@@ -3300,7 +3300,7 @@ function updateGrid(){
     });
 }
 
-function handleSelect(i){
+window.handleSelect = function(i){
     if(startRange === null || (startRange !== null && endRange !== null)){
         startRange = i;
         endRange = null;
@@ -3312,11 +3312,11 @@ function handleSelect(i){
     updateGrid();
 }
 
-function closeSelector(){
+window.closeSelector = function(){
     document.getElementById('selectorOverlay').style.display = 'none';
 }
 
-function applyFilter(){
+window.applyFilter = function(){
     const low = Math.min(startRange, endRange);
     const high = Math.max(startRange, endRange);
     const filterKey = `${currentBookIdx}_${currentChapterNum}`;
@@ -3697,7 +3697,7 @@ function openChat() {
     }, 100);
 }
 
-function closeChat() {
+window.closeChat = function() {
     document.getElementById('chat-overlay').style.display = 'none';
     const historySidebar = document.getElementById('chat-history-sidebar');
     if (historySidebar.classList.contains('active')) {
@@ -3705,12 +3705,12 @@ function closeChat() {
     }
 }
 
-function toggleHistorySidebar() {
+window.toggleHistorySidebar = function() {
     document.getElementById('chat-history-sidebar').classList.toggle('active');
     safeFeatherReplace(); // Re-rendre les icônes après affichage
 }
 
-function startNewConversation(showToastMessage = true) {
+window.startNewConversation = function(showToastMessage = true) {
     const newId = generateConversationId();
     allConversations[newId] = {
         id: newId,
@@ -3725,7 +3725,7 @@ function startNewConversation(showToastMessage = true) {
     document.getElementById('chat-history-sidebar').classList.remove('active'); // Fermer la sidebar
 }
 
-function deleteConversation(conversationIdToDelete) {
+window.deleteConversation = function(conversationIdToDelete) {
     if (!conversationIdToDelete) return;
 
     if (Object.keys(allConversations).length === 1 && currentConversationId === conversationIdToDelete) {
@@ -3761,7 +3761,7 @@ function deleteConversation(conversationIdToDelete) {
     });
 }
 
-function switchConversation(conversationId) {
+window.switchConversation = function(conversationId) {
     if (conversationId === currentConversationId) return; // Déjà sur cette conversation
     currentConversationId = conversationId;
     saveUserConversations();
@@ -3805,7 +3805,7 @@ function renderConversationList() {
 }
 
 // Permet de renvoyer un message dont l'appel API a échoué, sans avoir à le retaper
-function retryFailedMessage(text) {
+window.retryFailedMessage = function(text) {
     if (!text || isAILoading) return;
     const chatInput = document.getElementById('chat-input');
     chatInput.value = text;
@@ -4122,7 +4122,7 @@ function render(){
     document.querySelectorAll('.verse-load-sentinel').forEach(el => verseLoadObserver.observe(el));
 }
 
-function resetFilter(i, chapterNum){
+window.resetFilter = function(i, chapterNum){
     delete activeFilters[`${i}_${chapterNum}`];
     delete visibleVerseCounts[`${i}_${chapterNum}`];
     render();
