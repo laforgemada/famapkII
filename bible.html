@@ -3322,7 +3322,7 @@ function applyFilter(){
 
 let isSendingBibleReads = false;
 
-async function sendAllBibleReads() {
+window.sendAllBibleReads = async function() {
 
 	if (!currentUsername) {
         showToast("Veuillez vous connecter.", "error");
