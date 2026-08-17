@@ -3205,7 +3205,7 @@ function logout(){
 /* ==========================================
  * LOGIQUE FONCTIONNELLE DE LA BIBLE
  * ========================================== */
-function changeLang(l, btn){
+window.changeLang = function(l, btn){
     lang = l;
 
     const hadActiveFilters = Object.keys(activeFilters).length > 0;
@@ -3231,7 +3231,7 @@ function changeLang(l, btn){
 let openBookIdx = null;
 let openChapterByBook = {};
 
-async function openBook(index) {
+window.openBook = async function(index) {
     if (openBookIdx === index) {
         openBookIdx = null; // Retaper sur le livre déjà ouvert le referme
         render();
