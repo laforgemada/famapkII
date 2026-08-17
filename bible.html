@@ -2811,7 +2811,9 @@ body{ padding-bottom:calc(120px + var(--safe-bottom)); }
 </nav>
 
 <script>
-const API_BASE_URL = 'https://apokalypsy.com';
+import { fullBibleContent } from './data/bible_content.js';
+
+const API_BASE_URL = 'https://apokalypsy.com'; // Garde cette URL si elle est utilisée pour d'autres appels API (notifications, points, chat AI)
 
 // Enveloppe sécurisée : si le CDN feather-icons échoue à charger (réseau lent/bloqué),
 // on évite qu'une ReferenceError ne casse tout le reste du script.
@@ -3064,10 +3066,6 @@ let currentChapterNum = null;
 let startRange = null;
 let endRange = null;
 let activeFilters = {};
-// Évite de revérifier/retélécharger un chapitre déjà confirmé complet à
-// chaque nouveau rendu (ex : recherche tapée au clavier qui redéclenche
-// render() plusieurs fois par seconde).
-const verifiedChapters = new Set();
 // Nombre de versets actuellement affichés par chapitre ouvert (clé identique
 // à activeFilters : "${bookIndex}_${chapterNum}"). Par défaut on n'affiche
 // que les 5 premiers versets, le reste se charge au défilement.
@@ -3423,91 +3421,16 @@ async function openBook(index) {
         return;
     }
     openBookIdx = index;
-    await loadBookIfNeeded(index);
-    render();
+    render(); // Re-render pour afficher le livre ouvert
 
-    // Vérifie que le chapitre actuellement affiché est bien complet.
-    // Contexte : le téléchargement groupé du livre entier peut, pour un gros
-    // livre, tronquer certains chapitres à l'intérieur même du JSON reçu
-    // (pas seulement "chapitre manquant", mais "chapitre présent avec moins
-    // de versets que la réalité" — ex : Genèse 1 affichée avec 25 versets
-    // au lieu de 31). On profite donc de l'ouverture du livre pour
-    // revérifier discrètement, en arrière-plan, le chapitre affiché via
-    // l'endpoint "un seul chapitre" (beaucoup plus petit, donc fiable), et
-    // on complète si besoin, sans bloquer l'affichage initial.
-    const activeChapterNum = openChapterByBook[index];
-    if (activeChapterNum) {
-        const verifyKey = `${index}_${activeChapterNum}`;
-        if (!verifiedChapters.has(verifyKey)) {
-            verifiedChapters.add(verifyKey);
-            ensureChapterComplete(index, activeChapterNum);
-        }
+    // Initialise le chapitre à afficher si ce n'est pas déjà fait
+    if (!openChapterByBook[index] && data[lang].books[index].chapters.length > 0) {
+        openChapterByBook[index] = data[lang].books[index].chapters[0].chapter; // Ouvre le chapitre 1 par défaut
     }
 }
 
-async function ensureChapterComplete(bookIdx, chapterNum) {
-    const book = data[lang].books[bookIdx];
-    if (!book || !book.chapters) return;
-    const chapterObj = book.chapters.find(c => c.chapter === chapterNum);
-    if (!chapterObj) return;
-
-    try {
-        const code = TRANSLATION_CODES[lang];
-        const url = `${BIBLE_API_BASE}/${code}/${book.number}/${chapterNum}.json`;
-        const response = await fetch(url);
-        if (!response.ok) return;
-        const raw = await response.json();
-        const normalized = normalizeLiveBookResponse(raw);
-        const freshChapter = normalized.chapters[0];
-
-        if (freshChapter && freshChapter.verses.length > chapterObj.verses.length) {
-            console.warn(`Chapitre ${chapterNum} de ${book.name} complété : ${chapterObj.verses.length} → ${freshChapter.verses.length} versets.`);
-            chapterObj.verses = freshChapter.verses;
-
-            // Le cache localStorage contenait la version tronquée : on
-            // l'invalide pour que le prochain chargement reparte propre.
-            try { localStorage.removeItem(`bibleLive_${lang}_${book.number}`); } catch (e) { /* ignoré */ }
-
-            // On ne réaffiche que si ce chapitre est toujours celui ouvert
-            // (l'utilisateur n'a pas changé de livre entre-temps).
-            if (openBookIdx === bookIdx && openChapterByBook[bookIdx] === chapterNum) {
-                render();
-            }
-        }
-    } catch (e) {
-        console.warn(`Vérification du chapitre ${chapterNum} de ${book.name} impossible :`, e);
-    }
-}
-
-async function loadBookIfNeeded(index) {
-    const book = data[lang].books[index];
-    if (book.chapters !== null || book.loading) return;
-
-    book.loading = true;
-    book.error = null;
-    render(); // Affiche immédiatement l'état "chargement..."
-
-    try {
-        const result = await fetchLiveBook(lang, book.number);
-        book.chapters = result.chapters;
-        if (result.book_name) book.name = result.book_name; // Nom localisé réel une fois chargé
-        if (!openChapterByBook[index] && book.chapters.length > 0) {
-            openChapterByBook[index] = book.chapters[0].chapter; // Ouvre le chapitre 1 par défaut
-        }
-    } catch (e) {
-        console.error("Erreur de chargement du livre :", e);
-        book.error = "Impossible de charger ce livre pour le moment. Vérifiez votre connexion.";
-    } finally {
-        book.loading = false;
-    }
-}
-
-async function retryLoadBook(index) {
-    const book = data[lang].books[index];
-    book.error = null;
-    await loadBookIfNeeded(index);
-    render();
-}
+// Les fonctions ensureChapterComplete, loadBookIfNeeded, retryLoadBook sont supprimées
+// car tout le contenu de la Bible est chargé localement et n'a pas besoin de vérification/rechargement API.
 
 function openChapter(bookIdx, chapterNum) {
     openChapterByBook[bookIdx] = chapterNum;
@@ -4285,14 +4208,10 @@ function render(){
 
         visibleBookCount++;
 
+        // Si une correspondance est trouvée dans la recherche, le livre et le chapitre correspondants sont ouverts.
         if (searchVal && searchMatch) {
             openBookIdx = i;
             openChapterByBook[i] = searchMatch.chapterNum;
-            const verifyKey = `${i}_${searchMatch.chapterNum}`;
-            if (!verifiedChapters.has(verifyKey)) {
-                verifiedChapters.add(verifyKey);
-                ensureChapterComplete(i, searchMatch.chapterNum);
-            }
         }
         const isOpen = openBookIdx === i;
 
@@ -4303,7 +4222,7 @@ function render(){
                     <div class="book-icon"><i data-feather="book"></i></div>
                     <div>
                         <div class="book-name">${b.name}</div>
-                        <div class="book-mini">${b.chapters ? `${b.chapters.length} chapitres` : 'Toucher pour charger'}${searchVal && searchMatch ? ` • trouvé au chapitre ${searchMatch.chapterNum}` : ''}</div>
+                        <div class="book-mini">${b.chapters ? `${b.chapters.length} chapitres` : 'Contenu non disponible'}${searchVal && searchMatch ? ` • trouvé au chapitre ${searchMatch.chapterNum}` : ''}</div>
                     </div>
                 </div>
                 <i data-feather="chevron-down"></i>
@@ -4311,12 +4230,9 @@ function render(){
             <div class="book-content">`;
 
         if (isOpen) {
-            if (b.loading) {
-                html += `<div class="book-status">⏳ Chargement de ${b.name}...</div>`;
-            } else if (b.error) {
-                html += `<div class="book-status book-status-error">⚠️ ${b.error}</div>
-                          <button class="btn-reset" onclick="retryLoadBook(${i})">Réessayer</button>`;
-            } else if (b.chapters) {
+            // Puisque les données sont chargées localement, il n'y a plus d'état de "loading" ou "error" lié à l'API.
+            // On vérifie directement si les chapitres sont disponibles.
+            if (b.chapters) {
                 const activeChapterNum = openChapterByBook[i] || b.chapters[0].chapter;
                 const chapterObj = b.chapters.find(ch => ch.chapter === activeChapterNum);
 
