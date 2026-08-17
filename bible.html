@@ -774,8 +774,9 @@
         }
 
         .book.open .book-content{
-            max-height:3000px; /* Augmenté pour gérer plus de versets */
+            max-height:1000px; /* Hauteur fixe : au-delà, on défile à l'intérieur plutôt que d'allonger la page */
             padding:0 24px 24px; /* Padding ajusté */
+            overflow-y:scroll;
         }
 
         .verse{
@@ -795,6 +796,28 @@
             background: #eef4fb; /* Un léger changement de fond au survol */
             transform: translateY(-1px);
             box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+        }
+
+        .verse-load-sentinel{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:10px;
+            padding:20px;
+            color:var(--text-muted);
+            font-size:0.82rem;
+            font-weight:700;
+        }
+        .verse-load-spinner{
+            width:16px;
+            height:16px;
+            border-radius:50%;
+            border:2.5px solid var(--border);
+            border-top-color:var(--primary, #16a34a);
+            animation:verseSpin 0.7s linear infinite;
+        }
+        @keyframes verseSpin{
+            to{ transform:rotate(360deg); }
         }
 
         @keyframes fadeUp{
@@ -1051,6 +1074,9 @@
             gap:10px;
             flex-wrap:wrap;
             padding:6px 20px 18px;
+        }
+        .chapter-tools-top{
+            padding:14px 20px 10px;
         }
         .chapter-tools .book-filter-btn{
             position:static;
@@ -2941,10 +2967,15 @@ async function fetchLiveBook(langCode, bookNumber) {
     }
 
     // BUG CORRIGÉ : pour les gros livres (ex : Genèse, 50 chapitres),
-    // l'endpoint "livre entier" de l'API peut renvoyer une réponse tronquée
-    // (limite de taille/temps côté serveur). Plutôt que d'abandonner ou de
-    // se contenter d'une partie du livre, on va chercher individuellement
-    // chaque chapitre manquant via l'endpoint "un seul chapitre".
+    // l'endpoint "livre entier" de l'API peut renvoyer une réponse tronquée.
+    // On complète en récupérant les chapitres manquants un par un — MAIS pas
+    // tous en même temps : envoyer 24-49 requêtes simultanées (Promise.all)
+    // déclenchait très probablement une limitation de débit côté API
+    // publique, faisant échouer la plupart d'entre elles silencieusement
+    // (d'où le nombre de chapitres qui variait légèrement à chaque essai :
+    // 24, puis 25, puis 26 — celles qui passaient par chance). On les
+    // récupère maintenant par petits groupes, avec une nouvelle tentative
+    // automatique en cas d'échec.
     if (expectedChapters && normalized.chapters.length < expectedChapters) {
         const haveChapters = new Set(normalized.chapters.map(c => c.chapter));
         const missing = [];
@@ -2953,21 +2984,35 @@ async function fetchLiveBook(langCode, bookNumber) {
         }
         console.warn(`Livre ${bookNumber} incomplet (${normalized.chapters.length}/${expectedChapters}) : récupération individuelle de ${missing.length} chapitre(s) manquant(s) (${missing.join(', ')}).`);
 
-        const fetchedMissing = await Promise.all(missing.map(async (chapNum) => {
+        const fetchOneChapter = async (chapNum, attempt = 1) => {
             try {
                 const chapUrl = `${BIBLE_API_BASE}/${code}/${bookNumber}/${chapNum}.json`;
                 const chapResponse = await fetch(chapUrl);
-                if (!chapResponse.ok) return null;
+                if (!chapResponse.ok) throw new Error(`HTTP ${chapResponse.status}`);
                 const chapRaw = await chapResponse.json();
                 const chapNormalized = normalizeLiveBookResponse(chapRaw);
                 return chapNormalized.chapters[0] || null;
             } catch (e) {
-                console.warn(`Échec du chargement du chapitre ${chapNum} du livre ${bookNumber} :`, e);
+                if (attempt < 3) {
+                    // Petite pause avant de réessayer (backoff), utile si
+                    // l'échec vient d'une limitation de débit temporaire.
+                    await new Promise(r => setTimeout(r, 400 * attempt));
+                    return fetchOneChapter(chapNum, attempt + 1);
+                }
+                console.warn(`Échec définitif du chargement du chapitre ${chapNum} du livre ${bookNumber} après ${attempt} tentatives :`, e);
                 return null;
             }
-        }));
+        };
 
-        fetchedMissing.forEach(ch => { if (ch) normalized.chapters.push(ch); });
+        const CONCURRENCY = 4; // petits groupes plutôt que tout en une fois
+        const results = [];
+        for (let i = 0; i < missing.length; i += CONCURRENCY) {
+            const batch = missing.slice(i, i + CONCURRENCY);
+            const batchResults = await Promise.all(batch.map(c => fetchOneChapter(c)));
+            results.push(...batchResults);
+        }
+
+        results.forEach(ch => { if (ch) normalized.chapters.push(ch); });
         normalized.chapters.sort((a, b) => a.chapter - b.chapter);
     }
 
@@ -3019,6 +3064,28 @@ let currentChapterNum = null;
 let startRange = null;
 let endRange = null;
 let activeFilters = {};
+// Évite de revérifier/retélécharger un chapitre déjà confirmé complet à
+// chaque nouveau rendu (ex : recherche tapée au clavier qui redéclenche
+// render() plusieurs fois par seconde).
+const verifiedChapters = new Set();
+// Nombre de versets actuellement affichés par chapitre ouvert (clé identique
+// à activeFilters : "${bookIndex}_${chapterNum}"). Par défaut on n'affiche
+// que les 5 premiers versets, le reste se charge au défilement.
+let visibleVerseCounts = {};
+const VERSES_PER_PAGE = 5;
+
+// Un seul observateur réutilisé à chaque rendu : quand la "sentinelle" en
+// bas de la liste de versets devient visible à l'écran, on révèle 5
+// versets de plus et on relance le rendu.
+const verseLoadObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const key = entry.target.dataset.verseKey;
+            visibleVerseCounts[key] = (visibleVerseCounts[key] || VERSES_PER_PAGE) + VERSES_PER_PAGE;
+            render();
+        }
+    });
+}, { rootMargin: '200px' }); // Se déclenche un peu avant d'atteindre le bas, pour un défilement fluide
 
 // Support clavier standard : Échap ferme la modale/le menu actuellement ouvert,
 // dans l'ordre de priorité le plus "local" au plus "global".
@@ -3358,6 +3425,58 @@ async function openBook(index) {
     openBookIdx = index;
     await loadBookIfNeeded(index);
     render();
+
+    // Vérifie que le chapitre actuellement affiché est bien complet.
+    // Contexte : le téléchargement groupé du livre entier peut, pour un gros
+    // livre, tronquer certains chapitres à l'intérieur même du JSON reçu
+    // (pas seulement "chapitre manquant", mais "chapitre présent avec moins
+    // de versets que la réalité" — ex : Genèse 1 affichée avec 25 versets
+    // au lieu de 31). On profite donc de l'ouverture du livre pour
+    // revérifier discrètement, en arrière-plan, le chapitre affiché via
+    // l'endpoint "un seul chapitre" (beaucoup plus petit, donc fiable), et
+    // on complète si besoin, sans bloquer l'affichage initial.
+    const activeChapterNum = openChapterByBook[index];
+    if (activeChapterNum) {
+        const verifyKey = `${index}_${activeChapterNum}`;
+        if (!verifiedChapters.has(verifyKey)) {
+            verifiedChapters.add(verifyKey);
+            ensureChapterComplete(index, activeChapterNum);
+        }
+    }
+}
+
+async function ensureChapterComplete(bookIdx, chapterNum) {
+    const book = data[lang].books[bookIdx];
+    if (!book || !book.chapters) return;
+    const chapterObj = book.chapters.find(c => c.chapter === chapterNum);
+    if (!chapterObj) return;
+
+    try {
+        const code = TRANSLATION_CODES[lang];
+        const url = `${BIBLE_API_BASE}/${code}/${book.number}/${chapterNum}.json`;
+        const response = await fetch(url);
+        if (!response.ok) return;
+        const raw = await response.json();
+        const normalized = normalizeLiveBookResponse(raw);
+        const freshChapter = normalized.chapters[0];
+
+        if (freshChapter && freshChapter.verses.length > chapterObj.verses.length) {
+            console.warn(`Chapitre ${chapterNum} de ${book.name} complété : ${chapterObj.verses.length} → ${freshChapter.verses.length} versets.`);
+            chapterObj.verses = freshChapter.verses;
+
+            // Le cache localStorage contenait la version tronquée : on
+            // l'invalide pour que le prochain chargement reparte propre.
+            try { localStorage.removeItem(`bibleLive_${lang}_${book.number}`); } catch (e) { /* ignoré */ }
+
+            // On ne réaffiche que si ce chapitre est toujours celui ouvert
+            // (l'utilisateur n'a pas changé de livre entre-temps).
+            if (openBookIdx === bookIdx && openChapterByBook[bookIdx] === chapterNum) {
+                render();
+            }
+        }
+    } catch (e) {
+        console.warn(`Vérification du chapitre ${chapterNum} de ${book.name} impossible :`, e);
+    }
 }
 
 async function loadBookIfNeeded(index) {
@@ -3451,6 +3570,7 @@ function applyFilter(){
     const high = Math.max(startRange, endRange);
     const filterKey = `${currentBookIdx}_${currentChapterNum}`;
     activeFilters[filterKey] = { start: low, end: high };
+    delete visibleVerseCounts[filterKey]; // On repart de 5 versets affichés avec ce nouveau filtre
     const bookName = data[lang].books[currentBookIdx].name;
 
     closeSelector();
@@ -4168,6 +4288,11 @@ function render(){
         if (searchVal && searchMatch) {
             openBookIdx = i;
             openChapterByBook[i] = searchMatch.chapterNum;
+            const verifyKey = `${i}_${searchMatch.chapterNum}`;
+            if (!verifiedChapters.has(verifyKey)) {
+                verifiedChapters.add(verifyKey);
+                ensureChapterComplete(i, searchMatch.chapterNum);
+            }
         }
         const isOpen = openBookIdx === i;
 
@@ -4195,21 +4320,31 @@ function render(){
                 const activeChapterNum = openChapterByBook[i] || b.chapters[0].chapter;
                 const chapterObj = b.chapters.find(ch => ch.chapter === activeChapterNum);
 
-                html += `<div class="chapter-select-wrap">
-                    <label class="chapter-select-label" for="chapterSelect-${i}">Chapitre</label>
-                    <select class="chapter-select" id="chapterSelect-${i}" onclick="event.stopPropagation()" onchange="event.stopPropagation(); openChapter(${i}, parseInt(this.value, 10))">
-                        ${b.chapters.map(ch => `<option value="${ch.chapter}" ${ch.chapter === activeChapterNum ? 'selected' : ''}>Chapitre ${ch.chapter}</option>`).join('')}
-                    </select>
-                    <i data-feather="chevron-down" class="chapter-select-icon"></i>
-                </div>`;
-
                 if (chapterObj) {
                     const filterKey = `${i}_${activeChapterNum}`;
                     const filter = activeFilters[filterKey];
                     const isFiltered = filter !== undefined;
 
-                    html += chapterObj.verses.map((t, vi) => {
-                        if (isFiltered && (vi < filter.start || vi > filter.end)) return '';
+                    html += `<div class="chapter-tools chapter-tools-top">
+                        <button class="book-filter-btn" onclick="openVerseFilterSelector(${i}, ${activeChapterNum});" title="Filtrer les versets" aria-label="Filtrer les versets de ce chapitre">
+                            <i data-feather="filter"></i> Filtrer ce chapitre
+                        </button>
+                        ${isFiltered ? `<button class="btn-reset" onclick="resetFilter(${i}, ${activeChapterNum})">Voir tout le chapitre</button>` : ''}
+                    </div>`;
+
+                    // On ne garde que les versets à afficher selon le filtre actif...
+                    const versesToDisplay = chapterObj.verses
+                        .map((t, vi) => ({ t, vi }))
+                        .filter(({ vi }) => !isFiltered || (vi >= filter.start && vi <= filter.end));
+
+                    // ...puis on n'en affiche qu'une partie (5 par défaut), le
+                    // reste se charge automatiquement au défilement plutôt que
+                    // de tout rendre d'un coup (long pour les gros chapitres).
+                    const shownCount = visibleVerseCounts[filterKey] || VERSES_PER_PAGE;
+                    const versesSlice = versesToDisplay.slice(0, shownCount);
+                    const remaining = versesToDisplay.length - versesSlice.length;
+
+                    html += versesSlice.map(({ t, vi }) => {
                         const isSelected = sessionVersesToValidate.some(bookEntry =>
                             bookEntry.book === b.name && bookEntry.chapter === activeChapterNum && bookEntry.verses.includes(vi + 1)
                         ) ? 'selected-for-read' : '';
@@ -4217,12 +4352,11 @@ function render(){
                         return `<div class="verse ${isSelected}" onclick="toggleVerseSelectionForRead(${i}, ${activeChapterNum}, ${vi}, this)"><span class="num">${vi + 1}</span>${displayText}</div>`;
                     }).join('');
 
-                    html += `<div class="chapter-tools">
-                        <button class="book-filter-btn" onclick="openVerseFilterSelector(${i}, ${activeChapterNum});" title="Filtrer les versets" aria-label="Filtrer les versets de ce chapitre">
-                            <i data-feather="filter"></i> Filtrer ce chapitre
-                        </button>
-                        ${isFiltered ? `<button class="btn-reset" onclick="resetFilter(${i}, ${activeChapterNum})">Voir tout le chapitre</button>` : ''}
-                    </div>`;
+                    if (remaining > 0) {
+                        html += `<div class="verse-load-sentinel" data-verse-key="${filterKey}">
+                            <span class="verse-load-spinner"></span> Chargement des versets suivants (${remaining} restant${remaining > 1 ? 's' : ''})...
+                        </div>`;
+                    }
                 }
             }
         }
@@ -4236,10 +4370,15 @@ function render(){
 
     c.innerHTML = html;
     safeFeatherReplace();
+
+    // Ré-attache l'observateur de défilement à la (nouvelle) sentinelle,
+    // puisque tout le HTML a été régénéré (l'ancien nœud n'existe plus).
+    document.querySelectorAll('.verse-load-sentinel').forEach(el => verseLoadObserver.observe(el));
 }
 
 function resetFilter(i, chapterNum){
     delete activeFilters[`${i}_${chapterNum}`];
+    delete visibleVerseCounts[`${i}_${chapterNum}`];
     render();
 }
 
