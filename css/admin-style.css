@@ -352,6 +352,24 @@
     .overlay.active {
         display: block;
     }
+
+    /* Styles pour les liens du menu quand la sidebar est active sur mobile */
+    .sidebar.active .nav-link {
+        color: var(--white); /* Rendre le texte blanc */
+    }
+
+    .sidebar.active .nav-link i {
+        color: var(--white); /* Rendre les icônes blanches */
+    }
+
+    /* Ajuster la couleur du lien actif pour qu'il reste visible sur fond sombre */
+    .sidebar.active .nav-link.active {
+        background-color: rgba(255, 255, 255, 0.1); /* Légèrement transparent blanc */
+        color: var(--white);
+    }
+    .sidebar.active .nav-link.active i {
+        color: var(--white);
+    }
 }
 
 @media (min-width: 769px) {
