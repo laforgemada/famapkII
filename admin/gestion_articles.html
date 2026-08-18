@@ -234,6 +234,103 @@
                 transform: translateX(100%);
             }
         }
+
+        /* Styles Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+                margin-left: 0; /* Pour les écrans mobiles, la sidebar sera masquée ou un menu hamburger */
+            }
+
+            .crud-container, .editor-container {
+                padding: 15px;
+            }
+
+            .table-header-flex {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .btn-bulk-delete {
+                width: 100%;
+                text-align: center;
+            }
+
+            .article-table th, .article-table td {
+                padding: 8px;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .btn-mode {
+                font-size: 0.75rem;
+                padding: 4px 10px;
+            }
+
+            .btn-publish, .btn-bulk-delete {
+                font-size: 0.8rem;
+                padding: 10px 15px;
+            }
+            .actions {
+                flex-direction: column;
+                gap: 4px;
+            }
+            .btn-action {
+                padding: 6px;
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Styles pour la pagination */
+        .pagination-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 25px;
+            flex-wrap: wrap; /* Permet aux boutons de passer à la ligne */
+        }
+
+        .pagination-button {
+            background: #e2e8f0;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            min-width: 40px; /* Taille minimale pour les boutons */
+            text-align: center;
+        }
+
+        .pagination-button:hover:not(.active):not(:disabled) {
+            background: #cbd5e1;
+            color: #1e293b;
+        }
+
+        .pagination-button.active {
+            background: #1e293b;
+            color: white;
+            border-color: #1e293b;
+        }
+
+        .pagination-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .table-responsive {
+            max-width: 100%;
+            overflow-x: auto; /* Permet le défilement horizontal de la table */
+            -webkit-overflow-scrolling: touch; /* Améliore le défilement sur iOS */
+        }
     </style>
 </head>
 
@@ -349,30 +446,34 @@
             </button>
         </div>
 
-        <table class="article-table">
+        <div class="table-responsive">
+            <table class="article-table">
 
-            <thead>
-            <tr>
-                <th class="checkbox-col"><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th>
-                <th>Image</th>
-                <th>Titre</th>
-                <th>Catégorie</th>
-                <th>Date</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
+                <thead>
+                <tr>
+                    <th class="checkbox-col"><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th>
+                    <th>Image</th>
+                    <th>Titre</th>
+                    <th>Catégorie</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
 
-            <tbody id="articleTableBody">
+                <tbody id="articleTableBody">
 
-            <tr>
-                <td colspan="6" style="text-align:center;">
-                    Chargement...
-                </td>
-            </tr>
+                <tr>
+                    <td colspan="6" style="text-align:center;">
+                        Chargement...
+                    </td>
+                </tr>
 
-            </tbody>
+                </tbody>
 
-        </table>
+            </table>
+        </div>
+
+        <div id="pagination-controls" class="pagination-controls"></div>
 
     </div>
 
@@ -404,8 +505,12 @@
 <script>
 
     const API_BASE = "https://apokalypsy.com/api/articles";
+    const articlesPerPage = 5; // Nombre d'articles par page
+    let currentPage = 1; // Page actuelle
 
     let allArticles = [];
+    let filteredArticles = []; // Articles après filtrage, avant pagination
+    let selectedArticleIds = []; // Pour stocker les IDs des articles sélectionnés pour la suppression multiple
 
     // =========================
     // SYSTEME DE MESSAGES FLASH
@@ -533,15 +638,16 @@
             const res = await fetch(`${API_BASE}/list`);
 
             const data = await res.json();
-
             allArticles = data;
+            filteredArticles = data; // Au départ, tous les articles sont filtrés
+            currentPage = 1; // Réinitialiser la page à chaque nouveau chargement
+            selectedArticleIds = []; // Réinitialiser les sélections à chaque rechargement complet
 
-            renderArticles(data);
+            renderArticles(); // Appeler renderArticles sans argument, il utilisera filteredArticles
             
             // Réinitialiser la case "Tout sélectionner" et le bouton de suppression multiple
             document.getElementById('selectAll').checked = false;
-            updateBulkDeleteButton();
-
+            updateBulkDeleteButton(); // Met à jour l'affichage du bouton et le compteur avec la sélection vide
         }catch(e){
 
             console.error(e);
@@ -558,28 +664,34 @@
     // RENDER
     // =========================
 
-    function renderArticles(articles){
-
+    function renderArticles(){
         const tbody = document.getElementById('articleTableBody');
+        const totalArticles = filteredArticles.length;
+        const startIndex = (currentPage - 1) * articlesPerPage;
+        const endIndex = Math.min(startIndex + articlesPerPage, totalArticles);
 
-        if(!articles.length){
+        const articlesToDisplay = filteredArticles.slice(startIndex, endIndex);
 
+        if(!articlesToDisplay.length){
             tbody.innerHTML = `
                 <tr>
-                    <td colspan="6" style="text-align:center;">Aucun article.</td>
+                    <td colspan="6" style="text-align:center;">Aucun article à afficher sur cette page.</td>
                 </tr>
             `;
-
+            updatePaginationControls(totalArticles); // Mettre à jour même s'il n'y a rien
             return;
         }
 
-        tbody.innerHTML = articles.map(art => {
+        tbody.innerHTML = articlesToDisplay.map(art => {
             const displayCat = art.category ? art.category.charAt(0).toUpperCase() + art.category.slice(1) : '<span style="color:#94a3b8;">Non spécifiée</span>';
             
+            // On doit s'assurer que l'état de la checkbox est conservé si l'article était sélectionné
+            const isChecked = selectedArticleIds.includes(String(art.id)) ? 'checked' : '';
+
             return `
                 <tr>
                     <td class="checkbox-col">
-                        <input type="checkbox" class="article-checkbox" value="${art.id}" onclick="updateBulkDeleteButton()">
+                        <input type="checkbox" class="article-checkbox" value="${art.id}" ${isChecked} onclick="updateBulkDeleteButton()">
                     </td>
                     <td>
                         <img src="${art.image_url || 'https://via.placeholder.com/50'}"
@@ -626,6 +738,78 @@
                 </tr>
             `;
         }).join('');
+
+        updatePaginationControls(totalArticles);
+    }
+
+    // =========================
+    // PAGINATION LOGIC
+    // =========================
+
+    function updatePaginationControls(totalItems) {
+        const controlsContainer = document.getElementById('pagination-controls');
+        const totalPages = Math.ceil(totalItems / articlesPerPage);
+        controlsContainer.innerHTML = ''; // Nettoyer les contrôles existants
+
+        if (totalPages <= 1) {
+            return; // Pas besoin de pagination s'il y a 1 page ou moins
+        }
+
+        // Bouton Précédent
+        controlsContainer.innerHTML += `
+            <button class="pagination-button" ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">
+                &laquo; Précédent
+            </button>
+        `;
+
+        // Afficher les numéros de page (logique simple pour l'instant)
+        // On pourrait implémenter une logique plus complexe pour afficher seulement un sous-ensemble de pages (ex: 1...5, 6, 7...)
+        const maxPageButtons = 5; // Nombre max de boutons de page à afficher
+        let startPage = Math.max(1, currentPage - Math.floor(maxPageButtons / 2));
+        let endPage = Math.min(totalPages, startPage + maxPageButtons - 1);
+
+        if (endPage - startPage + 1 < maxPageButtons) {
+            startPage = Math.max(1, endPage - maxPageButtons + 1);
+        }
+
+
+        if (startPage > 1) {
+            controlsContainer.innerHTML += `<button class="pagination-button" onclick="changePage(1)">1</button>`;
+            if (startPage > 2) {
+                controlsContainer.innerHTML += `<span class="pagination-button disabled">...</span>`;
+            }
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            controlsContainer.innerHTML += `
+                <button class="pagination-button ${currentPage === i ? 'active' : ''}" onclick="changePage(${i})">
+                    ${i}
+                </button>
+            `;
+        }
+
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                controlsContainer.innerHTML += `<span class="pagination-button disabled">...</span>`;
+            }
+            controlsContainer.innerHTML += `<button class="pagination-button" onclick="changePage(${totalPages})">${totalPages}</button>`;
+        }
+
+        // Bouton Suivant
+        controlsContainer.innerHTML += `
+            <button class="pagination-button" ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">
+                Suivant &raquo;
+            </button>
+        `;
+    }
+
+    function changePage(pageNumber) {
+        if (pageNumber < 1 || pageNumber > Math.ceil(filteredArticles.length / articlesPerPage)) {
+            return; // Page invalide
+        }
+        currentPage = pageNumber;
+        renderArticles();
+        window.scrollTo({ top: document.querySelector('.crud-container').offsetTop, behavior: 'smooth' });
     }
 
     // =========================
@@ -634,76 +818,95 @@
 
     // Coche ou décoche toutes les lignes d'un coup
     function toggleSelectAll(masterCheckbox) {
-        const checkboxes = document.querySelectorAll('.article-checkbox');
-        checkboxes.forEach(cb => cb.checked = masterCheckbox.checked);
+        const checkboxesOnCurrentPage = document.querySelectorAll('.article-checkbox');
+        checkboxesOnCurrentPage.forEach(cb => {
+            cb.checked = masterCheckbox.checked;
+            // Mettre à jour selectedArticleIds
+            const articleId = String(cb.value);
+            if (cb.checked && !selectedArticleIds.includes(articleId)) {
+                selectedArticleIds.push(articleId);
+            } else if (!cb.checked && selectedArticleIds.includes(articleId)) {
+                selectedArticleIds = selectedArticleIds.filter(id => id !== articleId);
+            }
+        });
         updateBulkDeleteButton();
     }
 
     // Gère la visibilité du bouton de suppression multiple et met à jour le compteur
     function updateBulkDeleteButton() {
-        const checkboxes = document.querySelectorAll('.article-checkbox');
-        const checkedBoxes = document.querySelectorAll('.article-checkbox:checked');
+        // Mettre à jour selectedArticleIds basé sur l'état actuel des checkboxes de la page
+        const checkboxesOnCurrentPage = document.querySelectorAll('.article-checkbox');
+        checkboxesOnCurrentPage.forEach(cb => {
+            const articleId = String(cb.value);
+            if (cb.checked && !selectedArticleIds.includes(articleId)) {
+                selectedArticleIds.push(articleId);
+            } else if (!cb.checked && selectedArticleIds.includes(articleId)) {
+                selectedArticleIds = selectedArticleIds.filter(id => id !== articleId);
+            }
+        });
+
         const btnBulkDelete = document.getElementById('btnBulkDelete');
         const selectedCountSpan = document.getElementById('selectedCount');
         const masterCheckbox = document.getElementById('selectAll');
 
-        selectedCountSpan.innerText = checkedBoxes.length;
+        selectedCountSpan.innerText = selectedArticleIds.length;
 
-        // Affiche le bouton s'il y a au moins un élément coché
-        if (checkedBoxes.length > 0) {
+        // Affiche le bouton s'il y a au moins un élément coché globalement
+        if (selectedArticleIds.length > 0) {
             btnBulkDelete.style.display = 'block';
         } else {
             btnBulkDelete.style.display = 'none';
         }
 
-        // Ajuste la case maîtresse si l'utilisateur décoche manuellement un élément
-        if (checkedBoxes.length === 0) {
-            masterCheckbox.checked = false;
-            masterCheckbox.indeterminate = false;
-        } else if (checkedBoxes.length === checkboxes.length) {
+        // Ajuster l'état de la checkbox "Tout sélectionner" de la page actuelle
+        const allCheckedOnPage = checkboxesOnCurrentPage.length > 0 && Array.from(checkboxesOnCurrentPage).every(cb => cb.checked);
+        const anyCheckedOnPage = Array.from(checkboxesOnCurrentPage).some(cb => cb.checked);
+
+        if (allCheckedOnPage) {
             masterCheckbox.checked = true;
             masterCheckbox.indeterminate = false;
+        } else if (anyCheckedOnPage) {
+            masterCheckbox.checked = false;
+            masterCheckbox.indeterminate = true;
         } else {
             masterCheckbox.checked = false;
-            masterCheckbox.indeterminate = true; // État visuel intermédiaire
+            masterCheckbox.indeterminate = false;
         }
     }
 
-    // Supprime tous les articles sélectionnés
+    // Supprime tous les articles sélectionnés globalement
     async function deleteSelectedArticles() {
-        const checkedBoxes = document.querySelectorAll('.article-checkbox:checked');
-        if (checkedBoxes.length === 0) return;
+        if (selectedArticleIds.length === 0) return;
 
-        if (!confirm(`Voulez-vous vraiment supprimer ces ${checkedBoxes.length} articles ?`)) return;
+        if (!confirm(`Voulez-vous vraiment supprimer ces ${selectedArticleIds.length} articles ?`)) return;
 
         const btnBulkDelete = document.getElementById('btnBulkDelete');
-        
         const originalBtnHTML = btnBulkDelete.innerHTML;
 
         btnBulkDelete.disabled = true;
         btnBulkDelete.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Suppression...`;
 
-        const idsToDelete = Array.from(checkedBoxes).map(cb => cb.value);
-
         try {
-            const deletePromises = idsToDelete.map(id => 
+            const deletePromises = selectedArticleIds.map(id => 
                 fetch(`${API_BASE}/delete/${id}`, { method: 'POST' })
             );
 
             await Promise.all(deletePromises);
 
-            showFlash(`${checkedBoxes.length} articles supprimés avec succès.`, 'success');
-
+            showFlash(`${selectedArticleIds.length} articles supprimés avec succès.`, 'success');
+            selectedArticleIds = []; // Réinitialiser après suppression
+            
         } catch (err) {
             console.error("Erreur lors de la suppression :", err);
             showFlash("Une erreur est survenue lors de la suppression groupée.", 'error');
         } finally {
             btnBulkDelete.disabled = false;
             btnBulkDelete.innerHTML = originalBtnHTML;
-            btnBulkDelete.style.display = 'none';
+            btnBulkDelete.style.display = 'none'; // Cacher le bouton après la suppression
             
             setTimeout(() => {
-                fetchArticles();
+                fetchArticles(); // Recharger les articles et la pagination
+                currentPage = 1; // Revenir à la première page
             }, 300);
         }
     }
@@ -884,8 +1087,11 @@
 
             // Remplacement de l'alerte par le message flash
             showFlash("Article supprimé avec succès.", 'success');
+            
+            // Retirer l'article supprimé de la sélection multiple si présent
+            selectedArticleIds = selectedArticleIds.filter(id => id !== String(id));
 
-            fetchArticles();
+            fetchArticles(); // Recharger les articles et la pagination
 
         }catch(err){
 
