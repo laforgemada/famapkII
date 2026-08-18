@@ -336,6 +336,14 @@
 
 <body>
 
+<!-- Sidebar toggle button for mobile -->
+<button id="sidebarToggle" class="sidebar-toggle" onclick="toggleSidebar()">
+    <i class="fa-solid fa-bars"></i>
+</button>
+
+<!-- Overlay for when sidebar is open on mobile -->
+<div class="overlay" onclick="toggleSidebar()"></div>
+
 <!-- Conteneur des messages flash -->
 <div id="flash-container"></div>
 
@@ -536,6 +544,18 @@
                 flash.remove();
             }, 300);
         }, 3500);
+    }
+
+    // =========================
+    // TOGGLE SIDEBAR
+    // =========================
+    function toggleSidebar() {
+        const sidebar = document.getElementById('admin-sidebar');
+        const overlay = document.querySelector('.overlay');
+        if (sidebar && overlay) {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
     }
 
     // =========================
