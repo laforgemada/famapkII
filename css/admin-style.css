@@ -184,8 +184,7 @@
         .info-box span { font-weight: 600; color: var(--text-main); font-size: 1rem; }
 
         @media (max-width: 992px) {
-            .sidebar { width: 70px; }
-            .sidebar-logo span, .menu-label, .nav-link span { display: none; }
+            .sidebar { width: 70px; }            
             .top-header { left: 70px; }
             .main-content { margin-left: 70px; }
         }
