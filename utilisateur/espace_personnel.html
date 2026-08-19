@@ -1847,12 +1847,6 @@ async function sendMessageToAI() {
             body: JSON.stringify({ message: userText })
         });
 
-        // Vérification si la réponse est bien du JSON avant de tenter de le parser
-        const contentType = response.headers.get("content-type");
-        if (!contentType || !contentType.includes("application/json")) {
-            throw new Error("Le serveur n'a pas renvoyé de JSON.");
-        }
-
         const data = await response.json();
 
         // Supprime l'indicateur de chargement
