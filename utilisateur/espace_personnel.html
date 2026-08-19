@@ -1031,7 +1031,8 @@ html[data-theme="dark"] @keyframes cardGlow {
 <div class="modal-overlay" id="aiChatModal" onclick="closeModalOnOverlay(event, 'aiChatModal')">
     <div class="modal-box ai-chat-modal" role="dialog" aria-modal="true" aria-label="Chat avec l'IA">
         <div class="modal-header">
-            <h3>🤖 Votre Assistant IA</h3>
+            <h3><i data-feather="cpu"></i> Votre Assistant IA</h3>
+            <p>Obtenez des conseils personnalisés sur votre parcours.</p>
             <button class="modal-close-btn" aria-label="Fermer le chat" onclick="closeModal('aiChatModal')">
                 <i data-feather="x"></i>
             </button>
@@ -1040,7 +1041,7 @@ html[data-theme="dark"] @keyframes cardGlow {
             <div class="chat-messages" id="chatMessages">
                 <!-- Les messages seront insérés ici par JavaScript -->
                 <div class="ai-message">
-                    <div class="ai-message-icon"><i data-feather="cpu"></i></div>
+                    <div class="ai-message-icon"><i data-feather="feather"></i></div>
                     <div class="ai-message-content">
                         Bonjour ! Je suis votre assistant personnel. Je peux vous donner des conseils sur vos points de fidélité, votre progression, ou vous expliquer les fonctionnalités de votre espace. Que voulez-vous savoir ?
                     </div>

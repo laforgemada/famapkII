@@ -2004,7 +2004,7 @@ html[data-theme="dark"]{
     --chat-user-text: white;
     --chat-ai-bg: var(--surface-2);
     --chat-ai-text: var(--text);
-    --chat-input-bg: var(--surface);
+    --chat-input-bg: var(--surface-2); /* Harmonisation avec le fond du modal */
     --chat-input-border: var(--border);
 }
 
@@ -2068,6 +2068,7 @@ html[data-theme="dark"]{
     height: calc(100% - 36px); /* Prend plus de hauteur sur mobile */
     display: flex;
     flex-direction: column;
+    background: var(--surface); /* Déplacé ici pour une couleur de fond uniforme */
 }
 @media (max-width: 480px) {
     .ai-chat-modal {
@@ -2084,6 +2085,29 @@ html[data-theme="dark"]{
     flex: 1;
     display: flex;
     flex-direction: column;
+}
+
+/* Nouvelles règles pour un header de modal plus chaleureux */
+.ai-chat-modal .modal-header h3 {
+    font-size: 1.15rem; /* Légèrement plus grand */
+    font-weight: 900;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.ai-chat-modal .modal-header p {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+/* Ajustement pour l'icône dans l'en-tête */
+.ai-chat-modal .modal-header h3 i {
+    color: var(--primary); /* Couleur primaire pour l'icône */
+    width: 24px;
+    height: 24px;
 }
 
 .chat-messages {
@@ -2122,25 +2146,26 @@ html[data-theme="dark"]{
     gap: 10px;
 }
 .ai-message-icon {
-    width: 24px;
-    height: 24px;
-    min-width: 24px;
-    border-radius: 8px;
-    background: rgba(var(--primary-2-rgb), 0.15); /* Couleur subtile pour l'icône AI */
-    color: var(--primary-2);
+    width: 28px; /* Plus grand */
+    height: 28px; /* Plus grand */
+    min-width: 28px;
+    border-radius: 9px; /* Légèrement plus arrondi */
+    background: var(--primary-2); /* Couleur pleine pour un meilleur contraste */
+    color: white; /* Icône blanche */
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(var(--primary-2-rgb), 0.3); /* Ombre plus visible */
 }
 .ai-message-icon i {
-    width: 16px;
-    height: 16px;
-    stroke-width: 2;
+    width: 18px; /* Plus grande */
+    height: 18px; /* Plus grande */
+    stroke-width: 2.2; /* Plus épais */
 }
 .ai-message-content {
     flex: 1;
-    font-size: 0.92rem;
+    font-size: 0.95rem; /* Texte un peu plus grand */
 }
 
 /* Zone de saisie du chat */
@@ -2156,21 +2181,22 @@ html[data-theme="dark"]{
     flex: 1;
     border: 1px solid var(--chat-input-border);
     background: var(--chat-input-bg);
-    border-radius: 12px;
-    padding: 12px 16px;
+    border-radius: 14px; /* Plus arrondi */
+    padding: 13px 18px; /* Plus de padding */
     font-family: inherit;
-    font-size: 0.9rem;
+    font-size: 0.95rem; /* Plus grand */
     color: var(--text);
     outline: none;
-    transition: border-color 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .chat-input-area input:focus {
     border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(var(--primary-2-rgb), 0.15); /* Anneau de focus subtil */
 }
 .chat-input-area button {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
+    width: 48px; /* Plus grand */
+    height: 48px; /* Plus grand */
+    border-radius: 14px; /* Plus arrondi */
     background: var(--gradient);
     color: white;
     border: none;
@@ -2179,15 +2205,21 @@ html[data-theme="dark"]{
     justify-content: center;
     flex-shrink: 0;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(22,163,74,0.25);
-    transition: transform 0.2s ease;
+    box-shadow: 0 6px 16px rgba(22,163,74,0.3); /* Ombre plus prononcée */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.chat-input-area button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(22,163,74,0.4);
 }
 .chat-input-area button:active {
     transform: scale(0.95);
+    box-shadow: 0 4px 12px rgba(22,163,74,0.25);
 }
 .chat-input-area button i {
-    width: 20px;
-    height: 20px;
+    width: 22px; /* Plus grand */
+    height: 22px; /* Plus grand */
+    stroke-width: 2.3; /* Plus épais */
 }
 
 /* Pour le mode sombre */
@@ -2201,8 +2233,8 @@ html[data-theme="dark"] {
 }
 
 html[data-theme="dark"] .ai-message-icon {
-    background: rgba(34,197,94,0.16);
-    color: #4ade80;
+    background: var(--primary); /* Conserver la couleur primaire pour l'icône AI */
+    color: white;
 }
 
 html[data-theme="dark"] .chat-input-area button {
