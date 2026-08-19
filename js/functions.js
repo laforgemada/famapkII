@@ -1,4 +1,8 @@
-
+/**
+ * ==========================================
+ * TRADUCTIONS GLOBALES
+ * ==========================================
+ */
 const translations = {
     mg:{
         connexion:"Miditra",
@@ -56,14 +60,6 @@ const translations = {
     }
 };
 
-// ⚠️ API_BASE_URL n'est PAS défini ici : espace_personnel.html le déclare
-// désormais localement (voir commentaire dans ce fichier), car il charge
-// functions.js dynamiquement et rien ne garantit l'ordre d'exécution entre
-// les deux. Le déclarer aussi ici causerait un SyntaxError
-// "Identifier 'API_BASE_URL' has already been declared" dès qu'une page
-// charge les deux scripts. Si une future page a besoin de cette constante
-// SANS déclarer sa propre copie locale, ajoute-la ici à ce moment-là.
-
 const API_URL = 'https://apokalypsy.com/api/articles/list';
 const LEADERBOARD_API_URL = 'https://apokalypsy.com/api/users/leaderboard';
 const STATS_API_URL = 'https://apokalypsy.com/api/global/stats';
@@ -72,7 +68,7 @@ let allArticles = [];
 let currentCategoryIndex = 0; 
 let currentPage = 1;
 const itemsPerPage = 5;
-let articlesLoadedSuccessfully = false; // Nouvelle variable pour suivre l'état du chargement des articles
+let articlesLoadedSuccessfully = false;
 
 const categoryMapping = {
     1: 'sermons',
@@ -85,43 +81,48 @@ const categoryMapping = {
    LANG & BADGES MANAGEMENT
 ========================= */
 function changeLanguage() {
-
     const select = document.getElementById("langSwitcher");
 
     if (!select) {
-        console.warn("L'élément langSwitcher n'est pas encore disponible. L'en-tête n'est peut-être pas encore chargé.");
+        // Sortie silencieuse si le sélecteur n'est pas sur la page actuelle (évite les erreurs en cascade)
         return;
     }
 
     const lang = select.value;
-    const t = translations[lang]; // ✅ AJOUT IMPORTANT
+    const t = translations[lang] || translations['fr']; 
 
-    document.getElementById('label-mavitrika').innerText = t.labelMavitrika;
-    document.getElementById('label-fampianarana').innerText = t.labelFampianarana;
-    document.getElementById('premium-banner-title').innerText = t.premiumTitle;
-    document.getElementById('premium-banner-text').innerText = t.premiumText;
+    // Sécurisation de la mise à jour des éléments textuels (uniquement s'ils existent sur la page)
+    const updateText = (id, text) => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = text;
+    };
 
-    document.getElementById('menu-home').innerText = t.home;
-    document.getElementById('menu-bible').innerText = t.bible;
-    document.getElementById('menu-chat').innerText = t.chat;
+    updateText('label-mavitrika', t.labelMavitrika);
+    updateText('label-fampianarana', t.labelFampianarana);
+    updateText('premium-banner-title', t.premiumTitle);
+    updateText('premium-banner-text', t.premiumText);
 
-    // Mise à jour des textes dynamiques dans hero et premium banner
-    document.getElementById('hero-btn-explore-bible').innerText = t.exploreBible;
-    document.getElementById('hero-btn-join-chat').innerText = t.joinChat;
-    document.getElementById('premium-zone-text').innerText = t.premiumZone;
+    updateText('menu-home', t.home);
+    updateText('menu-bible', t.bible);
+    updateText('menu-chat', t.chat);
+
+    updateText('hero-btn-explore-bible', t.exploreBible);
+    updateText('hero-btn-join-chat', t.joinChat);
+    updateText('premium-zone-text', t.premiumZone);
 
     const catList = document.getElementById('cat-list');
-    const icons = ['grid','book-open','zap','music','globe'];
-
-    catList.innerHTML = t.cats.map((name, i) => `
-        <div class="cat-badge ${i === currentCategoryIndex ? 'active' : ''}" onclick="selectCategory(${i})">
-            <i data-feather="${icons[i]}"></i>
-            ${name}
-        </div>
-    `).join('');
+    if (catList && t.cats) {
+        const icons = ['grid','book-open','zap','music','globe'];
+        catList.innerHTML = t.cats.map((name, i) => `
+            <div class="cat-badge ${i === currentCategoryIndex ? 'active' : ''}" onclick="selectCategory(${i})">
+                <i data-feather="${icons[i] || 'circle'}"></i>
+                ${name}
+            </div>
+        `).join('');
+    }
 
     updateAuthDisplay();
-    feather.replace();
+    if (window.feather) feather.replace();
 
     if (allArticles.length > 0) {
         renderArticles();
@@ -223,17 +224,18 @@ async function fetchArticles(){
     try{
         const response = await fetch(`${API_URL}?t=${Date.now()}`);
         allArticles = await response.json();
-        articlesLoadedSuccessfully = true; // Indique que les articles ont été chargés avec succès
+        articlesLoadedSuccessfully = true; 
         renderArticles();
     }catch(e){
-        console.error("Erreur API Articles :", e); // Ajout de l'objet d'erreur pour un meilleur débogage
-        articlesLoadedSuccessfully = false; // Indique que le chargement des articles a échoué
-        renderArticles(); // Appeler renderArticles pour afficher le message d'erreur approprié
+        console.error("Erreur API Articles :", e);
+        articlesLoadedSuccessfully = false; 
+        renderArticles(); 
     }
 }
 
 function renderArticles(){
     const container = document.getElementById('articles-container');
+    if (!container) return;
     container.innerHTML = '';
 
     let filteredArticles = allArticles;
@@ -247,13 +249,11 @@ function renderArticles(){
 
     if (filteredArticles.length === 0) {
         if (!articlesLoadedSuccessfully && allArticles.length === 0) {
-            // Message d'erreur spécifique en cas d'échec de l'API
             container.innerHTML = `
                 <div style="text-align:center; padding:50px 10px; color:var(--danger); font-weight:700;">
                     Impossible de charger les articles pour le moment. Veuillez réessayer plus tard.
                 </div>`;
         } else {
-            // Message si aucun article ne correspond au filtre (ou si l'API a réussi mais n'a rien renvoyé)
             container.innerHTML = `
                 <div style="text-align:center; padding:50px 10px; color:var(--text-muted); font-weight:700;">
                     Tsy misy fampianarana mifanaraka amin'ity sokajy ity. / Aucun article dans cette catégorie.
@@ -275,7 +275,6 @@ function renderArticles(){
             year:'numeric'
         });
 
-        // Détection de la langue active (Priorité au sélecteur du header, puis au localStorage, puis au tag HTML, puis 'mg')
         const langSelect = document.getElementById('langSwitcher');
         const currentLang = (langSelect ? langSelect.value : null) || localStorage.getItem('lang') || document.documentElement.lang || 'mg';
         
@@ -313,11 +312,12 @@ function renderArticles(){
 
     updatePaginationControls(filteredArticles.length);
     observeElements();
-    feather.replace();
+    if (window.feather) feather.replace();
 }
 
 function updatePaginationControls(totalItems){
     const controls = document.getElementById('pagination-controls');
+    if (!controls) return;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     if(totalPages <= 1){
@@ -334,7 +334,7 @@ function updatePaginationControls(totalItems){
             <i data-feather="chevron-right"></i>
         </button>
     `;
-    feather.replace();
+    if (window.feather) feather.replace();
 }
 
 function changePage(page){
@@ -375,8 +375,11 @@ function escapeHTML(str){
 ========================= */
 function updateAuthDisplay(){
     const authZone = document.getElementById('auth-zone');
-    const lang = document.getElementById('langSwitcher').value;
-    const t = translations[lang];
+    if (!authZone) return;
+
+    const langSelect = document.getElementById('langSwitcher');
+    const lang = langSelect ? langSelect.value : (localStorage.getItem('app_lang') || 'fr');
+    const t = translations[lang] || translations['fr'];
 
     const userName = localStorage.getItem('user_name');
     const userRole = localStorage.getItem('user_role');
@@ -412,7 +415,7 @@ function updateAuthDisplay(){
             </a>
         `;
     }
-    feather.replace();
+    if (window.feather) feather.replace();
 }
 
 async function fetchGlobalStats() {
@@ -430,13 +433,17 @@ async function fetchGlobalStats() {
             ? `+${(stats.total_articles / 1000).toFixed(1)}K`.replace('.0', '')
             : stats.total_articles;
 
-        document.getElementById('stat-members').innerText = membersCount;
-        document.getElementById('stat-articles').innerText = articlesCount;
+        const statMembersEl = document.getElementById('stat-members');
+        const statArticlesEl = document.getElementById('stat-articles');
+        if (statMembersEl) statMembersEl.innerText = membersCount;
+        if (statArticlesEl) statArticlesEl.innerText = articlesCount;
 
     } catch (error) {
-        console.warn("Erreur lors de la récupération des statistiques globales. Utilisation des données par défaut :", error);
-        document.getElementById('stat-members').innerText = "+12K";
-        document.getElementById('stat-articles').innerText = "+580";
+        console.warn("Erreur lors de la récupération des statistiques globales :", error);
+        const statMembersEl = document.getElementById('stat-members');
+        const statArticlesEl = document.getElementById('stat-articles');
+        if (statMembersEl) statMembersEl.innerText = "+12K";
+        if (statArticlesEl) statArticlesEl.innerText = "+580";
     }
 }
 
@@ -446,7 +453,7 @@ async function fetchGlobalStats() {
 function logout(){
     const langEl = document.getElementById('langSwitcher');
     const lang = langEl ? langEl.value : (localStorage.getItem('app_lang') || 'fr');
-    const t = translations[lang];
+    const t = translations[lang] || translations['fr'];
 
     if(confirm(t.confirmLogout)){
         localStorage.removeItem('user_name');
@@ -460,41 +467,37 @@ function logout(){
 ========================= */
 window.onload = () => {
     const savedLang = localStorage.getItem('app_lang');
-    if(savedLang && document.getElementById('langSwitcher')){
-        document.getElementById('langSwitcher').value = savedLang;
+    const langSwitcherEl = document.getElementById('langSwitcher');
+    if(savedLang && langSwitcherEl){
+        langSwitcherEl.value = savedLang;
     }
-    // Appelle changeLanguage pour appliquer les traductions initiales et les badges de catégorie.
     changeLanguage(); 
 
-    // Ces trois fonctions ciblent des éléments qui n'existent que sur la page
-    // d'accueil (index.html). functions.js étant partagé par plusieurs pages
-    // (espace_personnel.html, bible.html...), on vérifie que ces éléments
-    // sont bien présents avant d'appeler ces fonctions, sinon elles
-    // plantaient avec "Cannot set properties of null" sur les autres pages.
     if (document.getElementById('leaderboard-podium')) fetchLeaderboard();
     if (document.getElementById('articles-container')) fetchArticles();
     if (document.getElementById('stat-members') || document.getElementById('stat-articles')) fetchGlobalStats();
 };
-/* =========================
-   GESTION DU MODAL D'ARTICLE
-========================= */
+
 /* =========================
    GESTION DU MODAL D'ARTICLE
 ========================= */
 function openArticleModal(title, content, image) {
     const modal = document.getElementById('article-modal');
+    if (!modal) return;
     const modalImg = document.getElementById('modal-article-img');
     const modalTitle = document.getElementById('modal-article-title');
     const modalText = document.getElementById('modal-article-text');
 
-    modalTitle.innerText = decodeURIComponent(title);
-    modalText.innerHTML = decodeURIComponent(content);
+    if (modalTitle) modalTitle.innerText = decodeURIComponent(title);
+    if (modalText) modalText.innerHTML = decodeURIComponent(content);
 
-    if (image && image !== 'null' && image !== '') {
-        modalImg.src = image;
-        modalImg.style.display = 'block';
-    } else {
-        modalImg.style.display = 'none';
+    if (modalImg) {
+        if (image && image !== 'null' && image !== '') {
+            modalImg.src = image;
+            modalImg.style.display = 'block';
+        } else {
+            modalImg.style.display = 'none';
+        }
     }
 
     modal.classList.add('active');
@@ -504,19 +507,18 @@ function openArticleModal(title, content, image) {
 
 function closeArticleModal() {
     const modal = document.getElementById('article-modal');
+    if (!modal) return;
     modal.classList.remove('active');
     document.body.style.overflow = 'auto';
 }
 
-// Fermeture au clic en dehors de la boîte du modal
 window.addEventListener('click', (e) => {
     const modal = document.getElementById('article-modal');
-    if (e.target === modal) {
+    if (modal && e.target === modal) {
         closeArticleModal();
     }
 });
 
-// Écouteur global pour intercepter les clics sur les boutons "Vaky bebe kokoa"
 document.addEventListener('click', function(event) {
     const btn = event.target.closest('.btn-read-more');
     if (btn) {

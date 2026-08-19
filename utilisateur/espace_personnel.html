@@ -1228,6 +1228,8 @@ const API_BASE_URL = 'https://apokalypsy.com';
 const DAILY_POLL_API_URL = `${API_BASE_URL}/api/poll/today`;
 const BIBLE_QUIZ_API_URL = `${API_BASE_URL}/api/quiz/today`;
 
+
+
 let currentUsername = null;
 let loyaltyData = null;
 let bonusTimer = null;
@@ -1346,7 +1348,7 @@ function debugState(label = "STATE") {
     console.log("localStorage user_role:", localStorage.getItem('user_role'));
     console.log("localStorage token:", localStorage.getItem('token'));
     console.log("notif badge DOM:", document.getElementById('notif-badge'));
-    console.log("loyalty DOM:", document.getElementById('loyalty-points-display'));
+    console.log("loyalty DOM:", document.getElementById('display-points'));
     console.groupEnd();
 }
 
@@ -1833,14 +1835,21 @@ async function sendMessageToAI() {
     scrollToBottom('chatMessages');
 
     try {
-        // 🚀 URL relative correcte pointant vers le serveur de production (et non localhost:8080)
-        const response = await fetch('/api/coach/advice', {
-            method: 'GET',
+        // CORRECTION : Utilisation de API_BASE_URL (assurez-vous que cette variable est définie, ex: 'http://localhost:8000')
+        // Si vous êtes en production sur le même domaine, vous pouvez laisser '/' mais vérifiez bien la configuration du serveur.
+        const response = await fetch(`${API_BASE_URL}/api/coach/advice`, {
+            method: 'GET', // Note : Si vous envoyez du texte utilisateur, utilisez 'POST' et 'body: JSON.stringify({message: userText})'
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 'Content-Type': 'application/json'
             }
         });
+
+        // Vérification si la réponse est bien du JSON avant de tenter de le parser
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            throw new Error("Le serveur n'a pas renvoyé de JSON.");
+        }
 
         const data = await response.json();
 
@@ -1853,7 +1862,7 @@ async function sendMessageToAI() {
 
         let aiResponse = "Je n'ai pas pu récupérer vos données pour le moment.";
         if (response.ok && data.success) {
-            aiResponse = data.advice; // Conseil généré par l'API Symfony
+            aiResponse = data.advice; 
         } else if (data.error) {
             aiResponse = data.error;
         }
@@ -2725,7 +2734,7 @@ function updateEarnCardsState() {
 
 /**
  * ==========================================
- * GESTION DE LA FIDÉLITÉ
+ * GESTION DE LA FIDÉLITÉ (MISE À JOUR)
  * ==========================================
  */
 async function loadLoyaltyData() {
@@ -2733,54 +2742,71 @@ async function loadLoyaltyData() {
 
     const cacheKey = `cache_loyalty_${currentUsername}`;
     const cached = getCache(cacheKey);
+    
     if (cached) {
-        // Affichage instantané de la dernière valeur connue pendant que
-        // la version à jour est récupérée en arrière-plan.
         userPoints.total = cached.total || 0;
         renderLoyaltyActionButton(cached.history || []);
         renderUserStats();
     }
 
+    // Vérification de la présence du token avant même de tenter la requête
+    const token = localStorage.getItem('token');
+    if (!token) {
+        console.warn("Utilisateur non authentifié : aucun token trouvé.");
+        return; 
+    }
+
     const urlHistory = `${API_BASE_URL}/api/points/history?username=${encodeURIComponent(currentUsername)}`;
 
     try {
-        const token = localStorage.getItem('token');
         const response = await fetch(urlHistory, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                'Authorization': `Bearer ${token}`
             }
         });
 
-        if (response.status === 404) {
-            console.warn(`Route non trouvée ou aucun historique pour ${currentUsername}. Initialisation par défaut.`);
-            userPoints.total = 0; // Définit à 0 si pas d'historique
-            renderLoyaltyActionButton([]);
-            renderUserStats(); // Affiche avec 0 points
+        // Gestion de l'erreur 401 (Token expiré ou invalide)
+        if (response.status === 401) {
+            console.error("Erreur 401 : Token invalide ou expiré.");
+            // Optionnel : déconnecter l'utilisateur si nécessaire
+            // localStorage.removeItem('token'); 
             return;
         }
 
-        if (!response.ok) throw new Error("Erreur récupération de l'historique");
+        if (response.status === 404) {
+            console.warn(`Aucun historique trouvé pour ${currentUsername}.`);
+            userPoints.total = 0;
+            renderLoyaltyActionButton([]);
+            renderUserStats();
+            return;
+        }
+
+        if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
 
         const data = await response.json();
         
-        if (data.success) {
-            userPoints.total = parseFloat(data.total_points) || 0; // Convertit en nombre
+        if (data && data.success) {
+            userPoints.total = parseFloat(data.total_points) || 0;
             renderLoyaltyActionButton(data.history || []);
             setCache(cacheKey, { total: userPoints.total, history: data.history || [] });
         } else {
             userPoints.total = 0;
             renderLoyaltyActionButton([]);
         }
-        renderUserStats(); // Affiche après le chargement des données de fidélité
+        renderUserStats();
 
     } catch (error) {
         console.error("Erreur lors du chargement de la fidélité :", error);
-        userPoints.total = 0;
-        renderLoyaltyActionButton([]);
-        renderUserStats(); // Affiche avec 0 points en cas d'erreur
+        // On ne remet pas forcément à 0 si on a déjà un cache, 
+        // cela évite de faire clignoter l'interface lors d'un problème réseau mineur
+        if (!cached) {
+            userPoints.total = 0;
+            renderLoyaltyActionButton([]);
+            renderUserStats();
+        }
     }
 }
 
