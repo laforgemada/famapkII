@@ -1820,73 +1820,123 @@ async function sendMessageToAI() {
     if (userText === '') return;
 
     displayMessage('user', userText);
-    input.value = ''; // Efface l'input après envoi
+    input.value = '';
 
     // Indicateur de "l'IA écrit..."
     const loadingMessageId = 'ai-typing-indicator';
     const loadingMessageElement = document.createElement('div');
+
     loadingMessageElement.id = loadingMessageId;
     loadingMessageElement.className = 'ai-message';
+
     loadingMessageElement.innerHTML = `
-        <div class="ai-message-icon"><i data-feather="feather"></i></div>
-        <div class="ai-message-content">L'IA analyse votre parcours...</div>
+        <div class="ai-message-icon">
+            <i data-feather="feather"></i>
+        </div>
+        <div class="ai-message-content">
+            L'IA analyse votre parcours...
+        </div>
     `;
+
     document.getElementById('chatMessages').appendChild(loadingMessageElement);
+
     feather.replace();
     scrollToBottom('chatMessages');
 
     try {
-        // CORRECTION : Utilisation de API_BASE_URL (assurez-vous que cette variable est définie, ex: 'http://localhost:8000')
-        // Si vous êtes en production sur le même domaine, vous pouvez laisser '/' mais vérifiez bien la configuration du serveur.
+
         const response = await fetch(`${API_BASE_URL}/api/coach/advice`, {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token'),
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
-            body: JSON.stringify({ message: userText })
+            body: JSON.stringify({
+                message: userText
+            })
         });
 
-        let data;
+        /*
+         * IMPORTANT :
+         * On lit le body UNE SEULE FOIS.
+         */
+        const rawText = await response.text();
+
+        let data = null;
+
         try {
-            data = await response.json();
+            data = JSON.parse(rawText);
         } catch (jsonError) {
-            const rawText = await response.text();
-            console.warn("La réponse du serveur n'est pas un JSON valide ou est vide :", rawText, jsonError);
-            throw new Error("Le serveur n'a pas renvoyé de JSON valide. Réponse brute : " + rawText.substring(0, 200) + "...");
+
+            console.error(
+                "Réponse brute du serveur :",
+                rawText
+            );
+
+            throw new Error(
+                "Le serveur n'a pas renvoyé de JSON valide."
+            );
         }
 
         // Supprime l'indicateur de chargement
         const chatMessages = document.getElementById('chatMessages');
-        const existingLoading = chatMessages.querySelector(`#${loadingMessageId}`);
+        const existingLoading =
+            chatMessages.querySelector(`#${loadingMessageId}`);
+
         if (existingLoading) {
             existingLoading.remove();
         }
 
-        let aiResponse = "Je n'ai pas pu récupérer vos données pour le moment.";
+        let aiResponse =
+            "Je n'ai pas pu récupérer votre conseil pour le moment.";
+
         if (response.ok && data.success) {
-            aiResponse = data.advice;
+
+            aiResponse =
+                data.advice ||
+                "Aucun conseil n'a été généré.";
+
         } else if (data.error) {
+
             aiResponse = data.error;
-        } else if (!response.ok) { // Gestion des erreurs HTTP si le JSON ne contient pas de champ 'error'
-            aiResponse = `Erreur du serveur (${response.status}).`;
+
+        } else if (!response.ok) {
+
+            aiResponse =
+                `Erreur du serveur (${response.status}).`;
         }
 
         displayMessage('ai', aiResponse);
         scrollToBottom('chatMessages');
 
     } catch (error) {
-        console.error("Erreur de connexion avec l'API du coach :", error);
 
-        // Nettoyage en cas d'erreur réseau ou de parsing
-        const chatMessages = document.getElementById('chatMessages');
-        const existingLoading = chatMessages.querySelector(`#${loadingMessageId}`);
+        console.error(
+            "Erreur de connexion avec l'API du coach :",
+            error
+        );
+
+        // Nettoyage de l'indicateur
+        const chatMessages =
+            document.getElementById('chatMessages');
+
+        const existingLoading =
+            chatMessages.querySelector(`#${loadingMessageId}`);
+
         if (existingLoading) {
             existingLoading.remove();
         }
 
-        // Utilise le message d'erreur spécifique si c'est une erreur de parsing que nous avons générée
-        let displayError = error.message.includes("JSON valide") ? error.message : "Erreur de connexion avec le serveur. Veuillez réessayer plus tard.";
+        let displayError;
+
+        if (error.message.includes("JSON valide")) {
+            displayError = error.message;
+        } else {
+            displayError =
+                "Erreur de connexion avec le serveur. Veuillez réessayer plus tard.";
+        }
+
         displayMessage('ai', displayError);
         scrollToBottom('chatMessages');
     }
