@@ -698,6 +698,8 @@ html[data-theme="dark"] @keyframes cardGlow {
 }
 </style>
 
+
+
 </head>
 
 <body>
@@ -1806,7 +1808,7 @@ function scrollToBottom(containerId) {
 }
 
 /**
- * Envoie un message à l'IA et affiche sa réponse (simulation pour l'instant).
+ * Envoie un message à l'IA et affiche sa réponse via l'API Symfony.
  */
 async function sendMessageToAI() {
     const input = document.getElementById('aiChatInput');
@@ -1824,49 +1826,54 @@ async function sendMessageToAI() {
     loadingMessageElement.className = 'ai-message';
     loadingMessageElement.innerHTML = `
         <div class="ai-message-icon"><i data-feather="cpu"></i></div>
-        <div class="ai-message-content">L'IA écrit...</div>
+        <div class="ai-message-content">L'IA analyse votre parcours...</div>
     `;
     document.getElementById('chatMessages').appendChild(loadingMessageElement);
     feather.replace();
     scrollToBottom('chatMessages');
 
-    // Simulation de la réponse de l'IA après un court délai
-    setTimeout(() => {
+    try {
+        // 🚀 URL relative correcte pointant vers le serveur de production (et non localhost:8080)
+        const response = await fetch('/api/coach/advice', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        // Supprime l'indicateur de chargement
         const chatMessages = document.getElementById('chatMessages');
         const existingLoading = chatMessages.querySelector(`#${loadingMessageId}`);
         if (existingLoading) {
-            existingLoading.remove(); // Supprime l'indicateur de chargement
+            existingLoading.remove();
         }
 
-        let aiResponse = "Je n'ai pas compris votre question. Pouvez-vous reformuler ? Je peux vous aider avec vos points, votre progression ou les fonctionnalités de cet espace.";
-
-        const lowerCaseText = userText.toLowerCase();
-
-        if (lowerCaseText.includes("bonjour") || lowerCaseText.includes("salut")) {
-            aiResponse = "Bonjour ! Comment puis-je vous aider aujourd'hui ?";
-        } else if (lowerCaseText.includes("point") || lowerCaseText.includes("fidélité")) {
-            aiResponse = `Votre solde de fidélité actuel est de ${userPoints.total.toFixed(2)} points. Continuez d'explorer l'application pour en gagner davantage !`;
-        } else if (lowerCaseText.includes("progression") || lowerCaseText.includes("niveau")) {
-            const level = calculateLevel(userPoints.total);
-            const progressToNext = calculateProgress(userPoints.total);
-            aiResponse = `Vous êtes actuellement au niveau ${level}. Il vous reste ${100 - progressToNext} points pour atteindre le niveau suivant. Continuez sur votre lancée !`;
-        } else if (lowerCaseText.includes("trophée") || lowerCaseText.includes("badge")) {
-            aiResponse = "Les trophées sont des badges spirituels que vous débloquez en atteignant certains paliers de points. Consultez la section 'Mes Trophées' pour voir ceux que vous avez déjà gagnés et ceux à venir !";
-        } else if (lowerCaseText.includes("bonus") || lowerCaseText.includes("quotidien")) {
-            aiResponse = "Le bonus quotidien est une récompense que vous pouvez réclamer une fois par jour dans la section 'Espace Fidélité & Récompenses'. N'oubliez pas de le récupérer pour augmenter vos points !";
-        } else if (lowerCaseText.includes("activité")) {
-            aiResponse = "La section 'Votre activité récente' vous montre un résumé de vos dernières lectures bibliques. Chaque lecture contribue à votre progression générale.";
-        } else if (lowerCaseText.includes("sondage") || lowerCaseText.includes("quiz") || lowerCaseText.includes("vidéo")) {
-            aiResponse = "Ce sont des opportunités de points bonus ! Le sondage et le quiz biblique vous récompensent pour votre participation, et la vidéo bonus vous donne des points pour un court visionnage. Vous pouvez les retrouver dans la section 'Opportunités de Points'.";
-        } else if (lowerCaseText.includes("partager")) {
-            aiResponse = "Le partage de l'application est un excellent moyen de faire connaître Apokalypsy à vos proches tout en gagnant des points de fidélité !";
-        } else if (lowerCaseText.includes("merci") || lowerCaseText.includes("mercis")) {
-            aiResponse = "De rien ! N'hésitez pas si vous avez d'autres questions.";
+        let aiResponse = "Je n'ai pas pu récupérer vos données pour le moment.";
+        if (response.ok && data.success) {
+            aiResponse = data.advice; // Conseil généré par l'API Symfony
+        } else if (data.error) {
+            aiResponse = data.error;
         }
 
         displayMessage('ai', aiResponse);
         scrollToBottom('chatMessages');
-    }, 1000 + Math.random() * 1500); // Délai aléatoire pour simuler une "réflexion" de l'IA
+
+    } catch (error) {
+        console.error("Erreur de connexion avec l'API du coach :", error);
+        
+        // Nettoyage en cas d'erreur réseau
+        const chatMessages = document.getElementById('chatMessages');
+        const existingLoading = chatMessages.querySelector(`#${loadingMessageId}`);
+        if (existingLoading) {
+            existingLoading.remove();
+        }
+
+        displayMessage('ai', "Erreur de connexion avec le serveur. Veuillez réessayer plus tard.");
+        scrollToBottom('chatMessages');
+    }
 }
 
 /**
