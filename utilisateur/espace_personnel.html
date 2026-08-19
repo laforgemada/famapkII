@@ -701,6 +701,10 @@ html[data-theme="dark"] @keyframes cardGlow {
 </head>
 
 <body>
+    <!-- Bouton flottant pour le chat IA -->
+    <button id="openAIChatFab" class="fab-ai-chat" aria-label="Ouvrir le chat IA" onclick="openAIChatModal()">
+        <i data-feather="message-square"></i>
+    </button>
 
 <header class="top-nav">
 
@@ -1018,8 +1022,37 @@ html[data-theme="dark"] @keyframes cardGlow {
         </div>
         <span>Profil</span>
     </button>
-
+    
 </nav>
+
+<!-- Modale du Chat IA -->
+<div class="modal-overlay" id="aiChatModal" onclick="closeModalOnOverlay(event, 'aiChatModal')">
+    <div class="modal-box ai-chat-modal" role="dialog" aria-modal="true" aria-label="Chat avec l'IA">
+        <div class="modal-header">
+            <h3>🤖 Votre Assistant IA</h3>
+            <button class="modal-close-btn" aria-label="Fermer le chat" onclick="closeModal('aiChatModal')">
+                <i data-feather="x"></i>
+            </button>
+        </div>
+        <div class="modal-body chat-body">
+            <div class="chat-messages" id="chatMessages">
+                <!-- Les messages seront insérés ici par JavaScript -->
+                <div class="ai-message">
+                    <div class="ai-message-icon"><i data-feather="cpu"></i></div>
+                    <div class="ai-message-content">
+                        Bonjour ! Je suis votre assistant personnel. Je peux vous donner des conseils sur vos points de fidélité, votre progression, ou vous expliquer les fonctionnalités de votre espace. Que voulez-vous savoir ?
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="aiChatInput" placeholder="Posez-moi une question..." autocomplete="off">
+                <button id="sendAiChatBtn" aria-label="Envoyer le message" onclick="sendMessageToAI()">
+                    <i data-feather="send"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Conteneur des notifications toast -->
 <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
@@ -1504,7 +1537,8 @@ const searchIndex = [
     { title: "Bonus quotidien", desc: "Réclamer mon bonus de fidélité", icon: "gift", anchor: "loyalty" },
     { title: "Sondage quotidien", desc: "Répondre au sondage du jour (+5 pts)", icon: "check-square", action: "startDailyPoll()" },
     { title: "Quiz biblique", desc: "Tester mes connaissances (+10 pts)", icon: "help-circle", action: "startBibleQuiz()" },
-    { title: "Vidéo bonus", desc: "Regarder une vidéo inspirante (+2 pts)", icon: "monitor", action: "watchVideoAd()" }
+    { title: "Vidéo bonus", desc: "Regarder une vidéo inspirante (+2 pts)", icon: "monitor", action: "watchVideoAd()" },
+    { title: "Chat avec l'IA", desc: "Obtenir des conseils personnalisés", icon: "message-square", action: "openAIChatModal()" }
 ];
 
 function handleSearchInput(query) {
@@ -1582,6 +1616,8 @@ function closeModal(id) {
         if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
             try { ytPlayer.pauseVideo(); } catch (e) { /* lecteur pas encore prêt */ }
         }
+    } else if (id === 'aiChatModal') {
+        // Optionnel : Réinitialiser le chat ou décharger des ressources
     }
 }
 
@@ -1594,6 +1630,7 @@ document.addEventListener('keydown', (event) => {
         closeModal('searchModal');
         closeModal('profileModal');
         closeModal('logoutConfirmModal');
+        closeModal('aiChatModal'); // Ferme la modale du chat IA
         const dropdown = document.getElementById('notifDropdown');
         if (dropdown) {
             dropdown.classList.remove('show');
@@ -1680,6 +1717,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     debugState("DÉMARRAGE");
 
+    // Écouteur pour le bouton flottant du chat IA
+    const openAIChatFab = document.getElementById('openAIChatFab');
+    if (openAIChatFab) {
+        openAIChatFab.addEventListener('click', openAIChatModal);
+    }
+
     // Met en pause le compte à rebours du bonus quand l'onglet est masqué
     // (économie CPU/batterie sur mobile), et le reprend au retour.
     document.addEventListener('visibilitychange', () => {
@@ -1694,6 +1737,137 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+/**
+ * ==========================================
+ * CHAT IA MODALE
+ * ==========================================
+ */
+
+function openAIChatModal() {
+    const modal = document.getElementById('aiChatModal');
+    if (!modal) return;
+    modal.classList.add('show');
+    const input = document.getElementById('aiChatInput');
+    if (input) {
+        input.value = '';
+        setTimeout(() => input.focus(), 50); // Focus sur l'input après l'ouverture
+    }
+    scrollToBottom('chatMessages'); // Assure que le chat est défilé vers le bas
+}
+
+// Attach event listener for Enter key in the AI chat input
+document.addEventListener('DOMContentLoaded', () => {
+    const aiChatInput = document.getElementById('aiChatInput');
+    if (aiChatInput) {
+        aiChatInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sendMessageToAI();
+            }
+        });
+    }
+});
+
+
+/**
+ * Ajoute un message au conteneur du chat.
+ * @param {string} sender 'user' ou 'ai'
+ * @param {string} message Le contenu du message.
+ */
+function displayMessage(sender, message) {
+    const chatMessages = document.getElementById('chatMessages');
+    if (!chatMessages) return;
+
+    const messageElement = document.createElement('div');
+    if (sender === 'user') {
+        messageElement.className = 'user-message';
+        messageElement.innerText = message;
+    } else {
+        messageElement.className = 'ai-message';
+        messageElement.innerHTML = `
+            <div class="ai-message-icon"><i data-feather="cpu"></i></div>
+            <div class="ai-message-content">${message}</div>
+        `;
+    }
+    chatMessages.appendChild(messageElement);
+    feather.replace(); // Pour les nouvelles icônes dans les messages IA
+    scrollToBottom('chatMessages');
+}
+
+/**
+ * Fait défiler le conteneur du chat jusqu'en bas.
+ * @param {string} containerId L'ID du conteneur à faire défiler.
+ */
+function scrollToBottom(containerId) {
+    const container = document.getElementById(containerId);
+    if (container) {
+        container.scrollTop = container.scrollHeight;
+    }
+}
+
+/**
+ * Envoie un message à l'IA et affiche sa réponse (simulation pour l'instant).
+ */
+async function sendMessageToAI() {
+    const input = document.getElementById('aiChatInput');
+    const userText = input.value.trim();
+
+    if (userText === '') return;
+
+    displayMessage('user', userText);
+    input.value = ''; // Efface l'input après envoi
+
+    // Indicateur de "l'IA écrit..."
+    const loadingMessageId = 'ai-typing-indicator';
+    const loadingMessageElement = document.createElement('div');
+    loadingMessageElement.id = loadingMessageId;
+    loadingMessageElement.className = 'ai-message';
+    loadingMessageElement.innerHTML = `
+        <div class="ai-message-icon"><i data-feather="cpu"></i></div>
+        <div class="ai-message-content">L'IA écrit...</div>
+    `;
+    document.getElementById('chatMessages').appendChild(loadingMessageElement);
+    feather.replace();
+    scrollToBottom('chatMessages');
+
+    // Simulation de la réponse de l'IA après un court délai
+    setTimeout(() => {
+        const chatMessages = document.getElementById('chatMessages');
+        const existingLoading = chatMessages.querySelector(`#${loadingMessageId}`);
+        if (existingLoading) {
+            existingLoading.remove(); // Supprime l'indicateur de chargement
+        }
+
+        let aiResponse = "Je n'ai pas compris votre question. Pouvez-vous reformuler ? Je peux vous aider avec vos points, votre progression ou les fonctionnalités de cet espace.";
+
+        const lowerCaseText = userText.toLowerCase();
+
+        if (lowerCaseText.includes("bonjour") || lowerCaseText.includes("salut")) {
+            aiResponse = "Bonjour ! Comment puis-je vous aider aujourd'hui ?";
+        } else if (lowerCaseText.includes("point") || lowerCaseText.includes("fidélité")) {
+            aiResponse = `Votre solde de fidélité actuel est de ${userPoints.total.toFixed(2)} points. Continuez d'explorer l'application pour en gagner davantage !`;
+        } else if (lowerCaseText.includes("progression") || lowerCaseText.includes("niveau")) {
+            const level = calculateLevel(userPoints.total);
+            const progressToNext = calculateProgress(userPoints.total);
+            aiResponse = `Vous êtes actuellement au niveau ${level}. Il vous reste ${100 - progressToNext} points pour atteindre le niveau suivant. Continuez sur votre lancée !`;
+        } else if (lowerCaseText.includes("trophée") || lowerCaseText.includes("badge")) {
+            aiResponse = "Les trophées sont des badges spirituels que vous débloquez en atteignant certains paliers de points. Consultez la section 'Mes Trophées' pour voir ceux que vous avez déjà gagnés et ceux à venir !";
+        } else if (lowerCaseText.includes("bonus") || lowerCaseText.includes("quotidien")) {
+            aiResponse = "Le bonus quotidien est une récompense que vous pouvez réclamer une fois par jour dans la section 'Espace Fidélité & Récompenses'. N'oubliez pas de le récupérer pour augmenter vos points !";
+        } else if (lowerCaseText.includes("activité")) {
+            aiResponse = "La section 'Votre activité récente' vous montre un résumé de vos dernières lectures bibliques. Chaque lecture contribue à votre progression générale.";
+        } else if (lowerCaseText.includes("sondage") || lowerCaseText.includes("quiz") || lowerCaseText.includes("vidéo")) {
+            aiResponse = "Ce sont des opportunités de points bonus ! Le sondage et le quiz biblique vous récompensent pour votre participation, et la vidéo bonus vous donne des points pour un court visionnage. Vous pouvez les retrouver dans la section 'Opportunités de Points'.";
+        } else if (lowerCaseText.includes("partager")) {
+            aiResponse = "Le partage de l'application est un excellent moyen de faire connaître Apokalypsy à vos proches tout en gagnant des points de fidélité !";
+        } else if (lowerCaseText.includes("merci") || lowerCaseText.includes("mercis")) {
+            aiResponse = "De rien ! N'hésitez pas si vous avez d'autres questions.";
+        }
+
+        displayMessage('ai', aiResponse);
+        scrollToBottom('chatMessages');
+    }, 1000 + Math.random() * 1500); // Délai aléatoire pour simuler une "réflexion" de l'IA
+}
 
 /**
  * Fonction pour obtenir la prochaine classe de couleur d'icône d'activité
