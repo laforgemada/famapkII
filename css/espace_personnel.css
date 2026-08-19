@@ -2241,6 +2241,10 @@ html[data-theme="dark"] .chat-input-area button {
     box-shadow: 0 4px 12px rgba(34,197,94,0.25);
 }
 
+html[data-theme="dark"] .chat-input-area button {
+    box-shadow: 0 4px 12px rgba(34,197,94,0.25);
+}
+
 html[data-theme="dark"] .top-nav{
     background:var(--glass);
     border-bottom:1px solid var(--border);
