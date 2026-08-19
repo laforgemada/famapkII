@@ -1790,7 +1790,7 @@ function displayMessage(sender, message) {
     } else {
         messageElement.className = 'ai-message';
         messageElement.innerHTML = `
-            <div class="ai-message-icon"><i data-feather="cpu"></i></div>
+            <div class="ai-message-icon"><i data-feather="feather"></i></div>
             <div class="ai-message-content">${message}</div>
         `;
     }
@@ -1828,7 +1828,7 @@ async function sendMessageToAI() {
     loadingMessageElement.id = loadingMessageId;
     loadingMessageElement.className = 'ai-message';
     loadingMessageElement.innerHTML = `
-        <div class="ai-message-icon"><i data-feather="cpu"></i></div>
+        <div class="ai-message-icon"><i data-feather="feather"></i></div>
         <div class="ai-message-content">L'IA analyse votre parcours...</div>
     `;
     document.getElementById('chatMessages').appendChild(loadingMessageElement);
@@ -1839,11 +1839,12 @@ async function sendMessageToAI() {
         // CORRECTION : Utilisation de API_BASE_URL (assurez-vous que cette variable est définie, ex: 'http://localhost:8000')
         // Si vous êtes en production sur le même domaine, vous pouvez laisser '/' mais vérifiez bien la configuration du serveur.
         const response = await fetch(`${API_BASE_URL}/api/coach/advice`, {
-            method: 'GET', // Note : Si vous envoyez du texte utilisateur, utilisez 'POST' et 'body: JSON.stringify({message: userText})'
+            method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({ message: userText })
         });
 
         // Vérification si la réponse est bien du JSON avant de tenter de le parser
