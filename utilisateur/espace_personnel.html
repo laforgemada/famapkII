@@ -1847,7 +1847,14 @@ async function sendMessageToAI() {
             body: JSON.stringify({ message: userText })
         });
 
-        const data = await response.json();
+        let data;
+        try {
+            data = await response.json();
+        } catch (jsonError) {
+            const rawText = await response.text();
+            console.warn("La réponse du serveur n'est pas un JSON valide ou est vide :", rawText, jsonError);
+            throw new Error("Le serveur n'a pas renvoyé de JSON valide. Réponse brute : " + rawText.substring(0, 200) + "...");
+        }
 
         // Supprime l'indicateur de chargement
         const chatMessages = document.getElementById('chatMessages');
@@ -1858,9 +1865,11 @@ async function sendMessageToAI() {
 
         let aiResponse = "Je n'ai pas pu récupérer vos données pour le moment.";
         if (response.ok && data.success) {
-            aiResponse = data.advice; 
+            aiResponse = data.advice;
         } else if (data.error) {
             aiResponse = data.error;
+        } else if (!response.ok) { // Gestion des erreurs HTTP si le JSON ne contient pas de champ 'error'
+            aiResponse = `Erreur du serveur (${response.status}).`;
         }
 
         displayMessage('ai', aiResponse);
@@ -1868,15 +1877,17 @@ async function sendMessageToAI() {
 
     } catch (error) {
         console.error("Erreur de connexion avec l'API du coach :", error);
-        
-        // Nettoyage en cas d'erreur réseau
+
+        // Nettoyage en cas d'erreur réseau ou de parsing
         const chatMessages = document.getElementById('chatMessages');
         const existingLoading = chatMessages.querySelector(`#${loadingMessageId}`);
         if (existingLoading) {
             existingLoading.remove();
         }
 
-        displayMessage('ai', "Erreur de connexion avec le serveur. Veuillez réessayer plus tard.");
+        // Utilise le message d'erreur spécifique si c'est une erreur de parsing que nous avons générée
+        let displayError = error.message.includes("JSON valide") ? error.message : "Erreur de connexion avec le serveur. Veuillez réessayer plus tard.";
+        displayMessage('ai', displayError);
         scrollToBottom('chatMessages');
     }
 }
