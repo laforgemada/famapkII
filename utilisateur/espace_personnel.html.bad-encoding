@@ -9,11 +9,11 @@
 <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
 <script src="https://unpkg.com/feather-icons" defer></script>
 <script>
-    // Définir basePath de manière globale pour les chargements de ressources.
+    // DÃ©finir basePath de maniÃ¨re globale pour les chargements de ressources.
     const isGitHubPages = window.location.hostname.includes("github.io");
     const basePath = isGitHubPages ? "/famapkII" : "";
 
-    // Appliqué immédiatement (avant le CSS/rendu) pour éviter le flash de thème clair
+    // AppliquÃ© immÃ©diatement (avant le CSS/rendu) pour Ã©viter le flash de thÃ¨me clair
     (function() {
         try {
             const saved = localStorage.getItem('theme');
@@ -31,14 +31,14 @@
     // Charger les fonctions globales (functions.js) dynamiquement AVANT le script inline principal
     const scriptFunctions = document.createElement('script');
     scriptFunctions.src = basePath + '/js/functions.js';
-    // ⚠️ "defer" n'a AUCUN EFFET sur un <script> créé dynamiquement en JS
-    // (defer ne fonctionne que pour les scripts déjà présents dans le HTML
-    // au moment du parsing). Un script injecté ainsi s'exécute par défaut en
+    // âš ï¸ "defer" n'a AUCUN EFFET sur un <script> crÃ©Ã© dynamiquement en JS
+    // (defer ne fonctionne que pour les scripts dÃ©jÃ  prÃ©sents dans le HTML
+    // au moment du parsing). Un script injectÃ© ainsi s'exÃ©cute par dÃ©faut en
     // mode "async", donc sans garantie d'ordre ni d'avoir fini AVANT que
-    // DOMContentLoaded ne se déclenche et n'utilise ses fonctions/constantes.
-    // "async = false" est la technique standard pour forcer un script injecté
-    // dynamiquement à s'exécuter dans l'ordre et à bloquer DOMContentLoaded
-    // jusqu'à ce qu'il soit chargé, exactement comme "defer" l'aurait fait.
+    // DOMContentLoaded ne se dÃ©clenche et n'utilise ses fonctions/constantes.
+    // "async = false" est la technique standard pour forcer un script injectÃ©
+    // dynamiquement Ã  s'exÃ©cuter dans l'ordre et Ã  bloquer DOMContentLoaded
+    // jusqu'Ã  ce qu'il soit chargÃ©, exactement comme "defer" l'aurait fait.
     scriptFunctions.async = false;
     document.head.appendChild(scriptFunctions);
 </script>
@@ -47,8 +47,8 @@
 
 <style>
 /* ==========================================
-   EXTENSION : Sondage / Quiz / Vidéo bonus
-   (styles complémentaires à espace_personnel.css)
+   EXTENSION : Sondage / Quiz / VidÃ©o bonus
+   (styles complÃ©mentaires Ã  espace_personnel.css)
    ========================================== */
 .earn-card { position: relative; transition: transform .15s ease, opacity .15s ease, box-shadow .15s ease; }
 .earn-card:not(.done):hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(124,58,237,0.15); }
@@ -102,7 +102,7 @@
 .video-fake-player p { position: relative; font-size: 0.9rem; opacity: .9; margin: 0; }
 .video-status-text { font-size: 0.8rem; color: var(--muted, #64748b); text-align: center; margin: 4px 0 14px; }
 
-/* Icône de notification pour la mise à jour de l'application (APK) */
+/* IcÃ´ne de notification pour la mise Ã  jour de l'application (APK) */
 .notif-item-icon.app_update { background: rgba(124,58,237,0.12); color: #7c3aed; }
 
 .daily-goal-wrap {
@@ -117,7 +117,7 @@
 .animate-spin { animation: spin 1s linear infinite; }
 
 /* ==========================================
-   EXTENSION : Icônes de trophées (badges attrayants)
+   EXTENSION : IcÃ´nes de trophÃ©es (badges attrayants)
    ========================================== */
 .trophy-icon-wrap {
     width: 64px;
@@ -133,7 +133,7 @@
     transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .35s ease, margin-top .35s ease;
 }
 .trophy-card.locked .trophy-icon-wrap{
-    margin-top: 0; /* Pas de flamme sur les trophées verrouillés : pas besoin de la place au-dessus */
+    margin-top: 0; /* Pas de flamme sur les trophÃ©es verrouillÃ©s : pas besoin de la place au-dessus */
 }
 
 .trophy-icon-emoji {
@@ -153,7 +153,7 @@
     display: block;
 }
 
-/* Flamme animée façon "langue de feu" au-dessus de l'icône, uniquement sur les trophées débloqués */
+/* Flamme animÃ©e faÃ§on "langue de feu" au-dessus de l'icÃ´ne, uniquement sur les trophÃ©es dÃ©bloquÃ©s */
 .trophy-flame{
     position: absolute;
     top: -30px;
@@ -200,7 +200,7 @@
     50%      { opacity: 1; transform: translateY(-3px); }
 }
 
-/* Anneau de pulsation autour des trophées débloqués, pour attirer l'œil */
+/* Anneau de pulsation autour des trophÃ©es dÃ©bloquÃ©s, pour attirer l'Å“il */
 .trophy-icon-wrap::after {
     content: '';
     position: absolute;
@@ -220,7 +220,7 @@
     100% { opacity: 0;   transform: scale(1.3); }
 }
 
-/* Survol : léger rebond + rotation pour un effet vivant */
+/* Survol : lÃ©ger rebond + rotation pour un effet vivant */
 .trophy-card:not(.locked):hover .trophy-icon-wrap {
     transform: scale(1.14) rotate(-6deg);
     box-shadow: 0 14px 26px rgba(0,0,0,0.24), inset 0 2px 4px rgba(255,255,255,0.4);
@@ -230,7 +230,7 @@
     transform: translateY(-1px) scale(1.05);
 }
 
-/* Reflet qui balaie l'icône au survol */
+/* Reflet qui balaie l'icÃ´ne au survol */
 .trophy-icon-wrap::before {
     content: '';
     position: absolute;
@@ -254,7 +254,7 @@
     to   { background-position: 120% 120%; }
 }
 
-/* Palette de dégradés distincte par trophée */
+/* Palette de dÃ©gradÃ©s distincte par trophÃ©e */
 .trophy-color-1 { --trophy-grad: linear-gradient(135deg, #4ade80, #16a34a); --trophy-ring: #16a34a; }
 .trophy-color-2 { --trophy-grad: linear-gradient(135deg, #38bdf8, #0284c7); --trophy-ring: #0284c7; }
 .trophy-color-3 { --trophy-grad: linear-gradient(135deg, #a78bfa, #7c3aed); --trophy-ring: #7c3aed; }
@@ -268,7 +268,7 @@
     box-shadow: 0 8px 22px rgba(234,179,8,0.4), inset 0 2px 4px rgba(255,255,255,0.5);
 }
 
-/* État verrouillé : icône en niveaux de gris + petit cadenas */
+/* Ã‰tat verrouillÃ© : icÃ´ne en niveaux de gris + petit cadenas */
 .trophy-card.locked .trophy-icon-wrap {
     background: linear-gradient(135deg, #cbd5e1, #94a3b8);
     box-shadow: inset 0 2px 4px rgba(255,255,255,0.25);
@@ -303,7 +303,7 @@
 .trophy-card { transition: transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s ease; }
 .trophy-card:not(.locked):hover { transform: translateY(-4px); box-shadow: 0 12px 22px rgba(0,0,0,0.08); }
 
-/* Animation de déblocage (célébration) */
+/* Animation de dÃ©blocage (cÃ©lÃ©bration) */
 .trophy-card.just-unlocked .trophy-icon-wrap {
     animation: trophyPop .6s cubic-bezier(.34,1.56,.64,1);
 }
@@ -316,7 +316,7 @@
 </style>
 <style>
 /* ==========================================
-   EXTENSION : Opportunités de Points (Refonte UI Pro)
+   EXTENSION : OpportunitÃ©s de Points (Refonte UI Pro)
    ========================================== */
 .earn-points-section {
     background: linear-gradient(135deg, rgba(124, 58, 237, 0.03) 0%, rgba(168, 85, 247, 0.08) 100%);
@@ -358,7 +358,7 @@
 .earn-card:not(.done):hover {
     transform: translateY(-7px);
     border-color: var(--primary-2); /* Couleur plus vive au survol */
-    box-shadow: 0 18px 36px rgba(var(--primary-2-rgb), 0.25); /* Ombre plus prononcée et colorée */
+    box-shadow: 0 18px 36px rgba(var(--primary-2-rgb), 0.25); /* Ombre plus prononcÃ©e et colorÃ©e */
     /* Ajout d'une animation subtile au survol */
     animation: cardGlow 1.5s infinite alternate ease-in-out;
 }
@@ -377,7 +377,7 @@
     100% { box-shadow: 0 18px 36px rgba(var(--primary-2-rgb), 0.25), 0 0 15px rgba(var(--primary-2-rgb), 0.4); }
 }
 
-/* Nouvelles variables pour les couleurs RVB si elles ne sont pas déjà définies */
+/* Nouvelles variables pour les couleurs RVB si elles ne sont pas dÃ©jÃ  dÃ©finies */
 :root {
     --primary-2-rgb: 34, 197, 94; /* Exemple pour #22c55e */
 }
@@ -391,7 +391,7 @@ html[data-theme="dark"] @keyframes cardGlow {
     100% { box-shadow: 0 18px 36px rgba(var(--primary-2-rgb), 0.25), 0 0 15px rgba(var(--primary-2-rgb), 0.4); }
 }
 
-/* État accompli (Fait) */
+/* Ã‰tat accompli (Fait) */
 .earn-card.done {
     background: rgba(148, 163, 184, 0.05);
     border-color: rgba(148, 163, 184, 0.2);
@@ -404,7 +404,7 @@ html[data-theme="dark"] @keyframes cardGlow {
     transform: none;
 }
 
-/* Icônes thématisées */
+/* IcÃ´nes thÃ©matisÃ©es */
 .earn-icon-box {
     width: 48px;
     height: 48px;
@@ -471,7 +471,7 @@ html[data-theme="dark"] @keyframes cardGlow {
 </style>
 <style>
 /* ==========================================
-   STREAK FLAME BADGE (Série de jours)
+   STREAK FLAME BADGE (SÃ©rie de jours)
    ========================================== */
 .streak-badge {
     display: inline-flex;
@@ -584,7 +584,7 @@ html[data-theme="dark"] @keyframes cardGlow {
     box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08);
 }
 
-/* Boîte d'icône avec un style plus vivant, texturé et en relief */
+/* BoÃ®te d'icÃ´ne avec un style plus vivant, texturÃ© et en relief */
 .earn-icon-box {
     width: 48px;
     height: 48px;
@@ -606,7 +606,7 @@ html[data-theme="dark"] @keyframes cardGlow {
     transform: scale(1.15) rotate(5deg);
 }
 
-/* Dégradés colorés et chaleureux pour les fonds d'icônes */
+/* DÃ©gradÃ©s colorÃ©s et chaleureux pour les fonds d'icÃ´nes */
 .earn-icon-blue { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); }
 .earn-icon-purple { background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); }
 .earn-icon-green { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); }
@@ -727,7 +727,7 @@ html[data-theme="dark"] @keyframes cardGlow {
 
         <div class="nav-right">
 
-            <button class="nav-btn theme-toggle" aria-label="Changer de thème (clair/sombre)" onclick="toggleTheme()">
+            <button class="nav-btn theme-toggle" aria-label="Changer de thÃ¨me (clair/sombre)" onclick="toggleTheme()">
                 <i data-feather="moon" class="feather-moon"></i>
                 <i data-feather="sun" class="feather-sun"></i>
             </button>
@@ -740,7 +740,7 @@ html[data-theme="dark"] @keyframes cardGlow {
                 <button class="nav-btn" id="notif-btn" aria-label="Ouvrir les notifications" aria-haspopup="true" aria-expanded="false" onclick="toggleNotifMenu(event)">
                     <i data-feather="bell"></i>
                     <span class="notif-badge" id="notif-badge">0</span>
-                    <span class="sse-status" id="sseStatus" title="État de la connexion en direct" aria-hidden="true"></span>
+                    <span class="sse-status" id="sseStatus" title="Ã‰tat de la connexion en direct" aria-hidden="true"></span>
                 </button>
                 
                 <div class="notif-dropdown" id="notifDropdown" role="menu" aria-label="Notifications">
@@ -771,10 +771,10 @@ html[data-theme="dark"] @keyframes cardGlow {
     <div class="hero-content">
 
         <div class="hero-mini">
-            释 Bienvenue sur Apokalypsy
+            é‡Š Bienvenue sur Apokalypsy
         </div>
 
-        <!-- Badge de Série de Connexion (Désactivé pour le moment) -->
+        <!-- Badge de SÃ©rie de Connexion (DÃ©sactivÃ© pour le moment) -->
  
 
 
@@ -786,15 +786,15 @@ html[data-theme="dark"] @keyframes cardGlow {
         <p class="hero-text">
             Continuez votre progression spirituelle avec
             les enseignements bibliques, les discussions
-            chrétiennes et les contenus exclusifs.
+            chrÃ©tiennes et les contenus exclusifs.
         </p>
 <div class="streak-badge" id="streakBadge">
-    <span class="fire-icon">🔥</span>
+    <span class="fire-icon">ðŸ”¥</span>
     <span id="streakText">0 jour de suite</span>
 </div>
 
         <div class="daily-goal-wrap" id="dailyGoalWrap" style="display:none;">
-            <span class="daily-goal-label" id="dailyGoalLabel">0/4 activités aujourd'hui</span>
+            <span class="daily-goal-label" id="dailyGoalLabel">0/4 activitÃ©s aujourd'hui</span>
             <div class="daily-goal-track"><div class="daily-goal-fill" id="dailyGoalFill" style="width:0%;"></div></div>
         </div>
 		
@@ -827,10 +827,10 @@ html[data-theme="dark"] @keyframes cardGlow {
         </div>
         <div class="loyalty-score">
             <h3 id="display-points" aria-live="polite"><span class="skeleton skel-line" style="width:110px;height:20px;display:inline-block;"></span></h3>
-            <p>Votre solde de fidélité</p>
+            <p>Votre solde de fidÃ©litÃ©</p>
         </div>
     </div>
-	<!-- Badge de Série de Connexion -->
+	<!-- Badge de SÃ©rie de Connexion -->
     
     <div id="loyalty-action-container">
         <span class="skeleton skel-line" style="width:170px;height:44px;border-radius:16px;display:inline-block;" aria-label="Chargement du bonus"></span>
@@ -843,7 +843,7 @@ html[data-theme="dark"] @keyframes cardGlow {
 
             <div class="progress-content">
 
-                <div class="circle-text" aria-live="polite">···</div>
+                <div class="circle-text" aria-live="polite">Â·Â·Â·</div>
                 <div class="circle-sub">Progression</div>
 
             </div>
@@ -853,7 +853,7 @@ html[data-theme="dark"] @keyframes cardGlow {
         <div class="impact-content">
 
             <div class="section-badge">
-                📈 Votre activité
+                ðŸ“ˆ Votre activitÃ©
             </div>
 
             <div class="impact-title">
@@ -861,7 +861,7 @@ html[data-theme="dark"] @keyframes cardGlow {
             </div>
 
             <div class="impact-desc">
-                Tes lectures bibliques, prières et discussions
+                Tes lectures bibliques, priÃ¨res et discussions
                 font grandir ta progression sur la plateforme.
             </div>
 
@@ -869,12 +869,12 @@ html[data-theme="dark"] @keyframes cardGlow {
 
 				<div class="impact-box box-blue">
 					<span class="box-value" id="stats-priere">0m</span>
-					<span class="box-label">Prière</span>
+					<span class="box-label">PriÃ¨re</span>
 				</div>
 
 				<div class="impact-box box-orange">
 					<span class="box-value" id="stats-lecons">0</span>
-					<span class="box-label">Leçons</span>
+					<span class="box-label">LeÃ§ons</span>
 				</div>
 
 				<div class="impact-box box-green">
@@ -890,149 +890,46 @@ html[data-theme="dark"] @keyframes cardGlow {
 
     </section>
 
-	
-<section class="card" id="recent-activities-card">
+		<section class="card" id="recent-activities-card">
 
-    <div class="section-badge">
-        ⚡ Activités récentes
-    </div>
+			<div class="section-badge">
+				âš¡ ActivitÃ©s rÃ©centes
+			</div>
 
-    <div class="impact-title">
-        Votre activité récente
-    </div>
+			<div class="impact-title">
+				Votre activitÃ© rÃ©cente
+			</div>
 
-    <div class="activity-summary" id="activity-summary">
-        <span>
-            <i data-feather="activity"></i>
-            <strong id="activity-total-count">0</strong>
-            activité(s)
-        </span>
+			<div class="activity-list" id="activity-list-skeleton" aria-busy="true">
+				<div class="skel-activity-item"><div class="skeleton skel-circle"></div><div class="skel-activity-content"><div class="skeleton skel-line short"></div><div class="skeleton skel-line" style="margin-bottom:0;"></div></div></div>
+				<div class="skel-activity-item"><div class="skeleton skel-circle"></div><div class="skel-activity-content"><div class="skeleton skel-line short"></div><div class="skeleton skel-line" style="margin-bottom:0;"></div></div></div>
+				<div class="skel-activity-item"><div class="skeleton skel-circle"></div><div class="skel-activity-content"><div class="skeleton skel-line short"></div><div class="skeleton skel-line" style="margin-bottom:0;"></div></div></div>
+			</div>
 
-        <span class="activity-summary-label">
-            Votre progression
-        </span>
-    </div>
+			<div id="activity-display-area"></div>
 
-    <!-- Chargement -->
-    <div class="activity-list"
-         id="activity-list-skeleton"
-         aria-busy="true">
+			<div id="activity-pagination" class="activity-pagination" style="display:none;"></div>
 
-        <div class="skel-activity-item">
-            <div class="skeleton skel-circle"></div>
-            <div class="skel-activity-content">
-                <div class="skeleton skel-line short"></div>
-                <div class="skeleton skel-line" style="margin-bottom:0;"></div>
-            </div>
-        </div>
-
-        <div class="skel-activity-item">
-            <div class="skeleton skel-circle"></div>
-            <div class="skel-activity-content">
-                <div class="skeleton skel-line short"></div>
-                <div class="skeleton skel-line" style="margin-bottom:0;"></div>
-            </div>
-        </div>
-
-        <div class="skel-activity-item">
-            <div class="skeleton skel-circle"></div>
-            <div class="skel-activity-content">
-                <div class="skeleton skel-line short"></div>
-                <div class="skeleton skel-line" style="margin-bottom:0;"></div>
-            </div>
-        </div>
-
-    </div>
-
-
-		<!-- Activités affichées -->
-		<div id="activity-display-area"></div>
-
-		<!-- Historique complet -->
-		<!-- Activités affichées -->
-<div id="activity-display-area"></div>
-
-<!-- Bouton pour afficher l'historique complet -->
-<button
-    type="button"
-    id="activity-toggle-btn"
-    class="activity-toggle-btn"
-    style="display:none;"
-    onclick="toggleFullActivityHistory()">
-
-    <span class="activity-toggle-icon">
-        <i data-feather="list"></i>
-    </span>
-
-    <span id="activity-toggle-text">
-        Voir toute mon activité
-    </span>
-
-</button>
-
-<!-- Historique complet des activités -->
-<div
-    id="full-activity-history"
-    class="full-activity-history"
-    style="display:none;"
-></div>
-
-
-
-    <!-- Historique complet masqué par défaut -->
-    <div
-        id="activity-full-history"
-        class="activity-full-history"
-        style="display:none;">
-
-        <div class="activity-full-history-header">
-            <div>
-                <strong>Historique complet</strong>
-                <span>Retrouvez toutes vos activités</span>
-            </div>
-
-            <button
-                type="button"
-                class="activity-close-btn"
-                onclick="toggleFullActivityHistory()"
-                aria-label="Fermer l'historique">
-
-                <i data-feather="x"></i>
-            </button>
-        </div>
-
-        <div id="activity-full-history-content"></div>
-
-        <div
-            id="activity-pagination"
-            class="activity-pagination"
-            style="display:none;">
-        </div>
-
-    </div>
-
-</section>
-
-
+		</section>
 
 <section class="card earn-points-section" id="earn-points-section">
     <div class="section-badge">
-        🌟 Gagner plus de points
+        ðŸŒŸ Gagner plus de points
     </div>
 
     <div class="impact-title">
-        Opportunités de Points
+        OpportunitÃ©s de Points
     </div>
 
     <p class="impact-desc">
-        Explorez ces activités interactives pour augmenter votre solde de points et débloquer de nouveaux trophées exclusifs !
+        Explorez ces activitÃ©s interactives pour augmenter votre solde de points et dÃ©bloquer de nouveaux trophÃ©es exclusifs !
     </p>
 
     <div class="earn-grid">
         <!-- Sondage -->
         <div class="earn-card" id="earn-card-poll" onclick="startDailyPoll()">
             <div class="earn-icon-box earn-icon-blue">
-                <span class="emoji-icon">📊</span>
+                <span class="emoji-icon">ðŸ“Š</span>
             </div>
             <div class="earn-content">
                 <div class="earn-title">Sondage Quotidien</div>
@@ -1044,7 +941,7 @@ html[data-theme="dark"] @keyframes cardGlow {
         <!-- Quiz -->
         <div class="earn-card" id="earn-card-quiz" onclick="startBibleQuiz()">
             <div class="earn-icon-box earn-icon-purple">
-                <span class="emoji-icon">💡</span>
+                <span class="emoji-icon">ðŸ’¡</span>
             </div>
             <div class="earn-content">
                 <div class="earn-title">Quiz Biblique</div>
@@ -1053,13 +950,13 @@ html[data-theme="dark"] @keyframes cardGlow {
             <div class="earn-bonus" id="earn-bonus-quiz">+10 pts</div>
         </div>
 
-        <!-- Vidéo -->
+        <!-- VidÃ©o -->
         <div class="earn-card" id="earn-card-video" onclick="watchVideoAd()">
             <div class="earn-icon-box earn-icon-green">
-                <span class="emoji-icon">🎬</span>
+                <span class="emoji-icon">ðŸŽ¬</span>
             </div>
             <div class="earn-content">
-                <div class="earn-title">Vidéo Bonus</div>
+                <div class="earn-title">VidÃ©o Bonus</div>
                 <span class="earn-card-note" id="earn-note-video">Regardez 1 min pour gagner des points</span>
             </div>
             <div class="earn-bonus" id="earn-bonus-video">+3 pts</div>
@@ -1068,7 +965,7 @@ html[data-theme="dark"] @keyframes cardGlow {
         <!-- Partage -->
         <div class="earn-card" id="earn-card-share" onclick="shareApp()">
             <div class="earn-icon-box earn-icon-pink">
-                <span class="emoji-icon">🎁</span>
+                <span class="emoji-icon">ðŸŽ</span>
             </div>
             <div class="earn-content">
                 <div class="earn-title">Partager l'App</div>
@@ -1084,7 +981,7 @@ html[data-theme="dark"] @keyframes cardGlow {
         <div class="trophy-header">
 
             <div class="trophy-title">
-                🏆 Mes Trophées
+                ðŸ† Mes TrophÃ©es
             </div>
 
             <div class="progress-btn">
@@ -1141,18 +1038,18 @@ html[data-theme="dark"] @keyframes cardGlow {
     <div class="modal-box ai-chat-modal" role="dialog" aria-modal="true" aria-label="Chat avec l'IA">
         <div class="modal-header">
             <h3><i data-feather="cpu"></i> Votre Assistant IA</h3>
-            <p>Obtenez des conseils personnalisés sur votre parcours.</p>
+            <p>Obtenez des conseils personnalisÃ©s sur votre parcours.</p>
             <button class="modal-close-btn" aria-label="Fermer le chat" onclick="closeModal('aiChatModal')">
                 <i data-feather="x"></i>
             </button>
         </div>
         <div class="modal-body chat-body">
             <div class="chat-messages" id="chatMessages">
-                <!-- Les messages seront insérés ici par JavaScript -->
+                <!-- Les messages seront insÃ©rÃ©s ici par JavaScript -->
                 <div class="ai-message">
                     <div class="ai-message-icon"><i data-feather="feather"></i></div>
                     <div class="ai-message-content">
-                        Bonjour ! Je suis votre assistant personnel. Je peux vous donner des conseils sur vos points de fidélité, votre progression, ou vous expliquer les fonctionnalités de votre espace. Que voulez-vous savoir ?
+                        Bonjour ! Je suis votre assistant personnel. Je peux vous donner des conseils sur vos points de fidÃ©litÃ©, votre progression, ou vous expliquer les fonctionnalitÃ©s de votre espace. Que voulez-vous savoir ?
                     </div>
                 </div>
             </div>
@@ -1199,12 +1096,12 @@ html[data-theme="dark"] @keyframes cardGlow {
         </div>
         <div class="modal-body">
             <div class="profile-modal-avatar" id="profileModalAvatar">??</div>
-            <div class="profile-modal-name" id="profileModalName">Invité</div>
+            <div class="profile-modal-name" id="profileModalName">InvitÃ©</div>
             <div class="profile-modal-level" id="profileModalLevel">Connectez-vous pour voir votre progression</div>
 
             <div class="profile-modal-row">
                 <i data-feather="gift"></i>
-                <span id="profileModalPoints">0.00 points de fidélité</span>
+                <span id="profileModalPoints">0.00 points de fidÃ©litÃ©</span>
             </div>
             <div class="profile-modal-row">
                 <i data-feather="book-open"></i>
@@ -1212,21 +1109,21 @@ html[data-theme="dark"] @keyframes cardGlow {
             </div>
 
             <button class="profile-modal-logout" onclick="requestEspaceLogout()">
-                <i data-feather="log-out"></i> Se déconnecter
+                <i data-feather="log-out"></i> Se dÃ©connecter
             </button>
         </div>
     </div>
 </div>
 
-<!-- Confirmation de déconnexion (remplace window.confirm(), non fiable dans certaines WebView Android) -->
+<!-- Confirmation de dÃ©connexion (remplace window.confirm(), non fiable dans certaines WebView Android) -->
 <div class="modal-overlay" id="logoutConfirmModal" onclick="closeModalOnOverlay(event, 'logoutConfirmModal')">
-    <div class="modal-box" role="dialog" aria-modal="true" aria-label="Confirmer la déconnexion" style="max-width:340px; text-align:center; padding:28px 22px;">
-        <p style="font-weight:800; font-size:1rem; margin:0 0 6px;">Se déconnecter ?</p>
+    <div class="modal-box" role="dialog" aria-modal="true" aria-label="Confirmer la dÃ©connexion" style="max-width:340px; text-align:center; padding:28px 22px;">
+        <p style="font-weight:800; font-size:1rem; margin:0 0 6px;">Se dÃ©connecter ?</p>
         <p style="color:var(--muted); font-size:0.85rem; margin:0 0 22px;">Vous devrez vous reconnecter pour retrouver votre espace.</p>
         <div style="display:flex; gap:10px;">
             <button onclick="closeModal('logoutConfirmModal')" style="flex:1; border:1px solid var(--border, #e2e8f0); background:transparent; color:var(--text-main, inherit); font-weight:700; padding:12px; border-radius:14px; cursor:pointer;">Annuler</button>
             <button class="profile-modal-logout" onclick="performEspaceLogout()" style="flex:1; margin:0;">
-                <i data-feather="log-out"></i> Se déconnecter
+                <i data-feather="log-out"></i> Se dÃ©connecter
             </button>
         </div>
     </div>
@@ -1236,7 +1133,7 @@ html[data-theme="dark"] @keyframes cardGlow {
 <div class="modal-overlay" id="pollModal" onclick="closeModalOnOverlay(event, 'pollModal')">
     <div class="modal-box" role="dialog" aria-modal="true" aria-label="Sondage quotidien">
         <div class="modal-header">
-            <h3>🗳️ Sondage du jour</h3>
+            <h3>ðŸ—³ï¸ Sondage du jour</h3>
             <button class="modal-close-btn" aria-label="Fermer le sondage" onclick="closeModal('pollModal')">
                 <i data-feather="x"></i>
             </button>
@@ -1252,7 +1149,7 @@ html[data-theme="dark"] @keyframes cardGlow {
 <div class="modal-overlay" id="quizModal" onclick="closeModalOnOverlay(event, 'quizModal')">
     <div class="modal-box" role="dialog" aria-modal="true" aria-label="Quiz biblique">
         <div class="modal-header">
-            <h3>📖 Quiz biblique</h3>
+            <h3>ðŸ“– Quiz biblique</h3>
             <button class="modal-close-btn" aria-label="Fermer le quiz" onclick="closeModal('quizModal')">
                 <i data-feather="x"></i>
             </button>
@@ -1267,12 +1164,12 @@ html[data-theme="dark"] @keyframes cardGlow {
     </div>
 </div>
 
-<!-- Modale de la vidéo bonus -->
+<!-- Modale de la vidÃ©o bonus -->
 <div class="modal-overlay" id="videoModal" onclick="closeModalOnOverlay(event, 'videoModal')">
-    <div class="modal-box" role="dialog" aria-modal="true" aria-label="Vidéo bonus">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-label="VidÃ©o bonus">
         <div class="modal-header">
-            <h3>🎬 Vidéo bonus</h3>
-            <button class="modal-close-btn" aria-label="Fermer la vidéo" onclick="closeModal('videoModal')">
+            <h3>ðŸŽ¬ VidÃ©o bonus</h3>
+            <button class="modal-close-btn" aria-label="Fermer la vidÃ©o" onclick="closeModal('videoModal')">
                 <i data-feather="x"></i>
             </button>
         </div>
@@ -1281,7 +1178,7 @@ html[data-theme="dark"] @keyframes cardGlow {
                 <div id="youtubePlayer" style="position:absolute; top:0; left:0; width:100%; height:100%;"></div>
                 <div id="videoUnavailableMsg" style="display:none; position:absolute; inset:0; align-items:center; justify-content:center; color:#fff; text-align:center; padding:20px; flex-direction:column; gap:8px;">
                     <i data-feather="video-off"></i>
-                    <p style="margin:0;">Aucune vidéo bonus n'est disponible pour le moment.</p>
+                    <p style="margin:0;">Aucune vidÃ©o bonus n'est disponible pour le moment.</p>
                 </div>
             </div>
             <div class="video-progress-bar"><div class="video-progress-fill" id="videoProgressFill"></div></div>
@@ -1290,31 +1187,31 @@ html[data-theme="dark"] @keyframes cardGlow {
     </div>
 </div>
 
-<!-- Modale de mise à jour de l'application (APK) -->
+<!-- Modale de mise Ã  jour de l'application (APK) -->
 <div class="modal-overlay" id="appUpdateModal" onclick="closeModalOnOverlay(event, 'appUpdateModal')">
-    <div class="modal-box" role="dialog" aria-modal="true" aria-label="Nouvelle mise à jour disponible">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-label="Nouvelle mise Ã  jour disponible">
         <div class="modal-header">
-            <h3>🚀 Nouvelle mise à jour disponible</h3>
+            <h3>ðŸš€ Nouvelle mise Ã  jour disponible</h3>
             <button class="modal-close-btn" aria-label="Fermer" onclick="closeModal('appUpdateModal')">
                 <i data-feather="x"></i>
             </button>
         </div>
         <div class="modal-body" style="text-align:center;">
             <p style="margin:0 0 18px; color: var(--muted, #64748b); font-size:0.92rem;">
-                Une nouvelle version de l'application est disponible. Téléchargez-la maintenant ou partagez-la
+                Une nouvelle version de l'application est disponible. TÃ©lÃ©chargez-la maintenant ou partagez-la
                 en scannant le QR code ci-dessous.
             </p>
 
             <a id="appUpdateDownloadBtn" href="#" target="_blank" rel="noopener"
                style="display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:13px 18px; border-radius:12px; background: var(--primary, #7c3aed); color:#fff; font-weight:700; text-decoration:none; font-size:0.95rem; margin-bottom:20px; box-sizing:border-box;">
-                <i data-feather="download"></i> Télécharger l'application
+                <i data-feather="download"></i> TÃ©lÃ©charger l'application
             </a>
 
             <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
                 <img
                     id="appUpdateQrImg"
                     src=""
-                    alt="QR code de téléchargement"
+                    alt="QR code de tÃ©lÃ©chargement"
                     style="width:180px; height:180px; border-radius:14px; border:1.5px solid rgba(124,58,237,0.18); background:#fff; padding:10px;"
                 />
                 <span style="font-size:0.78rem; color: var(--muted, #94a3b8);">Scannez pour partager l'application</span>
@@ -1328,12 +1225,12 @@ html[data-theme="dark"] @keyframes cardGlow {
 <script defer>
 const DEBUG = true;
 
-// Défini ICI, localement, plutôt que dans functions.js : cette page charge
-// functions.js de façon dynamique/asynchrone, donc rien ne garantissait que
-// functions.js ait fini de s'exécuter avant que ce script n'en ait besoin
-// (d'où les erreurs "API_BASE_URL is not defined" malgré le correctif dans
-// functions.js). En le définissant directement ici, comme le fait déjà
-// bible.html, on élimine complètement ce problème d'ordre de chargement.
+// DÃ©fini ICI, localement, plutÃ´t que dans functions.js : cette page charge
+// functions.js de faÃ§on dynamique/asynchrone, donc rien ne garantissait que
+// functions.js ait fini de s'exÃ©cuter avant que ce script n'en ait besoin
+// (d'oÃ¹ les erreurs "API_BASE_URL is not defined" malgrÃ© le correctif dans
+// functions.js). En le dÃ©finissant directement ici, comme le fait dÃ©jÃ 
+// bible.html, on Ã©limine complÃ¨tement ce problÃ¨me d'ordre de chargement.
 const API_BASE_URL = 'https://apokalypsy.com';
 const DAILY_POLL_API_URL = `${API_BASE_URL}/api/poll/today`;
 const BIBLE_QUIZ_API_URL = `${API_BASE_URL}/api/quiz/today`;
@@ -1344,7 +1241,7 @@ let currentUsername = null;
 let loyaltyData = null;
 let bonusTimer = null;
 
-// Récupération de l'utilisateur après connexion Google
+// RÃ©cupÃ©ration de l'utilisateur aprÃ¨s connexion Google
 const urlParams = new URLSearchParams(window.location.search);
 const googleUsername = urlParams.get('user');
 
@@ -1353,7 +1250,7 @@ if (googleUsername) {
     localStorage.setItem('user_name', googleUsername);
 }
 
-// Déclaration unique des variables globales des notifications
+// DÃ©claration unique des variables globales des notifications
 if (typeof notificationCount === 'undefined') {
     var notificationCount = 0;
 }
@@ -1362,17 +1259,17 @@ if (typeof loadedNotificationsArray === 'undefined') {
 }
 
 // ==========================================
-// Persistance des notifications (façon Facebook)
+// Persistance des notifications (faÃ§on Facebook)
 // ==========================================
-// Le flux temps réel (SSE, plus bas) ne délivre les événements qu'aux
-// utilisateurs connectés AU MOMENT PRÉCIS où ils se produisent — il ne
-// peut donc jamais, à lui seul, montrer une notification à quelqu'un qui
-// était hors ligne quand elle a été créée. La vraie source de vérité est
-// donc le serveur : au chargement de la page, on RÉCUPÈRE les
-// notifications non lues via une requête (fetchNotificationsFromServer),
-// puis le flux SSE prend le relais pour le temps réel pendant que la page
+// Le flux temps rÃ©el (SSE, plus bas) ne dÃ©livre les Ã©vÃ©nements qu'aux
+// utilisateurs connectÃ©s AU MOMENT PRÃ‰CIS oÃ¹ ils se produisent â€” il ne
+// peut donc jamais, Ã  lui seul, montrer une notification Ã  quelqu'un qui
+// Ã©tait hors ligne quand elle a Ã©tÃ© crÃ©Ã©e. La vraie source de vÃ©ritÃ© est
+// donc le serveur : au chargement de la page, on RÃ‰CUPÃˆRE les
+// notifications non lues via une requÃªte (fetchNotificationsFromServer),
+// puis le flux SSE prend le relais pour le temps rÃ©el pendant que la page
 // reste ouverte. Le localStorage sert uniquement de cache d'appoint si le
-// réseau est momentanément indisponible.
+// rÃ©seau est momentanÃ©ment indisponible.
 const NOTIF_STORAGE_MAX = 50;
 
 function getNotifStorageKey() {
@@ -1392,7 +1289,7 @@ function loadNotificationsFromStorage() {
             }
         }
     } catch (e) {
-        console.warn("Impossible de lire l'historique des notifications sauvegardé :", e);
+        console.warn("Impossible de lire l'historique des notifications sauvegardÃ© :", e);
     }
 }
 
@@ -1407,12 +1304,12 @@ function saveNotificationsToStorage() {
 }
 
 /**
- * Récupère depuis le serveur les notifications réelles de l'utilisateur
- * (lues + non lues, les plus récentes), avec leur véritable état "lu"
- * mémorisé côté serveur — donc valable même s'il était déconnecté quand
- * elles ont été créées. Nécessite un endpoint backend GET /api/notifications/list
- * (voir le code PHP fourni séparément). Tant qu'il n'existe pas encore
- * côté serveur (404) ou est injoignable, on se rabat silencieusement sur
+ * RÃ©cupÃ¨re depuis le serveur les notifications rÃ©elles de l'utilisateur
+ * (lues + non lues, les plus rÃ©centes), avec leur vÃ©ritable Ã©tat "lu"
+ * mÃ©morisÃ© cÃ´tÃ© serveur â€” donc valable mÃªme s'il Ã©tait dÃ©connectÃ© quand
+ * elles ont Ã©tÃ© crÃ©Ã©es. NÃ©cessite un endpoint backend GET /api/notifications/list
+ * (voir le code PHP fourni sÃ©parÃ©ment). Tant qu'il n'existe pas encore
+ * cÃ´tÃ© serveur (404) ou est injoignable, on se rabat silencieusement sur
  * le cache local pour que l'interface reste utilisable.
  */
 async function fetchNotificationsFromServer() {
@@ -1428,7 +1325,7 @@ async function fetchNotificationsFromServer() {
 		);
         if (!response.ok) throw new Error(`Statut HTTP ${response.status}`);
         const data = await response.json();
-        if (!Array.isArray(data.notifications)) throw new Error("Format de réponse invalide (champ 'notifications' manquant)");
+        if (!Array.isArray(data.notifications)) throw new Error("Format de rÃ©ponse invalide (champ 'notifications' manquant)");
 
         loadedNotificationsArray = data.notifications.map(n => ({
             id: n.id,
@@ -1451,10 +1348,10 @@ async function fetchNotificationsFromServer() {
 }
 
 /**
- * Prévient le serveur qu'une notification a été lue, pour que l'état "lu"
- * soit valable sur tous les appareils/sessions de ce compte — pas juste
- * dans ce navigateur. Nécessite POST /api/notifications/{id}/read côté
- * backend. Si l'appel échoue, l'état reste marqué localement quand même
+ * PrÃ©vient le serveur qu'une notification a Ã©tÃ© lue, pour que l'Ã©tat "lu"
+ * soit valable sur tous les appareils/sessions de ce compte â€” pas juste
+ * dans ce navigateur. NÃ©cessite POST /api/notifications/{id}/read cÃ´tÃ©
+ * backend. Si l'appel Ã©choue, l'Ã©tat reste marquÃ© localement quand mÃªme
  * (l'utilisateur ne revoit pas la notif dans CETTE session), mais sans
  * garantie de synchronisation tant que le backend n'est pas en place.
  */
@@ -1480,7 +1377,7 @@ async function markNotificationReadOnServer(realId) {
         }
 
         const data = await response.json();
-        console.log('Notification marquée comme lue :', data);
+        console.log('Notification marquÃ©e comme lue :', data);
 
     } catch (e) {
         console.warn(
@@ -1508,10 +1405,10 @@ async function markAllNotificationsReadOnServer() {
 }
 
 const activityIconColors = ['icon-blue', 'icon-purple', 'icon-pink', 'icon-orange-activity', 'icon-green-activity'];
-const ACTIVITIES_DAYS_PER_PAGE = 3; // Nombre de jours affichés par page de pagination
-let currentActivityPage = 1; // Page actuellement affichée dans la liste d'activités
+const ACTIVITIES_DAYS_PER_PAGE = 3; // Nombre de jours affichÃ©s par page de pagination
+let currentActivityPage = 1; // Page actuellement affichÃ©e dans la liste d'activitÃ©s
 
-let allRawActivities = []; // Stocke toutes les activités brutes pour le filtrage et le chargement progressif
+let allRawActivities = []; // Stocke toutes les activitÃ©s brutes pour le filtrage et le chargement progressif
 
 let activityColorIndex = 0;
 
@@ -1519,7 +1416,7 @@ let userPoints = {
     total: 0,
     bibleVerses: 0,
     bibleChapters: 0,
-    prayerMinutes: 0 // Dérivé des points totaux pour l'instant
+    prayerMinutes: 0 // DÃ©rivÃ© des points totaux pour l'instant
 };
 
 const params = new URLSearchParams(window.location.search);
@@ -1533,7 +1430,7 @@ if (googleToken) {
     localStorage.setItem('token', googleToken);
 
     console.log(
-        "Token Google enregistré :",
+        "Token Google enregistrÃ© :",
         googleToken
     );
 }
@@ -1555,9 +1452,9 @@ DEBUG GLOBAL
 function debugState(label = "STATE") {
     if (!DEBUG) return;
 
-    console.group(`🧪 ${label}`);
+    console.group(`ðŸ§ª ${label}`);
     console.log("currentUsername:", currentUsername);
-    console.log("userPoints:", userPoints); // Mise à jour pour le nouvel objet de points
+    console.log("userPoints:", userPoints); // Mise Ã  jour pour le nouvel objet de points
     console.log("bonusTimer:", bonusTimer);
     console.log("notificationCount:", notificationCount);
     console.log("loadedNotificationsArray:", loadedNotificationsArray);
@@ -1577,8 +1474,8 @@ function setText(id, value) {
 /**
  * ==========================================
  * CACHE LOCAL (stale-while-revalidate)
- * Affiche instantanément la dernière donnée connue
- * pendant que la version fraîche est récupérée en fond.
+ * Affiche instantanÃ©ment la derniÃ¨re donnÃ©e connue
+ * pendant que la version fraÃ®che est rÃ©cupÃ©rÃ©e en fond.
  * ==========================================
  */
 function getCache(key) {
@@ -1594,7 +1491,7 @@ function setCache(key, value) {
     try {
         localStorage.setItem(key, JSON.stringify(value));
     } catch (e) {
-        // Quota dépassé ou stockage indisponible : on ignore silencieusement
+        // Quota dÃ©passÃ© ou stockage indisponible : on ignore silencieusement
     }
 }
 
@@ -1610,15 +1507,15 @@ function toggleTheme() {
     html.setAttribute('data-theme', next);
     try { localStorage.setItem('theme', next); } catch (e) {}
 
-    // Le cercle de progression utilise une couleur inline générée en JS : on le rafraîchit
+    // Le cercle de progression utilise une couleur inline gÃ©nÃ©rÃ©e en JS : on le rafraÃ®chit
     renderUserStats();
 }
 
 /**
  * ==========================================
  * NAVIGATION - onglet actif de la barre du bas
- * Compare le chemin réel de chaque lien à l'URL courante
- * plutôt que de coder l'état "actif" en dur.
+ * Compare le chemin rÃ©el de chaque lien Ã  l'URL courante
+ * plutÃ´t que de coder l'Ã©tat "actif" en dur.
  * ==========================================
  */
 function setActiveBottomNav() {
@@ -1644,7 +1541,7 @@ function setActiveBottomNav() {
 
     // Cette page est l'espace personnel : si aucun lien ne correspond
     // (cas normal, car "Profil" ouvre une modale et n'a pas de href),
-    // on met en avant l'onglet Profil pour refléter la page courante.
+    // on met en avant l'onglet Profil pour reflÃ©ter la page courante.
     if (!matched) {
         const profileItem = document.querySelector('.bottom-item[data-page="profile"]');
         if (profileItem) {
@@ -1656,7 +1553,7 @@ function setActiveBottomNav() {
 
 /**
  * ==========================================
- * STREAK DE LECTURE (jours consécutifs)
+ * STREAK DE LECTURE (jours consÃ©cutifs)
  * ==========================================
  */
 function computeReadingStreak(historyItems) {
@@ -1675,7 +1572,7 @@ function computeReadingStreak(historyItems) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // La série doit inclure aujourd'hui ou hier pour être considérée "active"
+    // La sÃ©rie doit inclure aujourd'hui ou hier pour Ãªtre considÃ©rÃ©e "active"
     const todayKey = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
     const yesterday = new Date(today.getTime() - oneDay);
     const yesterdayKey = `${yesterday.getFullYear()}-${yesterday.getMonth()}-${yesterday.getDate()}`;
@@ -1712,7 +1609,7 @@ function renderStreak(count) {
 
 /**
  * ==========================================
- * SYSTÈME DE NOTIFICATIONS TOAST
+ * SYSTÃˆME DE NOTIFICATIONS TOAST
  * (remplace les alert() natifs pour une UX plus douce)
  * ==========================================
  */
@@ -1745,21 +1642,21 @@ function showToast(message, type = 'info', duration = 4000) {
 
 /**
  * ==========================================
- * RECHERCHE (modale) — recherche instantanée
+ * RECHERCHE (modale) â€” recherche instantanÃ©e
  * dans les sections principales de l'application
  * ==========================================
  */
 const searchIndex = [
-    { title: "Accueil", desc: "Retour à la page d'accueil", icon: "home", link: "/famapkII/" },
+    { title: "Accueil", desc: "Retour Ã  la page d'accueil", icon: "home", link: "/famapkII/" },
     { title: "Lire la Bible", desc: "Enseignements et lectures bibliques", icon: "book-open", link: "/famapkII/bible.html" },
-    { title: "Chat communautaire", desc: "Discussions chrétiennes en direct", icon: "message-circle", link: "/famapkII/chat.html" },
+    { title: "Chat communautaire", desc: "Discussions chrÃ©tiennes en direct", icon: "message-circle", link: "/famapkII/chat.html" },
     { title: "Mon profil", desc: "Voir mes points et ma progression", icon: "user", action: "openProfileModal()" },
-    { title: "Mes trophées", desc: "Consulter mes badges débloqués", icon: "award", anchor: "trophies" },
-    { title: "Bonus quotidien", desc: "Réclamer mon bonus de fidélité", icon: "gift", anchor: "loyalty" },
-    { title: "Sondage quotidien", desc: "Répondre au sondage du jour (+5 pts)", icon: "check-square", action: "startDailyPoll()" },
+    { title: "Mes trophÃ©es", desc: "Consulter mes badges dÃ©bloquÃ©s", icon: "award", anchor: "trophies" },
+    { title: "Bonus quotidien", desc: "RÃ©clamer mon bonus de fidÃ©litÃ©", icon: "gift", anchor: "loyalty" },
+    { title: "Sondage quotidien", desc: "RÃ©pondre au sondage du jour (+5 pts)", icon: "check-square", action: "startDailyPoll()" },
     { title: "Quiz biblique", desc: "Tester mes connaissances (+10 pts)", icon: "help-circle", action: "startBibleQuiz()" },
-    { title: "Vidéo bonus", desc: "Regarder une vidéo inspirante (+2 pts)", icon: "monitor", action: "watchVideoAd()" },
-    { title: "Chat avec l'IA", desc: "Obtenir des conseils personnalisés", icon: "message-square", action: "openAIChatModal()" }
+    { title: "VidÃ©o bonus", desc: "Regarder une vidÃ©o inspirante (+2 pts)", icon: "monitor", action: "watchVideoAd()" },
+    { title: "Chat avec l'IA", desc: "Obtenir des conseils personnalisÃ©s", icon: "message-square", action: "openAIChatModal()" }
 ];
 
 function handleSearchInput(query) {
@@ -1777,7 +1674,7 @@ function handleSearchInput(query) {
     );
 
     if (matches.length === 0) {
-        resultsEl.innerHTML = `<div class="search-empty">Aucun résultat pour « ${query} »</div>`;
+        resultsEl.innerHTML = `<div class="search-empty">Aucun rÃ©sultat pour Â« ${query} Â»</div>`;
         return;
     }
 
@@ -1788,9 +1685,7 @@ function handleSearchInput(query) {
             : `onclick="closeModal('searchModal');"`;
         return `
         <a class="search-result-item" ${hrefAttr} ${clickAttr}>
-            <div class="search-result-icon">
-				<i data-feather="${item.icon || 'search'}"></i>
-			</div>
+            <div class="search-result-icon"><i data-feather="${item.icon}"></i></div>
             <div class="search-result-text">
                 <strong>${item.title}</strong>
                 <span>${item.desc}</span>
@@ -1815,9 +1710,9 @@ function openProfileModal() {
     const modal = document.getElementById('profileModal');
     if (!modal) return;
 
-    const name = currentUsername || 'Invité';
+    const name = currentUsername || 'InvitÃ©';
     setText('profileModalName', name);
-    setText('profileModalPoints', `${userPoints.total.toFixed(2)} points de fidélité`);
+    setText('profileModalPoints', `${userPoints.total.toFixed(2)} points de fidÃ©litÃ©`);
     setText('profileModalChapters', `${userPoints.bibleChapters} chapitres lus`);
 
     const level = calculateLevel(userPoints.total);
@@ -1837,10 +1732,10 @@ function closeModal(id) {
     if (id === 'videoModal') {
         clearInterval(ytPollInterval);
         if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
-            try { ytPlayer.pauseVideo(); } catch (e) { /* lecteur pas encore prêt */ }
+            try { ytPlayer.pauseVideo(); } catch (e) { /* lecteur pas encore prÃªt */ }
         }
     } else if (id === 'aiChatModal') {
-        // Optionnel : Réinitialiser le chat ou décharger des ressources
+        // Optionnel : RÃ©initialiser le chat ou dÃ©charger des ressources
     }
 }
 
@@ -1864,14 +1759,14 @@ document.addEventListener('keydown', (event) => {
 });
 
 /**
- * Génère et affiche les initiales de l'utilisateur dans l'avatar du header.
- * Si l'utilisateur n'est pas connecté, affiche des points d'interrogation.
+ * GÃ©nÃ¨re et affiche les initiales de l'utilisateur dans l'avatar du header.
+ * Si l'utilisateur n'est pas connectÃ©, affiche des points d'interrogation.
  */
 function renderProfileAvatar(username) {
     const avatarElement = document.getElementById('profile-avatar-initials');
     if (!avatarElement) return;
 
-    if (username && username !== 'Invité') {
+    if (username && username !== 'InvitÃ©') {
         const parts = username.trim().split(" ");
         let initials = "??";
         if (parts.length > 1) {
@@ -1883,7 +1778,7 @@ function renderProfileAvatar(username) {
         }
         avatarElement.innerText = initials;
     } else {
-        avatarElement.innerText = "??"; // Mode invité
+        avatarElement.innerText = "??"; // Mode invitÃ©
     }
 }
 
@@ -1900,34 +1795,34 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const welcomeTitle = document.getElementById('welcome-user-title');
     if (welcomeTitle) {
-        welcomeTitle.innerText = `Bonjour ${currentUsername || 'Invité'} 🙏`;
+        welcomeTitle.innerText = `Bonjour ${currentUsername || 'InvitÃ©'} ðŸ™`;
     }
 
     renderProfileAvatar(currentUsername); // Appel de la fonction pour l'avatar
 
-    // Récupère la vidéo bonus définie par l'admin (visible même en mode invité,
-    // mais les points ne sont attribués qu'aux utilisateurs connectés)
+    // RÃ©cupÃ¨re la vidÃ©o bonus dÃ©finie par l'admin (visible mÃªme en mode invitÃ©,
+    // mais les points ne sont attribuÃ©s qu'aux utilisateurs connectÃ©s)
     fetchVideoBonusSettings().then(() => updateEarnCardsState());
-    // Récupère le dernier lien de mise à jour publié (repli si une notif SSE arrive sans URL)
+    // RÃ©cupÃ¨re le dernier lien de mise Ã  jour publiÃ© (repli si une notif SSE arrive sans URL)
     fetchAppUpdateSettings();
 
     if (currentUsername) {
-        // Affiche d'abord instantanément ce qu'on a en cache local (pas
-        // d'écran vide le temps du chargement), PUIS récupère la vraie
-        // liste côté serveur (avec son état "lu" fiable, peu importe si
-        // l'utilisateur était déconnecté quand les notifs sont arrivées).
+        // Affiche d'abord instantanÃ©ment ce qu'on a en cache local (pas
+        // d'Ã©cran vide le temps du chargement), PUIS rÃ©cupÃ¨re la vraie
+        // liste cÃ´tÃ© serveur (avec son Ã©tat "lu" fiable, peu importe si
+        // l'utilisateur Ã©tait dÃ©connectÃ© quand les notifs sont arrivÃ©es).
         loadNotificationsFromStorage();
         renderNotificationBadge();
         renderVerticalDropdownMenu();
         fetchNotificationsFromServer();
 
         loadLoyaltyData();
-        loadActivities(); // Charger la première page d'activités
+        loadActivities(); // Charger la premiÃ¨re page d'activitÃ©s
         initRealtimeNotifications();
-        updateEarnCardsState(); // Affiche l'état des activités du jour (fait/verrouillé) et l'objectif quotidien
+        updateEarnCardsState(); // Affiche l'Ã©tat des activitÃ©s du jour (fait/verrouillÃ©) et l'objectif quotidien
        
     } else {
-        console.warn("Mode invité : Certaines fonctionnalités sont désactivées.");
+        console.warn("Mode invitÃ© : Certaines fonctionnalitÃ©s sont dÃ©sactivÃ©es.");
         // Explicitly set guest states
         setText('display-points', '0.00 Points');
         document.getElementById('loyalty-action-container').innerHTML = `
@@ -1939,23 +1834,23 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (activityDisplayArea) {
             activityDisplayArea.innerHTML = `
                 <div style="padding: 20px; text-align: center; color: var(--muted); font-size: 0.9rem;">
-                    Connectez-vous pour voir vos activités récentes.
+                    Connectez-vous pour voir vos activitÃ©s rÃ©centes.
                 </div>
             `;
         }
-        renderUserStats(); // Cela affichera les stats (prière, leçons, versets) avec les valeurs par défaut (0 ou '...')
-        feather.replace(); // Assurez-vous que les nouvelles icônes sont rendues
+        renderUserStats(); // Cela affichera les stats (priÃ¨re, leÃ§ons, versets) avec les valeurs par dÃ©faut (0 ou '...')
+        feather.replace(); // Assurez-vous que les nouvelles icÃ´nes sont rendues
     }
-    debugState("DÉMARRAGE");
+    debugState("DÃ‰MARRAGE");
 
-    // Écouteur pour le bouton flottant du chat IA
+    // Ã‰couteur pour le bouton flottant du chat IA
     const openAIChatFab = document.getElementById('openAIChatFab');
     if (openAIChatFab) {
         openAIChatFab.addEventListener('click', openAIChatModal);
     }
 
-    // Met en pause le compte à rebours du bonus quand l'onglet est masqué
-    // (économie CPU/batterie sur mobile), et le reprend au retour.
+    // Met en pause le compte Ã  rebours du bonus quand l'onglet est masquÃ©
+    // (Ã©conomie CPU/batterie sur mobile), et le reprend au retour.
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
             if (window.loyaltyCountdownInterval) {
@@ -1982,9 +1877,9 @@ function openAIChatModal() {
     const input = document.getElementById('aiChatInput');
     if (input) {
         input.value = '';
-        setTimeout(() => input.focus(), 50); // Focus sur l'input après l'ouverture
+        setTimeout(() => input.focus(), 50); // Focus sur l'input aprÃ¨s l'ouverture
     }
-    scrollToBottom('chatMessages'); // Assure que le chat est défilé vers le bas
+    scrollToBottom('chatMessages'); // Assure que le chat est dÃ©filÃ© vers le bas
 }
 
 // Attach event listener for Enter key in the AI chat input
@@ -2021,13 +1916,13 @@ function displayMessage(sender, message) {
         `;
     }
     chatMessages.appendChild(messageElement);
-    feather.replace(); // Pour les nouvelles icônes dans les messages IA
+    feather.replace(); // Pour les nouvelles icÃ´nes dans les messages IA
     scrollToBottom('chatMessages');
 }
 
 /**
- * Fait défiler le conteneur du chat jusqu'en bas.
- * @param {string} containerId L'ID du conteneur à faire défiler.
+ * Fait dÃ©filer le conteneur du chat jusqu'en bas.
+ * @param {string} containerId L'ID du conteneur Ã  faire dÃ©filer.
  */
 function scrollToBottom(containerId) {
     const container = document.getElementById(containerId);
@@ -2037,7 +1932,7 @@ function scrollToBottom(containerId) {
 }
 
 /**
- * Envoie un message à l'IA et affiche sa réponse via l'API Symfony.
+ * Envoie un message Ã  l'IA et affiche sa rÃ©ponse via l'API Symfony.
  */
 async function sendMessageToAI() {
     const input = document.getElementById('aiChatInput');
@@ -2048,7 +1943,7 @@ async function sendMessageToAI() {
     displayMessage('user', userText);
     input.value = '';
 
-    // Indicateur de "l'IA écrit..."
+    // Indicateur de "l'IA Ã©crit..."
     const loadingMessageId = 'ai-typing-indicator';
     const loadingMessageElement = document.createElement('div');
 
@@ -2096,12 +1991,12 @@ async function sendMessageToAI() {
         } catch (jsonError) {
 
             console.error(
-                "Réponse brute du serveur :",
+                "RÃ©ponse brute du serveur :",
                 rawText
             );
 
             throw new Error(
-                "Le serveur n'a pas renvoyé de JSON valide."
+                "Le serveur n'a pas renvoyÃ© de JSON valide."
             );
         }
 
@@ -2115,13 +2010,13 @@ async function sendMessageToAI() {
         }
 
         let aiResponse =
-            "Je n'ai pas pu récupérer votre conseil pour le moment.";
+            "Je n'ai pas pu rÃ©cupÃ©rer votre conseil pour le moment.";
 
         if (response.ok && data.success) {
 
             aiResponse =
                 data.advice ||
-                "Aucun conseil n'a été généré.";
+                "Aucun conseil n'a Ã©tÃ© gÃ©nÃ©rÃ©.";
 
         } else if (data.error) {
 
@@ -2160,7 +2055,7 @@ async function sendMessageToAI() {
             displayError = error.message;
         } else {
             displayError =
-                "Erreur de connexion avec le serveur. Veuillez réessayer plus tard.";
+                "Erreur de connexion avec le serveur. Veuillez rÃ©essayer plus tard.";
         }
 
         displayMessage('ai', displayError);
@@ -2169,7 +2064,7 @@ async function sendMessageToAI() {
 }
 
 /**
- * Fonction pour obtenir la prochaine classe de couleur d'icône d'activité
+ * Fonction pour obtenir la prochaine classe de couleur d'icÃ´ne d'activitÃ©
  */
 function getNextActivityIconColorClass() {
     const colorClass = activityIconColors[activityColorIndex];
@@ -2178,17 +2073,17 @@ function getNextActivityIconColorClass() {
 }
 
 /**
- * Observe les éléments d'activité pour appliquer une animation quand ils entrent dans la vue.
+ * Observe les Ã©lÃ©ments d'activitÃ© pour appliquer une animation quand ils entrent dans la vue.
  */
 function observeActivityElements() {
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target); // Cesse d'observer une fois l'animation appliquée
+                observer.unobserve(entry.target); // Cesse d'observer une fois l'animation appliquÃ©e
             }
         });
-    }, { threshold: 0.1 }); // Se déclenche quand 10% de l'élément est visible
+    }, { threshold: 0.1 }); // Se dÃ©clenche quand 10% de l'Ã©lÃ©ment est visible
 
     document.querySelectorAll('#activity-display-area .activity-item').forEach(item => {
         observer.observe(item);
@@ -2198,11 +2093,11 @@ function observeActivityElements() {
 /**
  * Formatte une date pour l'affichage et le regroupement, ex: "aujourd'hui", "hier", ou "15 juillet 2024"
  * @param {string | Date} dateInput
- * @returns {string} Date formatée
+ * @returns {string} Date formatÃ©e
  */
 function formatDateForDisplay(dateInput) {
     const date = new Date(dateInput);
-    date.setHours(0, 0, 0, 0); // Normaliser à minuit pour comparaison
+    date.setHours(0, 0, 0, 0); // Normaliser Ã  minuit pour comparaison
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -2223,8 +2118,8 @@ function formatDateForDisplay(dateInput) {
 }
 
 /**
- * Met à jour le petit indicateur de connexion temps réel affiché sur la cloche
- * de notifications (vert = connecté, orange pulsant = reconnexion en cours).
+ * Met Ã  jour le petit indicateur de connexion temps rÃ©el affichÃ© sur la cloche
+ * de notifications (vert = connectÃ©, orange pulsant = reconnexion en cours).
  */
 function updateSseStatus(state) {
     const dot = document.getElementById('sseStatus');
@@ -2232,7 +2127,7 @@ function updateSseStatus(state) {
     dot.classList.remove('connected', 'reconnecting');
     if (state === 'connected') {
         dot.classList.add('connected');
-        dot.title = 'Connecté en direct';
+        dot.title = 'ConnectÃ© en direct';
     } else {
         dot.classList.add('reconnecting');
         dot.title = 'Reconnexion en cours...';
@@ -2241,11 +2136,11 @@ function updateSseStatus(state) {
 
 /**
  * ==========================================
- * NOTIFICATIONS EN TEMPS RÉEL (SSE)
+ * NOTIFICATIONS EN TEMPS RÃ‰EL (SSE)
  * ==========================================
  */
 function initRealtimeNotifications() {
-    console.log("Démarrage du flux SSE sur :", `${API_BASE_URL}/api/notifications/stream`);
+    console.log("DÃ©marrage du flux SSE sur :", `${API_BASE_URL}/api/notifications/stream`);
     
     const eventSource = new EventSource(`${API_BASE_URL}/api/notifications/stream?username=${encodeURIComponent(currentUsername)}`);
     let wasConnected = false;
@@ -2255,7 +2150,7 @@ function initRealtimeNotifications() {
         if (!wasConnected) {
             wasConnected = true;
         } else {
-            showToast("Connexion en direct rétablie.", "success", 2500);
+            showToast("Connexion en direct rÃ©tablie.", "success", 2500);
         }
     };
 
@@ -2266,7 +2161,7 @@ function initRealtimeNotifications() {
 
         try {
             const data = JSON.parse(event.data);
-            console.log("Flux SSE reçu avec succès :", data);
+            console.log("Flux SSE reÃ§u avec succÃ¨s :", data);
 
             if (!data || !data.message) return;
 
@@ -2284,13 +2179,13 @@ function initRealtimeNotifications() {
                 data.message.toLowerCase().includes('application') ||
                 data.message.toLowerCase().includes('apk')
             ) {
-                // Nouvelle version de l'application : ouvrira une popup (téléchargement + QR code)
+                // Nouvelle version de l'application : ouvrira une popup (tÃ©lÃ©chargement + QR code)
                 // au clic, au lieu de naviguer vers un lien classique.
                 iconType = 'app_update';
                 iconName = 'smartphone';
                 directLink = '#';
                 if (data.url) currentAppUpdateUrl = data.url;
-            } else if (data.type === 'new_badge' || data.message.includes('badge') || data.message.includes('Trophée')) {
+            } else if (data.type === 'new_badge' || data.message.includes('badge') || data.message.includes('TrophÃ©e')) {
                 iconType = 'badge';
                 iconName = 'award';
                 directLink = '#';
@@ -2306,7 +2201,7 @@ function initRealtimeNotifications() {
                 type: iconType,
                 icon: iconName,
                 message: data.message,
-                time: 'À l\'instant',
+                time: 'Ã€ l\'instant',
                 unread: true,
                 link: directLink,
                 apkUrl: iconType === 'app_update' ? (data.url || currentAppUpdateUrl || null) : null
@@ -2345,11 +2240,11 @@ function initRealtimeNotifications() {
     };
 
     eventSource.onerror = function(err) {
-        console.log("Le tuyau SSE s'est déconnecté ou cherche à joindre le serveur. En attente...");
+        console.log("Le tuyau SSE s'est dÃ©connectÃ© ou cherche Ã  joindre le serveur. En attente...");
         updateSseStatus('reconnecting');
     };
 
-    // État initial : en cours de connexion
+    // Ã‰tat initial : en cours de connexion
     updateSseStatus('reconnecting');
 
     document.addEventListener('click', function(event) {
@@ -2394,7 +2289,7 @@ function renderVerticalDropdownMenu() {
         container.innerHTML = `
             <div style="padding: 24px 20px; text-align: center; color: var(--muted); font-size: 0.82rem;">
                 <div class="notif-empty-icon"><i data-feather="bell-off"></i></div>
-                Aucune nouvelle notification reçue.
+                Aucune nouvelle notification reÃ§ue.
             </div>
         `;
         feather.replace();
@@ -2403,8 +2298,8 @@ function renderVerticalDropdownMenu() {
 
     container.innerHTML = loadedNotificationsArray.map(notif => {
         const isAppUpdate = notif.type === 'app_update';
-        // Pour une mise à jour d'app : pas de navigation, on ouvre la popup
-        // (téléchargement + QR code) avec le lien embarqué dans la notif.
+        // Pour une mise Ã  jour d'app : pas de navigation, on ouvre la popup
+        // (tÃ©lÃ©chargement + QR code) avec le lien embarquÃ© dans la notif.
         const href = isAppUpdate ? 'javascript:void(0)' : notif.link;
         const safeUrl = isAppUpdate && notif.apkUrl ? `'${notif.apkUrl.replace(/'/g, "\\'")}'` : 'null';
         const clickHandler = isAppUpdate
@@ -2414,7 +2309,7 @@ function renderVerticalDropdownMenu() {
         return `
         <a href="${href}" class="notif-item ${notif.unread ? 'unread' : ''}" onclick="${clickHandler}">
             <div class="notif-item-icon ${notif.type}">
-                <i data-feather="${notif.icon || 'bell'}"></i>
+                <i data-feather="${notif.icon}"></i>
             </div>
             <div class="notif-details">
                 <span class="notif-message">${notif.message}</span>
@@ -2454,19 +2349,19 @@ if (window.Notification && Notification.permission !== "denied" && Notification.
 }
 
 function requestEspaceLogout(){
-    // Nom volontairement unique (pas "logout") : functions.js, chargé sur
-    // cette même page, déclare AUSSI une fonction globale "logout()" (pour
-    // la page d'accueil, avec sa propre logique liée au sélecteur de
-    // langue). En JavaScript, deux fonctions globales du même nom se
-    // écrasent l'une l'autre — celle chargée en dernier gagne. C'est ce qui
+    // Nom volontairement unique (pas "logout") : functions.js, chargÃ© sur
+    // cette mÃªme page, dÃ©clare AUSSI une fonction globale "logout()" (pour
+    // la page d'accueil, avec sa propre logique liÃ©e au sÃ©lecteur de
+    // langue). En JavaScript, deux fonctions globales du mÃªme nom se
+    // Ã©crasent l'une l'autre â€” celle chargÃ©e en dernier gagne. C'est ce qui
     // provoquait le crash "Cannot read properties of null (reading 'value')" :
-    // la fonction logout() de functions.js s'exécutait à la place de la
-    // nôtre. On utilise donc un nom garanti unique sur cette page.
+    // la fonction logout() de functions.js s'exÃ©cutait Ã  la place de la
+    // nÃ´tre. On utilise donc un nom garanti unique sur cette page.
     const modal = document.getElementById('logoutConfirmModal');
     if (modal) {
         modal.classList.add('show');
     } else {
-        // Filet de sécurité si jamais la modale n'existe pas sur une page.
+        // Filet de sÃ©curitÃ© si jamais la modale n'existe pas sur une page.
         performEspaceLogout();
     }
 }
@@ -2476,7 +2371,7 @@ function performEspaceLogout(){
     localStorage.removeItem('user_role');
     localStorage.removeItem('token');
 
-    // Détection automatique du chemin de base pour GitHub Pages ou Localhost
+    // DÃ©tection automatique du chemin de base pour GitHub Pages ou Localhost
     const isGitHubPages = window.location.hostname.includes("github.io");
     const basePath = isGitHubPages ? "/famapkII" : "";
 
@@ -2484,7 +2379,7 @@ function performEspaceLogout(){
 }
 
 /* =========================
-   GAINS DE POINTS SUPPLÉMENTAIRES (Cointiply-like)
+   GAINS DE POINTS SUPPLÃ‰MENTAIRES (Cointiply-like)
 ========================= */
 
 async function awardPoints(points, reason) {
@@ -2509,9 +2404,9 @@ async function awardPoints(points, reason) {
 
         const result = await response.json();
         if (result.success) {
-            userPoints.total = parseFloat(userPoints.total) + points; // Mise à jour locale immédiate
+            userPoints.total = parseFloat(userPoints.total) + points; // Mise Ã  jour locale immÃ©diate
             renderUserStats();
-            showToast(`🎉 Vous avez gagné ${points} points !`, "success");
+            showToast(`ðŸŽ‰ Vous avez gagnÃ© ${points} points !`, "success");
             return true;
         } else {
             showToast(`Erreur : ${result.message}`, "error");
@@ -2526,12 +2421,12 @@ async function awardPoints(points, reason) {
 
 /**
  * ==========================================
- * SYSTÈME D'ACTIVITÉS QUOTIDIENNES À POINTS
- * (Sondage, Quiz biblique, Vidéo bonus, Partage)
+ * SYSTÃˆME D'ACTIVITÃ‰S QUOTIDIENNES Ã€ POINTS
+ * (Sondage, Quiz biblique, VidÃ©o bonus, Partage)
  * ==========================================
  */
-const VIDEO_WATCH_TARGET_SECONDS = 60; // Durée de visionnage requise pour gagner le bonus
-const VIDEO_BONUS_POINTS = 3;          // Points accordés une fois la vidéo regardée ~1 minute
+const VIDEO_WATCH_TARGET_SECONDS = 60; // DurÃ©e de visionnage requise pour gagner le bonus
+const VIDEO_BONUS_POINTS = 3;          // Points accordÃ©s une fois la vidÃ©o regardÃ©e ~1 minute
 
 function getDateKey(d = new Date()) {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -2554,17 +2449,17 @@ function markActionDoneToday(action) {
     setCache(earnKey(action), true);
 }
 
-// Questions par défaut en cas d'échec de l'API
+// Questions par dÃ©faut en cas d'Ã©chec de l'API
 const defaultPolls = [
-    { question: "Quel moment de la journée préfères-tu pour lire la Bible ?", options: ["Le matin", "Le midi", "Le soir", "La nuit"] },
-    { question: "Qu'est-ce qui nourrit le plus ta foi au quotidien ?", options: ["La prière", "La lecture biblique", "La communauté", "La méditation"] },
+    { question: "Quel moment de la journÃ©e prÃ©fÃ¨res-tu pour lire la Bible ?", options: ["Le matin", "Le midi", "Le soir", "La nuit"] },
+    { question: "Qu'est-ce qui nourrit le plus ta foi au quotidien ?", options: ["La priÃ¨re", "La lecture biblique", "La communautÃ©", "La mÃ©ditation"] },
     { question: "Quel fruit de l'Esprit aimerais-tu voir grandir en toi cette semaine ?", options: ["La patience", "La paix", "La joie", "L'amour"] }
 ];
 
 const defaultQuizzes = [
-    { question: "Combien Jésus avait-il de disciples proches ?", options: ["7", "12", "10", "3"], correct: 1 },
-    { question: "Qui a construit l'arche pour survivre au déluge ?", options: ["Abraham", "Moïse", "Noé", "David"], correct: 2 },
-    { question: "Dans quel livre trouve-t-on les Dix Commandements ?", options: ["Genèse", "Exode", "Lévitique", "Nombres"], correct: 1 }
+    { question: "Combien JÃ©sus avait-il de disciples proches ?", options: ["7", "12", "10", "3"], correct: 1 },
+    { question: "Qui a construit l'arche pour survivre au dÃ©luge ?", options: ["Abraham", "MoÃ¯se", "NoÃ©", "David"], correct: 2 },
+    { question: "Dans quel livre trouve-t-on les Dix Commandements ?", options: ["GenÃ¨se", "Exode", "LÃ©vitique", "Nombres"], correct: 1 }
 ];
 
 /* ---------- SONDAGE QUOTIDIEN DYNAMIQUE ---------- */
@@ -2572,7 +2467,7 @@ let currentPoll = null; // Stocke le sondage actuel
 
 async function startDailyPoll() {
     if (!currentUsername) { showToast("Veuillez vous connecter pour participer.", "error"); return; }
-    if (isActionDoneToday('poll')) { showToast("Vous avez déjà répondu au sondage aujourd'hui. Revenez demain !", "info"); return; }
+    if (isActionDoneToday('poll')) { showToast("Vous avez dÃ©jÃ  rÃ©pondu au sondage aujourd'hui. Revenez demain !", "info"); return; }
 
     try {
         const response = await fetch(DAILY_POLL_API_URL); // Utilisation de l'API
@@ -2580,12 +2475,12 @@ async function startDailyPoll() {
         if (data.success && data.poll) {
             currentPoll = data.poll;
         } else {
-            console.warn("API de sondage non disponible, utilisation des questions par défaut.");
-            currentPoll = defaultPolls[Math.floor(Math.random() * defaultPolls.length)]; // Question aléatoire par défaut
+            console.warn("API de sondage non disponible, utilisation des questions par dÃ©faut.");
+            currentPoll = defaultPolls[Math.floor(Math.random() * defaultPolls.length)]; // Question alÃ©atoire par dÃ©faut
         }
     } catch (error) {
-        console.error("Erreur lors de la récupération du sondage quotidien :", error);
-        currentPoll = defaultPolls[Math.floor(Math.random() * defaultPolls.length)]; // Question aléatoire par défaut en cas d'erreur réseau
+        console.error("Erreur lors de la rÃ©cupÃ©ration du sondage quotidien :", error);
+        currentPoll = defaultPolls[Math.floor(Math.random() * defaultPolls.length)]; // Question alÃ©atoire par dÃ©faut en cas d'erreur rÃ©seau
     }
 
     if (!currentPoll) {
@@ -2623,7 +2518,7 @@ let quizState = { questions: [], step: 0, correctCount: 0 };
 
 async function startBibleQuiz() {
     if (!currentUsername) { showToast("Veuillez vous connecter pour participer.", "error"); return; }
-    if (isActionDoneToday('quiz')) { showToast("Vous avez déjà fait le quiz aujourd'hui. Revenez demain !", "info"); return; }
+    if (isActionDoneToday('quiz')) { showToast("Vous avez dÃ©jÃ  fait le quiz aujourd'hui. Revenez demain !", "info"); return; }
 
     try {
         const response = await fetch(BIBLE_QUIZ_API_URL); // Utilisation de l'API
@@ -2631,8 +2526,8 @@ async function startBibleQuiz() {
         if (data.success && Array.isArray(data.quiz) && data.quiz.length > 0) {
             quizState = { questions: data.quiz, step: 0, correctCount: 0 };
         } else {
-            console.warn("API de quiz non disponible ou vide, utilisation des questions par défaut.");
-            // Sélectionne 3 questions aléatoires parmi les questions par défaut
+            console.warn("API de quiz non disponible ou vide, utilisation des questions par dÃ©faut.");
+            // SÃ©lectionne 3 questions alÃ©atoires parmi les questions par dÃ©faut
             const pickedDefaults = [];
             const availableIndices = Array.from({ length: defaultQuizzes.length }, (_, i) => i);
             for (let i = 0; i < 3 && availableIndices.length > 0; i++) {
@@ -2642,8 +2537,8 @@ async function startBibleQuiz() {
             quizState = { questions: pickedDefaults, step: 0, correctCount: 0 };
         }
     } catch (error) {
-        console.error("Erreur lors de la récupération du quiz biblique :", error);
-        // Sélectionne 3 questions aléatoires parmi les questions par défaut en cas d'erreur réseau
+        console.error("Erreur lors de la rÃ©cupÃ©ration du quiz biblique :", error);
+        // SÃ©lectionne 3 questions alÃ©atoires parmi les questions par dÃ©faut en cas d'erreur rÃ©seau
         const pickedDefaults = [];
         const availableIndices = Array.from({ length: defaultQuizzes.length }, (_, i) => i);
         for (let i = 0; i < 3 && availableIndices.length > 0; i++) {
@@ -2675,7 +2570,7 @@ function renderQuizStep() {
     setText('quizQuestionText', q.question); // 'question' au lieu de 'q'
 
     const progressFill = document.getElementById('quizProgressFill');
-    if (progressFill) progressFill.style.width = `${((step + 1) / questions.length) * 100}%`; // Barre de progression incluant l'étape actuelle
+    if (progressFill) progressFill.style.width = `${((step + 1) / questions.length) * 100}%`; // Barre de progression incluant l'Ã©tape actuelle
 
     const list = document.getElementById('quizOptionsList');
     list.innerHTML = q.options.map((opt, i) => `
@@ -2720,31 +2615,31 @@ async function finishQuiz() {
     const resultBox = document.getElementById('quizResultBox');
     resultBox.style.display = 'block';
     resultBox.innerHTML = `
-        <span class="quiz-result-emoji">${correctCount === questions.length ? '🏆' : correctCount > 0 ? '✨' : '📖'}</span>
-        <div class="quiz-result-title">${correctCount}/${questions.length} bonnes réponses</div>
-        <div class="quiz-result-desc">Tu as gagné ${earned} points aujourd'hui. Reviens demain pour un nouveau quiz !</div>
+        <span class="quiz-result-emoji">${correctCount === questions.length ? 'ðŸ†' : correctCount > 0 ? 'âœ¨' : 'ðŸ“–'}</span>
+        <div class="quiz-result-title">${correctCount}/${questions.length} bonnes rÃ©ponses</div>
+        <div class="quiz-result-desc">Tu as gagnÃ© ${earned} points aujourd'hui. Reviens demain pour un nouveau quiz !</div>
         <button class="loyalty-action-btn" style="width:100%;" onclick="closeModal('quizModal')">Fermer</button>
     `;
 
     if (earned > 0) {
         await awardPoints(earned, "Quiz biblique quotidien");
     } else {
-        showToast("Quiz terminé. Retente ta chance demain !", "info");
+        showToast("Quiz terminÃ©. Retente ta chance demain !", "info");
     }
     markActionDoneToday('quiz');
     updateEarnCardsState();
 }
 
-/* ---------- VIDÉO BONUS (vraie vidéo YouTube définie par l'admin) ---------- */
+/* ---------- VIDÃ‰O BONUS (vraie vidÃ©o YouTube dÃ©finie par l'admin) ---------- */
 let ytPlayer = null;              // Instance du lecteur YouTube IFrame API
-let ytPollInterval = null;        // Intervalle qui comptabilise les secondes réellement regardées
-let watchedSeconds = 0;           // Secondes de lecture réelle accumulées pour la vidéo en cours
-let videoRewarded = false;        // Empêche de recevoir 2x les points sur la même vidéo/jour
-let currentVideoId = null;        // ID YouTube de la vidéo actuellement chargée
-let currentVideoUrl = null;       // URL brute renvoyée par le serveur (cache)
+let ytPollInterval = null;        // Intervalle qui comptabilise les secondes rÃ©ellement regardÃ©es
+let watchedSeconds = 0;           // Secondes de lecture rÃ©elle accumulÃ©es pour la vidÃ©o en cours
+let videoRewarded = false;        // EmpÃªche de recevoir 2x les points sur la mÃªme vidÃ©o/jour
+let currentVideoId = null;        // ID YouTube de la vidÃ©o actuellement chargÃ©e
+let currentVideoUrl = null;       // URL brute renvoyÃ©e par le serveur (cache)
 
 /**
- * Extrait l'identifiant YouTube (11 caractères) depuis n'importe quel
+ * Extrait l'identifiant YouTube (11 caractÃ¨res) depuis n'importe quel
  * format d'URL courant : watch?v=, youtu.be/, embed/, shorts/.
  */
 function extractYouTubeId(url) {
@@ -2755,7 +2650,7 @@ function extractYouTubeId(url) {
 
 /**
  * Charge dynamiquement le script officiel de l'API YouTube IFrame
- * (une seule fois) et résout la promesse quand il est prêt à l'emploi.
+ * (une seule fois) et rÃ©sout la promesse quand il est prÃªt Ã  l'emploi.
  */
 function loadYouTubeAPI() {
     return new Promise((resolve) => {
@@ -2775,9 +2670,9 @@ function loadYouTubeAPI() {
 }
 
 /**
- * Récupère l'URL de la vidéo bonus configurée par l'admin.
- * Essaie d'abord le serveur (source de vérité, partagée entre tous les
- * utilisateurs), puis retombe sur le cache local si le serveur ne répond pas.
+ * RÃ©cupÃ¨re l'URL de la vidÃ©o bonus configurÃ©e par l'admin.
+ * Essaie d'abord le serveur (source de vÃ©ritÃ©, partagÃ©e entre tous les
+ * utilisateurs), puis retombe sur le cache local si le serveur ne rÃ©pond pas.
  */
 async function fetchVideoBonusSettings() {
     try {
@@ -2791,17 +2686,17 @@ async function fetchVideoBonusSettings() {
             }
         }
     } catch (e) {
-        console.warn("Vidéo bonus : serveur injoignable, utilisation du cache local.", e);
+        console.warn("VidÃ©o bonus : serveur injoignable, utilisation du cache local.", e);
     }
     currentVideoUrl = getCache('video_bonus_url_cache');
     return currentVideoUrl;
 }
 
 /**
- * MISE À JOUR DE L'APPLICATION (APK)
+ * MISE Ã€ JOUR DE L'APPLICATION (APK)
  * ==========================================
- * Récupère le lien de téléchargement actuellement publié par l'admin.
- * Sert de repli si une notification SSE arrive sans URL embarquée.
+ * RÃ©cupÃ¨re le lien de tÃ©lÃ©chargement actuellement publiÃ© par l'admin.
+ * Sert de repli si une notification SSE arrive sans URL embarquÃ©e.
  */
 let currentAppUpdateUrl = null;
 
@@ -2817,16 +2712,16 @@ async function fetchAppUpdateSettings() {
             }
         }
     } catch (e) {
-        console.warn("Mise à jour APK : serveur injoignable, utilisation du cache local.", e);
+        console.warn("Mise Ã  jour APK : serveur injoignable, utilisation du cache local.", e);
     }
     currentAppUpdateUrl = getCache('app_update_url_cache');
     return currentAppUpdateUrl;
 }
 
 /**
- * Ouvre la popup de mise à jour : branche le bouton de téléchargement et le
- * QR code sur le lien fourni (celui de la notification, ou à défaut le
- * dernier lien connu récupéré depuis le serveur).
+ * Ouvre la popup de mise Ã  jour : branche le bouton de tÃ©lÃ©chargement et le
+ * QR code sur le lien fourni (celui de la notification, ou Ã  dÃ©faut le
+ * dernier lien connu rÃ©cupÃ©rÃ© depuis le serveur).
  */
 function openAppUpdateModal(url) {
     const targetUrl = url || currentAppUpdateUrl;
@@ -2860,7 +2755,7 @@ async function watchVideoAd() {
     if (!videoId) {
         unavailableMsg.style.display = 'flex';
         playerEl.style.display = 'none';
-        setText('videoStatusText', "Aucune vidéo bonus n'est disponible pour le moment.");
+        setText('videoStatusText', "Aucune vidÃ©o bonus n'est disponible pour le moment.");
         return;
     }
     unavailableMsg.style.display = 'none';
@@ -2871,7 +2766,7 @@ async function watchVideoAd() {
     videoRewarded = isActionDoneToday('video_' + videoId);
 
     setText('videoStatusText', videoRewarded
-        ? "Vous avez déjà reçu vos points pour cette vidéo aujourd'hui. Vous pouvez la regarder à nouveau, sans bonus."
+        ? "Vous avez dÃ©jÃ  reÃ§u vos points pour cette vidÃ©o aujourd'hui. Vous pouvez la regarder Ã  nouveau, sans bonus."
         : `Regardez au moins ${VIDEO_WATCH_TARGET_SECONDS} secondes pour gagner ${VIDEO_BONUS_POINTS} points.`);
 
     await loadYouTubeAPI();
@@ -2890,8 +2785,8 @@ async function watchVideoAd() {
 function onYtStateChange(event) {
     clearInterval(ytPollInterval);
     if (event.data === YT.PlayerState.PLAYING) {
-        // On ne compte que le temps de lecture réel : une pause ou un
-        // buffering arrête le décompte, une reprise le relance.
+        // On ne compte que le temps de lecture rÃ©el : une pause ou un
+        // buffering arrÃªte le dÃ©compte, une reprise le relance.
         ytPollInterval = setInterval(trackWatchProgress, 1000);
     }
 }
@@ -2912,27 +2807,27 @@ function trackWatchProgress() {
 }
 
 async function completeVideoPlayback() {
-    videoRewarded = true; // Verrouillage optimiste pour éviter un double-clic/double-appel
-    const ok = await awardPoints(VIDEO_BONUS_POINTS, "Visionnage vidéo bonus (1 min)");
+    videoRewarded = true; // Verrouillage optimiste pour Ã©viter un double-clic/double-appel
+    const ok = await awardPoints(VIDEO_BONUS_POINTS, "Visionnage vidÃ©o bonus (1 min)");
 
     if (ok) {
         markActionDoneToday('video_' + currentVideoId);
-        setText('videoStatusText', `🎉 Bravo ! Vous avez gagné ${VIDEO_BONUS_POINTS} points de fidélité.`);
+        setText('videoStatusText', `ðŸŽ‰ Bravo ! Vous avez gagnÃ© ${VIDEO_BONUS_POINTS} points de fidÃ©litÃ©.`);
         updateEarnCardsState();
     } else {
-        videoRewarded = false; // L'appel serveur a échoué : on autorise un nouvel essai
+        videoRewarded = false; // L'appel serveur a Ã©chouÃ© : on autorise un nouvel essai
     }
 }
 
 /* ---------- PARTAGE ---------- */
 function shareApp() {
     if (!currentUsername) { showToast("Veuillez vous connecter pour participer.", "error"); return; }
-    if (isActionDoneToday('share')) { showToast("Vous avez déjà gagné des points de partage aujourd'hui. Revenez demain !", "info"); return; }
+    if (isActionDoneToday('share')) { showToast("Vous avez dÃ©jÃ  gagnÃ© des points de partage aujourd'hui. Revenez demain !", "info"); return; }
 
     if (navigator.share) {
         navigator.share({
             title: 'Apokalypsy',
-            text: 'Découvrez Apokalypsy, votre guide spirituel interactif !',
+            text: 'DÃ©couvrez Apokalypsy, votre guide spirituel interactif !',
             url: window.location.origin,
         }).then(async () => {
             const ok = await awardPoints(15, "Partage de l'application");
@@ -2942,26 +2837,26 @@ function shareApp() {
             }
         }).catch((error) => {
             console.error('Erreur de partage:', error);
-            showToast("Le partage a été annulé ou a échoué.", "error");
+            showToast("Le partage a Ã©tÃ© annulÃ© ou a Ã©chouÃ©.", "error");
         });
     } else {
         // Fallback pour les navigateurs ne supportant pas Web Share API
         navigator.clipboard?.writeText(window.location.origin).catch(() => {});
-        showToast("Partage non supporté : le lien a été copié dans le presse-papiers.", "info");
+        showToast("Partage non supportÃ© : le lien a Ã©tÃ© copiÃ© dans le presse-papiers.", "info");
     }
 }
 
 /**
- * Met à jour l'apparence des 4 cartes "Gagner plus de points" (verrouillée/disponible)
- * et l'objectif quotidien affiché dans le héro.
+ * Met Ã  jour l'apparence des 4 cartes "Gagner plus de points" (verrouillÃ©e/disponible)
+ * et l'objectif quotidien affichÃ© dans le hÃ©ro.
  */
 function updateEarnCardsState() {
     if (!currentUsername) return;
 
     const configs = [
-        { action: 'poll', cardId: 'earn-card-poll', bonusId: 'earn-bonus-poll', doneLabel: '✓ Fait', done: isActionDoneToday('poll') },
-        { action: 'quiz', cardId: 'earn-card-quiz', bonusId: 'earn-bonus-quiz', doneLabel: '✓ Fait', done: isActionDoneToday('quiz') },
-        { action: 'share', cardId: 'earn-card-share', bonusId: 'earn-bonus-share', doneLabel: '✓ Fait', done: isActionDoneToday('share') }
+        { action: 'poll', cardId: 'earn-card-poll', bonusId: 'earn-bonus-poll', doneLabel: 'âœ“ Fait', done: isActionDoneToday('poll') },
+        { action: 'quiz', cardId: 'earn-card-quiz', bonusId: 'earn-bonus-quiz', doneLabel: 'âœ“ Fait', done: isActionDoneToday('quiz') },
+        { action: 'share', cardId: 'earn-card-share', bonusId: 'earn-bonus-share', doneLabel: 'âœ“ Fait', done: isActionDoneToday('share') }
     ];
 
     let doneCount = 0;
@@ -2978,7 +2873,7 @@ function updateEarnCardsState() {
         }
     });
 
-    // Carte vidéo : une vidéo unique définie par l'admin, +3 pts après 1 min regardée
+    // Carte vidÃ©o : une vidÃ©o unique dÃ©finie par l'admin, +3 pts aprÃ¨s 1 min regardÃ©e
     const videoCard = document.getElementById('earn-card-video');
     const videoBonus = document.getElementById('earn-bonus-video');
     const videoNote = document.getElementById('earn-note-video');
@@ -2987,12 +2882,12 @@ function updateEarnCardsState() {
         const videoDoneToday = videoId ? isActionDoneToday('video_' + videoId) : false;
 
         if (!videoId) {
-            videoNote.innerText = "Aucune vidéo disponible pour le moment";
+            videoNote.innerText = "Aucune vidÃ©o disponible pour le moment";
             videoCard.classList.remove('done');
             videoBonus.innerText = '+3 pts';
         } else if (videoDoneToday) {
             videoCard.classList.add('done');
-            videoBonus.innerText = '✓ Fait';
+            videoBonus.innerText = 'âœ“ Fait';
             videoNote.innerText = "Revenez demain pour un nouveau bonus";
             doneCount++;
         } else {
@@ -3002,17 +2897,17 @@ function updateEarnCardsState() {
         }
     }
 
-    // Objectif quotidien affiché dans le héro
+    // Objectif quotidien affichÃ© dans le hÃ©ro
     const wrap = document.getElementById('dailyGoalWrap');
     const label = document.getElementById('dailyGoalLabel');
     const fill = document.getElementById('dailyGoalFill');
     const totalActions = 4;
     if (wrap && label && fill) {
         wrap.style.display = 'flex';
-        label.innerText = `${doneCount}/${totalActions} activités aujourd'hui`;
+        label.innerText = `${doneCount}/${totalActions} activitÃ©s aujourd'hui`;
         fill.style.width = `${(doneCount / totalActions) * 100}%`;
         if (doneCount >= totalActions) {
-            label.innerText = `🎉 Objectif du jour atteint !`;
+            label.innerText = `ðŸŽ‰ Objectif du jour atteint !`;
         }
     }
 }
@@ -3020,7 +2915,7 @@ function updateEarnCardsState() {
 async function updateLoginStreak() {
 
     if (!currentUsername) {
-        console.warn("⚠️ Aucun utilisateur pour calculer le streak.");
+        console.warn("âš ï¸ Aucun utilisateur pour calculer le streak.");
         return;
     }
 
@@ -3048,11 +2943,11 @@ async function updateLoginStreak() {
 
         const data = await response.json();
 
-        console.log("🔥 Login streak :", data);
+        console.log("ðŸ”¥ Login streak :", data);
 
         /*
-         * Même si l'utilisateur s'est déjà connecté aujourd'hui,
-         * le serveur renvoie quand même son streak actuel.
+         * MÃªme si l'utilisateur s'est dÃ©jÃ  connectÃ© aujourd'hui,
+         * le serveur renvoie quand mÃªme son streak actuel.
          */
         if (
             data.success ||
@@ -3063,9 +2958,9 @@ async function updateLoginStreak() {
 
             /*
              * Badge principal :
-             * 🔥 1 jour de suite
-             * 🔥 2 jours de suite
-             * 🔥 3 jours de suite...
+             * ðŸ”¥ 1 jour de suite
+             * ðŸ”¥ 2 jours de suite
+             * ðŸ”¥ 3 jours de suite...
              */
             const streakText =
                 document.getElementById('streakText');
@@ -3093,7 +2988,7 @@ async function updateLoginStreak() {
         } else {
 
             console.warn(
-                "⚠️ Impossible de récupérer le streak :",
+                "âš ï¸ Impossible de rÃ©cupÃ©rer le streak :",
                 data.message
             );
         }
@@ -3101,7 +2996,7 @@ async function updateLoginStreak() {
     } catch (error) {
 
         console.error(
-            "❌ Erreur lors de la mise à jour du streak :",
+            "âŒ Erreur lors de la mise Ã  jour du streak :",
             error
         );
     }
@@ -3109,7 +3004,7 @@ async function updateLoginStreak() {
 
 /**
  * ==========================================
- * GESTION DE LA FIDÉLITÉ (MISE À JOUR)
+ * GESTION DE LA FIDÃ‰LITÃ‰ (MISE Ã€ JOUR)
  * ==========================================
  */
 async function loadLoyaltyData() {
@@ -3124,10 +3019,10 @@ async function loadLoyaltyData() {
         renderUserStats();
     }
 
-    // Vérification de la présence du token avant même de tenter la requête
+    // VÃ©rification de la prÃ©sence du token avant mÃªme de tenter la requÃªte
     const token = localStorage.getItem('token');
     if (!token) {
-        console.warn("Utilisateur non authentifié : aucun token trouvé.");
+        console.warn("Utilisateur non authentifiÃ© : aucun token trouvÃ©.");
         return; 
     }
 
@@ -3143,16 +3038,16 @@ async function loadLoyaltyData() {
             }
         });
 
-        // Gestion de l'erreur 401 (Token expiré ou invalide)
+        // Gestion de l'erreur 401 (Token expirÃ© ou invalide)
         if (response.status === 401) {
-            console.error("Erreur 401 : Token invalide ou expiré.");
-            // Optionnel : déconnecter l'utilisateur si nécessaire
+            console.error("Erreur 401 : Token invalide ou expirÃ©.");
+            // Optionnel : dÃ©connecter l'utilisateur si nÃ©cessaire
             // localStorage.removeItem('token'); 
             return;
         }
 
         if (response.status === 404) {
-            console.warn(`Aucun historique trouvé pour ${currentUsername}.`);
+            console.warn(`Aucun historique trouvÃ© pour ${currentUsername}.`);
             userPoints.total = 0;
             renderLoyaltyActionButton([]);
             renderUserStats();
@@ -3174,9 +3069,9 @@ async function loadLoyaltyData() {
         renderUserStats();
 
     } catch (error) {
-        console.error("Erreur lors du chargement de la fidélité :", error);
-        // On ne remet pas forcément à 0 si on a déjà un cache, 
-        // cela évite de faire clignoter l'interface lors d'un problème réseau mineur
+        console.error("Erreur lors du chargement de la fidÃ©litÃ© :", error);
+        // On ne remet pas forcÃ©ment Ã  0 si on a dÃ©jÃ  un cache, 
+        // cela Ã©vite de faire clignoter l'interface lors d'un problÃ¨me rÃ©seau mineur
         if (!cached) {
             userPoints.total = 0;
             renderLoyaltyActionButton([]);
@@ -3189,22 +3084,22 @@ function renderLoyaltyActionButton(history) {
     const container = document.getElementById('loyalty-action-container');
     if (!container) return;
 
-    // Nettoyer l'ancien intervalle s'il existe pour éviter les fuites de mémoire
+    // Nettoyer l'ancien intervalle s'il existe pour Ã©viter les fuites de mÃ©moire
     if (window.loyaltyCountdownInterval) {
         clearInterval(window.loyaltyCountdownInterval);
-        window.loyaltyCountdownInterval = null; // S'assurer qu'il est réinitialisé
+        window.loyaltyCountdownInterval = null; // S'assurer qu'il est rÃ©initialisÃ©
     }
 
     const now = new Date();
     let dernierBonusDate = null;
 
-    // Trouver la dernière action de bonus quotidienne
+    // Trouver la derniÃ¨re action de bonus quotidienne
     const dailyBonuses = Array.isArray(history) 
         ? history.filter(item => item.actionType === 'DAILY_VERSE')
         : [];
 
     if (dailyBonuses.length > 0) {
-        // Trier par date pour trouver le plus récent
+        // Trier par date pour trouver le plus rÃ©cent
         dailyBonuses.sort((a, b) => {
             const [datePartA, timePartA] = a.date.split(' ');
             const [dayA, monthA, yearA] = datePartA.split('/');
@@ -3216,10 +3111,10 @@ function renderLoyaltyActionButton(history) {
             const [hoursB, minutesB] = timePartB.split(':');
             const dateB = new Date(yearB, monthB - 1, dayB, hoursB, minutesB);
 
-            return dateB.getTime() - dateA.getTime(); // Du plus récent au plus ancien
+            return dateB.getTime() - dateA.getTime(); // Du plus rÃ©cent au plus ancien
         });
         
-        // Le plus récent est le premier
+        // Le plus rÃ©cent est le premier
         const mostRecentBonus = dailyBonuses[0];
         const [datePart, timePart] = mostRecentBonus.date.split(' ');
         const [day, month, year] = datePart.split('/');
@@ -3230,16 +3125,16 @@ function renderLoyaltyActionButton(history) {
     const dateProchainBonus = dernierBonusDate ? new Date(dernierBonusDate.getTime() + (24 * 60 * 60 * 1000)) : null;
 
     if (dateProchainBonus && now < dateProchainBonus) {
-        // Création du conteneur pour le rebours
+        // CrÃ©ation du conteneur pour le rebours
         container.innerHTML = `
             <button class="loyalty-action-btn" style="background: #e2e8f0; color: #94a3b8; cursor: not-allowed; display: flex; flex-direction: column; gap: 4px; padding: 10px 16px;" disabled>
-                <span><i data-feather="check-circle"></i> Bonus quotidien réclamé</span>
+                <span><i data-feather="check-circle"></i> Bonus quotidien rÃ©clamÃ©</span>
                 <small id="loyalty-countdown-timer" style="font-size: 0.75rem; color: #64748b; font-weight: bold;"></small>
             </button>
         `;
         feather.replace();
 
-        // Fonction de mise à jour du chrono
+        // Fonction de mise Ã  jour du chrono
         function updateTimer() {
             const maintenant = new Date();
             const reste = dateProchainBonus - maintenant;
@@ -3251,7 +3146,7 @@ function renderLoyaltyActionButton(history) {
                 timerEl.innerText = "Bonus disponible ! Recharger la page.";
                 clearInterval(window.loyaltyCountdownInterval);
                 window.loyaltyCountdownInterval = null;
-                // Recharger les données pour afficher le bouton de réclamation
+                // Recharger les donnÃ©es pour afficher le bouton de rÃ©clamation
                 loadLoyaltyData(); 
                 return;
             }
@@ -3264,17 +3159,17 @@ function renderLoyaltyActionButton(history) {
             timerEl.innerText = `Disponible dans : ${format(h)}h ${format(m)}m ${format(s)}s`;
         }
 
-        // Lancer le compteur immédiatement et toutes les secondes
+        // Lancer le compteur immÃ©diatement et toutes les secondes
         window.loyaltyUpdateTimerFn = updateTimer;
         updateTimer();
         window.loyaltyCountdownInterval = setInterval(updateTimer, 1000);
 
     } else {
-        // Pas de bonus à venir ou déjà disponible : Bouton actif
+        // Pas de bonus Ã  venir ou dÃ©jÃ  disponible : Bouton actif
         window.loyaltyUpdateTimerFn = null;
         container.innerHTML = `
             <button class="loyalty-action-btn" onclick="claimDailyLoginReward()">
-                <i data-feather="gift"></i> Réclamer mon bonus (+0.50)
+                <i data-feather="gift"></i> RÃ©clamer mon bonus (+0.50)
             </button>
         `;
         feather.replace();
@@ -3287,7 +3182,7 @@ async function claimDailyLoginReward() {
     
     const token = localStorage.getItem('token');
     
-    // Sécurité Frontend si le token n'existe pas dans le localStorage
+    // SÃ©curitÃ© Frontend si le token n'existe pas dans le localStorage
     
 
     container.innerHTML = `
@@ -3309,299 +3204,32 @@ async function claimDailyLoginReward() {
         });
 
         if (response.status === 401) {
-            showToast("Session non autorisée. Veuillez vous reconnecter.", "error");
-            loadLoyaltyData(); // Recharge les données qui incluront un appel à renderUserStats
+            showToast("Session non autorisÃ©e. Veuillez vous reconnecter.", "error");
+            loadLoyaltyData(); // Recharge les donnÃ©es qui incluront un appel Ã  renderUserStats
             return;
         }
 
         const data = await response.json();
-        showToast(data.message || (data.success ? "Opération réussie !" : "Une erreur est survenue."), data.success ? "success" : "error");
+        showToast(data.message || (data.success ? "OpÃ©ration rÃ©ussie !" : "Une erreur est survenue."), data.success ? "success" : "error");
         
-        loadLoyaltyData(); // Recharge les données qui incluront un appel à renderUserStats
+        loadLoyaltyData(); // Recharge les donnÃ©es qui incluront un appel Ã  renderUserStats
 
     } catch (error) {
-        console.error("Erreur lors de la réclamation du bonus :", error);
-        showToast("Impossible de joindre le serveur de fidélité.", "error");
-        loadLoyaltyData(); // Recharge les données qui incluront un appel à renderUserStats
+        console.error("Erreur lors de la rÃ©clamation du bonus :", error);
+        showToast("Impossible de joindre le serveur de fidÃ©litÃ©.", "error");
+        loadLoyaltyData(); // Recharge les donnÃ©es qui incluront un appel Ã  renderUserStats
     }
 }
 
 /**
- * Construit le rendu de la liste d'activités à partir des données brutes
- * (utilisé à la fois pour l'affichage depuis le cache et depuis le réseau).
+ * Construit le rendu de la liste d'activitÃ©s Ã  partir des donnÃ©es brutes
+ * (utilisÃ© Ã  la fois pour l'affichage depuis le cache et depuis le rÃ©seau).
  */
 /**
- * Construit le rendu de la liste d'activités à partir des données brutes,
- * en les groupant par jour et en gérant le chargement progressif.
- * @param {Array} allData Toutes les activités brutes de l'API.
+ * Construit le rendu de la liste d'activitÃ©s Ã  partir des donnÃ©es brutes,
+ * en les groupant par jour et en gÃ©rant le chargement progressif.
+ * @param {Array} allData Toutes les activitÃ©s brutes de l'API.
  */
- 
- /**
- * Sécurise le texte avant de l'insérer dans du HTML.
- * Évite qu'un contenu provenant de l'API puisse casser l'affichage.
- */
-function escapeActivityHtml(value) {
-    if (value === null || value === undefined) {
-        return '';
-    }
-
-    return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
-
-
-/**
- * ==========================================
- * OUTILS - ACTIVITÉS RÉCENTES
- * ==========================================
- */
-
-/**
- * Formate une date en temps relatif.
- * Exemple :
- *   À l'instant
- *   Il y a 5 min
- *   Il y a 2 h
- *   Hier
- *   Il y a 3 jours
- */
-function formatActivityRelativeTime(dateInput) {
-    if (!dateInput) return 'Date inconnue';
-
-    const date = new Date(dateInput);
-
-    if (isNaN(date.getTime())) {
-        console.warn('Date activité invalide :', dateInput);
-        return 'Date inconnue';
-    }
-
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffSeconds = Math.floor(diffMs / 1000);
-
-    if (diffSeconds < 10) {
-        return "À l'instant";
-    }
-
-    if (diffSeconds < 60) {
-        return `Il y a ${diffSeconds}s`;
-    }
-
-    const diffMinutes = Math.floor(diffSeconds / 60);
-
-    if (diffMinutes < 60) {
-        return `Il y a ${diffMinutes} min`;
-    }
-
-    const diffHours = Math.floor(diffMinutes / 60);
-
-    if (diffHours < 24) {
-        return `Il y a ${diffHours} h`;
-    }
-
-    const diffDays = Math.floor(diffHours / 24);
-
-    if (diffDays === 1) {
-        return 'Hier';
-    }
-
-    if (diffDays < 7) {
-        return `Il y a ${diffDays} jours`;
-    }
-
-    return date.toLocaleDateString('fr-FR', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-    });
-}
-
-
-/**
- * Échappe le HTML pour éviter d'injecter directement
- * des données provenant de l'API dans le DOM.
- */
-function escapeActivityHtml(value) {
-    if (value === null || value === undefined) {
-        return '';
-    }
-
-    return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
-
-
-/**
- * Ouvre/ferme l'historique complet.
- */
-
-
-function toggleFullActivityHistory() {
-
-    const history =
-        document.getElementById('full-activity-history');
-
-    const button =
-        document.getElementById('activity-toggle-btn');
-
-    const buttonText =
-        document.getElementById('activity-toggle-text');
-
-    if (!history) {
-        console.warn(
-            'Conteneur #full-activity-history introuvable.'
-        );
-        return;
-    }
-
-    const isHidden =
-        history.style.display === 'none' ||
-        history.style.display === '';
-
-    if (isHidden) {
-
-        history.style.display = 'block';
-
-        if (buttonText) {
-            buttonText.textContent =
-                'Masquer l’historique';
-        }
-
-        if (button) {
-            button.classList.add('is-open');
-        }
-
-    } else {
-
-        history.style.display = 'none';
-
-        if (buttonText) {
-            buttonText.textContent =
-                'Voir toute mon activité';
-        }
-
-        if (button) {
-            button.classList.remove('is-open');
-        }
-    }
-
-    if (
-        typeof feather !== 'undefined' &&
-        typeof feather.replace === 'function'
-    ) {
-        feather.replace();
-    }
-}
-
-
-
-
-
-
-/**
- * Rend l'historique complet dans le conteneur prévu.
- */
-function renderFullActivityHistory(activities) {
-
-    const container =
-        document.getElementById('full-activity-history');
-
-    if (!container) {
-        console.warn(
-            'Conteneur #full-activity-history introuvable.'
-        );
-        return;
-    }
-
-    if (!Array.isArray(activities) || activities.length === 0) {
-        container.innerHTML = `
-            <div class="activity-empty-state">
-                <div class="activity-empty-icon">
-                    <i data-feather="book-open"></i>
-                </div>
-
-                <p>Aucune activité enregistrée.</p>
-
-                <span>
-                    Vos activités apparaîtront ici au fur et à mesure.
-                </span>
-            </div>
-        `;
-
-        if (typeof feather !== 'undefined') {
-            feather.replace();
-        }
-
-        return;
-    }
-
-    const sortedActivities = [...activities].sort((a, b) => {
-        const dateA = new Date(a.created_at);
-        const dateB = new Date(b.created_at);
-
-        return dateB.getTime() - dateA.getTime();
-    });
-
-    let html = '';
-
-    sortedActivities.forEach((item) => {
-
-        const book = escapeActivityHtml(item.book || 'Bible');
-        const chapter = escapeActivityHtml(item.chapter || '');
-        const verses = Array.isArray(item.verses)
-            ? item.verses.map(escapeActivityHtml).join(', ')
-            : '';
-
-        const relativeTime =
-            formatActivityRelativeTime(item.created_at);
-
-        html += `
-            <div class="activity-full-item">
-
-                <div class="activity-icon icon-blue">
-                    <i data-feather="book-open"></i>
-                </div>
-
-                <div class="activity-content">
-
-                    <div class="activity-title">
-                        Lecture Biblique
-                    </div>
-
-                    <div class="activity-text">
-                        Vous avez terminé
-                        ${book}
-                        chapitre ${chapter}
-                        ${verses ? ` — versets ${verses}` : ''}
-                    </div>
-
-                    <div class="activity-time">
-                        ${escapeActivityHtml(relativeTime)}
-                    </div>
-
-                </div>
-
-            </div>
-        `;
-    });
-
-    container.innerHTML = html;
-
-    if (typeof feather !== 'undefined') {
-        feather.replace();
-    }
-}
-
-
-
 function renderActivities(allData) {
 
     const activityDisplayArea =
@@ -3613,369 +3241,531 @@ function renderActivities(allData) {
     const paginationBar =
         document.getElementById('activity-pagination');
 
-    const toggleBtn =
-        document.getElementById('activity-toggle-btn');
-
-    const totalCount =
-        document.getElementById('activity-total-count');
-
-    if (!activityDisplayArea) {
-        console.error(
-            '❌ #activity-display-area introuvable'
-        );
+    if (!activityDisplayArea || !activityListSkeleton) {
         return;
     }
 
-    if (activityListSkeleton) {
-        activityListSkeleton.style.display = 'none';
-    }
+    activityListSkeleton.style.display = 'none';
 
-    /*
-     * Vérification des données
-     */
-    if (!Array.isArray(allData) || allData.length === 0) {
+    if (!allData || allData.length === 0) {
 
         activityDisplayArea.innerHTML = `
             <div class="activity-empty-state">
-
                 <div class="activity-empty-icon">
                     <i data-feather="book-open"></i>
                 </div>
 
-                <p>Aucune activité récente pour le moment.</p>
+                <p>Aucune activitÃ© rÃ©cente pour le moment.</p>
 
                 <span>
-                    Commencez à lire la Bible pour voir
-                    votre progression ici !
+                    Commencez Ã  lire la Bible pour voir votre progression ici !
                 </span>
-
             </div>
         `;
 
-        if (toggleBtn) {
-            toggleBtn.style.display = 'none';
-        }
-
         if (paginationBar) {
             paginationBar.style.display = 'none';
+            paginationBar.innerHTML = '';
         }
 
-        if (totalCount) {
-            totalCount.textContent = '0';
-        }
-
-        if (typeof feather !== 'undefined') {
-            feather.replace();
-        }
-
+        feather.replace();
         return;
     }
 
-    /*
-     * Nombre total
-     */
-    if (totalCount) {
-        totalCount.textContent = allData.length;
-    }
+    const groupedActivities = allData.reduce((acc, item) => {
 
-    /*
-     * Copie + tri par date
-     */
-    const sortedActivities = [...allData].sort((a, b) => {
+        const dateKey =
+            formatDateForDisplay(item.created_at);
 
-        const dateA = new Date(a.created_at || 0).getTime();
-        const dateB = new Date(b.created_at || 0).getTime();
+        if (!acc[dateKey]) {
+            acc[dateKey] = [];
+        }
 
-        return dateB - dateA;
-    });
+        acc[dateKey].push(item);
 
-    /*
-     * Seulement les 3 dernières activités
-     */
-    const recentActivities =
-        sortedActivities.slice(0, 3);
+        return acc;
+
+    }, {});
+
+    const sortedDateKeys =
+        Object.keys(groupedActivities).sort((a, b) => {
+
+            const dateA =
+                new Date(groupedActivities[a][0].created_at);
+
+            const dateB =
+                new Date(groupedActivities[b][0].created_at);
+
+            return dateB.getTime() - dateA.getTime();
+        });
 
     let htmlContent = '';
 
     activityColorIndex = 0;
 
-    recentActivities.forEach((item, index) => {
+    sortedDateKeys.forEach((dateKey, dayIndex) => {
 
-        /*
-         * Sécurisation des valeurs
-         */
-        const book =
-            item.book !== undefined && item.book !== null
-                ? String(item.book)
-                : 'Bible';
+        const dayActivities =
+            groupedActivities[dateKey];
 
-        const chapter =
-            item.chapter !== undefined && item.chapter !== null
-                ? String(item.chapter)
-                : '';
+        const groupedBooks =
+            dayActivities.reduce((acc, item) => {
 
-        /*
-         * Les versets peuvent être :
-         * - un tableau
-         * - une chaîne
-         * - null
-         */
-        let verses = '';
+                const book =
+                    item.book || 'Bible';
 
-        if (Array.isArray(item.verses)) {
+                if (!acc[book]) {
+                    acc[book] = [];
+                }
 
-            verses = item.verses.join(', ');
+                acc[book].push(item);
 
-        } else if (
-            item.verses !== undefined &&
-            item.verses !== null
-        ) {
+                return acc;
 
-            verses = String(item.verses);
-        }
+            }, {});
 
-        /*
-         * Couleur de l'icône
-         */
-        let iconClass = 'icon-blue';
+        const bookNames =
+            Object.keys(groupedBooks);
 
-        try {
+        const totalChapters =
+            dayActivities.length;
 
-            iconClass =
-                getNextActivityIconColorClass();
+        const totalVerses =
+            dayActivities.reduce((total, item) => {
 
-        } catch (e) {
+                return total +
+                    (
+                        Array.isArray(item.verses)
+                            ? item.verses.length
+                            : 0
+                    );
 
-            console.warn(
-                'Couleur activité indisponible :',
-                e
-            );
-        }
+            }, 0);
 
-        /*
-         * Date relative
-         */
-        let relativeTime = '';
+        const groupId =
+            `activity-details-${dayIndex}-${Date.now()}`;
 
-        try {
-
-            relativeTime =
-                formatActivityRelativeTime(
-                    item.created_at
-                );
-
-        } catch (e) {
-
-            console.warn(
-                'Date activité invalide :',
-                e
-            );
-        }
-
-        /*
-         * Construction de l'activité
-         */
         htmlContent += `
+            <div class="activity-day-group compact">
 
-            <div class="activity-item is-visible">
+                <div class="activity-date-header">
 
-                <div class="activity-icon ${iconClass}">
-                    <i data-feather="book-open"></i>
-                </div>
+                    <span>
+                        ${dateKey}
+                    </span>
 
-                <div class="activity-content">
-
-                    <div class="activity-title">
-                        Lecture Biblique
-                    </div>
-
-                    <div class="activity-text">
-
-                        Vous avez terminé
-                        <strong>
-                            ${escapeActivityHtml(book)}
-                        </strong>
-
-                        chapitre
-                        <strong>
-                            ${escapeActivityHtml(chapter)}
-                        </strong>
-
-                        ${
-                            verses
-                                ? `
-                                    <span>
-                                        · versets
-                                        ${escapeActivityHtml(verses)}
-                                    </span>
-                                  `
-                                : ''
-                        }
-
-                    </div>
-
-                    ${
-                        relativeTime
-                            ? `
-                                <div class="activity-time">
-                                    ${escapeActivityHtml(relativeTime)}
-                                </div>
-                              `
-                            : ''
-                    }
+                    <span class="activity-day-count">
+                        ${totalChapters}
+                        ${totalChapters > 1
+                            ? 'activitÃ©s'
+                            : 'activitÃ©'}
+                    </span>
 
                 </div>
 
+                <div class="activity-summary-card">
+
+                    <div class="activity-summary-icon">
+                        <i data-feather="book-open"></i>
+                    </div>
+
+                    <div class="activity-summary-content">
+
+                        <div class="activity-summary-title">
+                            Lecture biblique
+                        </div>
+
+                        <div class="activity-summary-text">
+
+                            <strong>
+                                ${totalChapters}
+                                ${totalChapters > 1
+                                    ? 'chapitres lus'
+                                    : 'chapitre lu'}
+                            </strong>
+
+                            <span>
+                                dans ${bookNames.length}
+                                ${bookNames.length > 1
+                                    ? 'livres'
+                                    : 'livre'}
+                            </span>
+
+                            ${
+                                totalVerses > 0
+                                    ? `
+                                        <span>
+                                            â€¢ ${totalVerses} versets
+                                        </span>
+                                      `
+                                    : ''
+                            }
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="activity-details-btn"
+                        onclick="toggleActivityDetails('${groupId}', this)"
+                        aria-expanded="false"
+                    >
+                        <span>DÃ©tails</span>
+                        <i data-feather="chevron-down"></i>
+                    </button>
+
+                </div>
+
+                <div
+                    class="activity-details"
+                    id="${groupId}"
+                    style="display:none;"
+                >
+        `;
+
+        bookNames.forEach(bookName => {
+
+            const bookActivities =
+                groupedBooks[bookName];
+
+            htmlContent += `
+                <div class="activity-book-group">
+
+                    <div class="activity-book-header">
+
+                        <div class="activity-book-icon">
+                            <i data-feather="book"></i>
+                        </div>
+
+                        <div>
+                            <strong>${bookName}</strong>
+
+                            <span>
+                                ${bookActivities.length}
+                                ${
+                                    bookActivities.length > 1
+                                        ? 'chapitres'
+                                        : 'chapitre'
+                                }
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="activity-chapter-list">
+            `;
+
+            bookActivities.forEach(item => {
+
+                const chapter =
+                    item.chapter || '?';
+
+                const verses =
+                    Array.isArray(item.verses)
+                        ? item.verses.join(', ')
+                        : '';
+
+                htmlContent += `
+                    <div class="activity-chapter-item">
+
+                        <div class="activity-chapter-icon">
+                            <i data-feather="check"></i>
+                        </div>
+
+                        <div class="activity-chapter-content">
+
+                            <div class="activity-title">
+                                Chapitre ${chapter}
+                            </div>
+
+                            ${
+                                verses
+                                    ? `
+                                        <div class="activity-text">
+                                            Versets : ${verses}
+                                        </div>
+                                      `
+                                    : ''
+                            }
+
+                        </div>
+
+                    </div>
+                `;
+            });
+
+            htmlContent += `
+                    </div>
+                </div>
+            `;
+        });
+
+        htmlContent += `
+                </div>
             </div>
         `;
     });
 
-    /*
-     * Insérer les 3 activités
-     */
     activityDisplayArea.innerHTML = htmlContent;
 
-    /*
-     * Bouton historique complet
-     */
-    if (toggleBtn) {
-
-        if (allData.length > 3) {
-
-            toggleBtn.style.display = 'flex';
-
-        } else {
-
-            toggleBtn.style.display = 'none';
-
-        }
-    }
-
-    /*
-     * Préparer l'historique complet
-     */
-    try {
-
-        renderFullActivityHistory(
-            sortedActivities
-        );
-
-    } catch (error) {
-
-        console.error(
-            '❌ Erreur historique complet :',
-            error
-        );
-    }
-
-    /*
-     * Pas de pagination visible
-     * dans la vue compacte.
-     */
     if (paginationBar) {
         paginationBar.style.display = 'none';
+        paginationBar.innerHTML = '';
     }
 
-    /*
-     * Remplacement des icônes Feather
-     */
-    if (typeof feather !== 'undefined') {
-        feather.replace();
-    }
+    feather.replace();
 
-    /*
-     * Animation
-     */
-    try {
-
+    if (typeof observeActivityElements === 'function') {
         observeActivityElements();
-
-    } catch (error) {
-
-        console.warn(
-            'Animation des activités indisponible :',
-            error
-        );
     }
 }
 
+function toggleActivityDetails(id, button) {
 
+    const details =
+        document.getElementById(id);
 
+    if (!details) {
+        return;
+    }
 
+    const isHidden =
+        details.style.display === 'none' ||
+        details.style.display === '';
 
-/**
- * Construit et affiche la barre de pagination des activités
- * (flèches précédent/suivant + numéros de page, avec ellipses si nécessaire).
- * @param {number} totalPages Nombre total de pages disponibles.
- * @param {number} totalDays Nombre total de jours distincts d'activité.
- */
+    if (isHidden) {
+
+        details.style.display = 'block';
+
+        button.setAttribute(
+            'aria-expanded',
+            'true'
+        );
+
+        const span =
+            button.querySelector('span');
+
+        if (span) {
+            span.textContent = 'Masquer';
+        }
+
+        const icon =
+            button.querySelector('i');
+
+        if (icon) {
+            icon.setAttribute(
+                'data-feather',
+                'chevron-up'
+            );
+        }
+
+    } else {
+
+        details.style.display = 'none';
+
+        button.setAttribute(
+            'aria-expanded',
+            'false'
+        );
+
+        const span =
+            button.querySelector('span');
+
+        if (span) {
+            span.textContent = 'DÃ©tails';
+        }
+
+        const icon =
+            button.querySelector('i');
+
+        if (icon) {
+            icon.setAttribute(
+                'data-feather',
+                'chevron-down'
+            );
+        }
+    }
+
+    feather.replace();
+}
 function renderActivityPagination(totalPages, totalDays) {
-    const paginationBar = document.getElementById('activity-pagination');
-    if (!paginationBar) return;
 
+    const paginationBar =
+        document.getElementById('activity-pagination');
+
+    if (!paginationBar) {
+        return;
+    }
+
+    /*
+     * Une seule page :
+     * inutile d'afficher la pagination.
+     */
     if (totalPages <= 1) {
+
         paginationBar.style.display = 'none';
         paginationBar.innerHTML = '';
+
         return;
     }
 
     paginationBar.style.display = 'flex';
 
-    // Calcule la liste des numéros de page à afficher, avec ellipses au-delà de 6 pages
     const pages = [];
+
+    /*
+     * Affichage simple si peu de pages.
+     */
     if (totalPages <= 6) {
-        for (let p = 1; p <= totalPages; p++) pages.push(p);
+
+        for (let p = 1; p <= totalPages; p++) {
+            pages.push(p);
+        }
+
     } else {
+
         pages.push(1);
-        if (currentActivityPage > 3) pages.push('…');
-        const rangeStart = Math.max(2, currentActivityPage - 1);
-        const rangeEnd = Math.min(totalPages - 1, currentActivityPage + 1);
-        for (let p = rangeStart; p <= rangeEnd; p++) pages.push(p);
-        if (currentActivityPage < totalPages - 2) pages.push('…');
+
+        if (currentActivityPage > 3) {
+            pages.push('...');
+        }
+
+        const start =
+            Math.max(2, currentActivityPage - 1);
+
+        const end =
+            Math.min(totalPages - 1, currentActivityPage + 1);
+
+        for (let p = start; p <= end; p++) {
+            pages.push(p);
+        }
+
+        if (currentActivityPage < totalPages - 2) {
+            pages.push('...');
+        }
+
         pages.push(totalPages);
     }
 
-    const numbersHtml = pages.map(p => {
-        if (p === '…') {
-            return `<span class="activity-page-ellipsis">…</span>`;
-        }
-        const isActive = p === currentActivityPage;
-        return `<button type="button" class="activity-page-btn${isActive ? ' active' : ''}" ${isActive ? 'aria-current="page"' : ''} onclick="goToActivityPage(${p})">${p}</button>`;
-    }).join('');
+    const numbersHtml =
+        pages.map(function(p) {
+
+            if (p === '...') {
+
+                return `
+                    <span class="activity-page-ellipsis">
+                        ...
+                    </span>
+                `;
+            }
+
+            const active =
+                p === currentActivityPage;
+
+            return `
+                <button
+                    type="button"
+                    class="activity-page-btn${active ? ' active' : ''}"
+                    ${active ? 'aria-current="page"' : ''}
+                    onclick="goToActivityPage(${p})"
+                >
+                    ${p}
+                </button>
+            `;
+
+        }).join('');
 
     paginationBar.innerHTML = `
-        <button type="button" class="activity-page-nav" id="activity-prev-btn" onclick="goToActivityPage(currentActivityPage - 1)" aria-label="Page précédente" ${currentActivityPage === 1 ? 'disabled' : ''}>
+
+        <button
+            type="button"
+            class="activity-page-nav"
+            onclick="goToActivityPage(currentActivityPage - 1)"
+            aria-label="Page prÃ©cÃ©dente"
+            ${currentActivityPage === 1 ? 'disabled' : ''}
+        >
             <i data-feather="chevron-left"></i>
         </button>
-        <div class="activity-page-numbers">${numbersHtml}</div>
-        <button type="button" class="activity-page-nav" id="activity-next-btn" onclick="goToActivityPage(currentActivityPage + 1)" aria-label="Page suivante" ${currentActivityPage === totalPages ? 'disabled' : ''}>
+
+        <div class="activity-page-numbers">
+            ${numbersHtml}
+        </div>
+
+        <button
+            type="button"
+            class="activity-page-nav"
+            onclick="goToActivityPage(currentActivityPage + 1)"
+            aria-label="Page suivante"
+            ${currentActivityPage === totalPages ? 'disabled' : ''}
+        >
             <i data-feather="chevron-right"></i>
         </button>
-        <span class="activity-page-meta">${totalDays} jour${totalDays > 1 ? 's' : ''} au total</span>
+
+        <span class="activity-page-meta">
+            ${totalDays}
+            ${totalDays > 1 ? 'jours' : 'jour'}
+        </span>
     `;
-    feather.replace();
-}
 
-/**
- * Navigue vers une page donnée de la liste d'activités.
- * @param {number} page Le numéro de page cible.
- */
-function goToActivityPage(page) {
-    if (page === currentActivityPage) return;
-    currentActivityPage = page;
-    renderActivities(allRawActivities);
-
-    // Ramène doucement l'utilisateur en haut de la liste, pour éviter
-    // qu'il ait à remonter manuellement après avoir changé de page.
-    const section = document.getElementById('recent-activities-card');
-    if (section) {
-        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (typeof feather !== 'undefined') {
+        feather.replace();
     }
 }
 
-/**
- * Charge les activités de l'utilisateur et affiche la première page.
+
+/*
+ * Navigation entre les pages d'activitÃ©s.
  */
+function goToActivityPage(page) {
+
+    if (
+        page < 1 ||
+        page > Math.max(
+            1,
+            Math.ceil(
+                Object.keys(
+                    allRawActivities.reduce(function(acc, item) {
+
+                        const key =
+                            formatDateForDisplay(item.created_at);
+
+                        if (!acc[key]) {
+                            acc[key] = [];
+                        }
+
+                        acc[key].push(item);
+
+                        return acc;
+
+                    }, {})
+                ).length / ACTIVITIES_DAYS_PER_PAGE
+            )
+        )
+    ) {
+        return;
+    }
+
+    if (page === currentActivityPage) {
+        return;
+    }
+
+    currentActivityPage = page;
+
+    renderActivities(allRawActivities);
+
+    const section =
+        document.getElementById('recent-activities-card');
+
+    if (section) {
+
+        section.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
+}
+
 async function loadActivities() {
     const username = localStorage.getItem('user_name');
     const activityDisplayArea = document.getElementById('activity-display-area');
@@ -3985,12 +3775,12 @@ async function loadActivities() {
     if (!username) {
         activityDisplayArea.innerHTML = `
             <div style="padding: 20px; text-align: center; color: var(--muted); font-size: 0.9rem;">
-                Connectez-vous pour voir vos activités récentes.
+                Connectez-vous pour voir vos activitÃ©s rÃ©centes.
             </div>
         `;
         if (activityListSkeleton) activityListSkeleton.style.display = 'none';
         if (paginationBar) paginationBar.style.display = 'none';
-        // Réinitialisation des stats en mode invité
+        // RÃ©initialisation des stats en mode invitÃ©
         userPoints.bibleVerses = 0;
         userPoints.bibleChapters = 0;
         renderUserStats();
@@ -3998,9 +3788,9 @@ async function loadActivities() {
         return;
     }
 
-    // Affiche le squelette pendant le chargement, réinitialise la pagination
+    // Affiche le squelette pendant le chargement, rÃ©initialise la pagination
     activityListSkeleton.style.display = 'flex';
-    activityDisplayArea.innerHTML = ''; // Nettoyer le contenu précédent
+    activityDisplayArea.innerHTML = ''; // Nettoyer le contenu prÃ©cÃ©dent
     currentActivityPage = 1;
 
     const cacheKey = `cache_activities_${username}`;
@@ -4022,22 +3812,22 @@ async function loadActivities() {
         setCache(cacheKey, data);
 
         renderActivities(allRawActivities);
-        updateUserStatsFromActivities(data); // Met à jour les stats après le chargement des activités
+        updateUserStatsFromActivities(data); // Met Ã  jour les stats aprÃ¨s le chargement des activitÃ©s
 
     } catch (error) {
-        console.error("Erreur lors du chargement des activités bibliques :", error);
+        console.error("Erreur lors du chargement des activitÃ©s bibliques :", error);
         if (!cached) { // Si pas de cache, affiche un message d'erreur
             activityDisplayArea.innerHTML = `
                 <div style="padding: 20px; text-align: center; color: var(--danger); font-size: 0.9rem;">
-                    Erreur lors du chargement des activités. Veuillez réessayer plus tard.
+                    Erreur lors du chargement des activitÃ©s. Veuillez rÃ©essayer plus tard.
                 </div>
             `;
-            // Réinitialise les compteurs en cas d'erreur
+            // RÃ©initialise les compteurs en cas d'erreur
             userPoints.bibleVerses = 0;
             userPoints.bibleChapters = 0;
             renderUserStats();
         } else {
-            showToast("Impossible de rafraîchir vos activités récentes.", "error");
+            showToast("Impossible de rafraÃ®chir vos activitÃ©s rÃ©centes.", "error");
         }
     } finally {
         activityListSkeleton.style.display = 'none';
@@ -4046,8 +3836,8 @@ async function loadActivities() {
 }
 
 /**
- * Met à jour les statistiques de l'utilisateur (versets, chapitres) à partir des activités.
- * @param {Array} activities La liste complète des activités.
+ * Met Ã  jour les statistiques de l'utilisateur (versets, chapitres) Ã  partir des activitÃ©s.
+ * @param {Array} activities La liste complÃ¨te des activitÃ©s.
  */
 function updateUserStatsFromActivities(activities) {
     let totalVersesRead = 0;
@@ -4071,7 +3861,7 @@ function updateUserStatsFromActivities(activities) {
     renderUserStats();
 }
 
-// Fonctions utilitaires, conservées pour être appelées par renderUserStats
+// Fonctions utilitaires, conservÃ©es pour Ãªtre appelÃ©es par renderUserStats
 function calculateLevel(points) {
     return Math.floor(points / 100) + 1;
 }
@@ -4080,182 +3870,102 @@ function calculateProgress(points) {
     return Math.floor(points % 100);
 }
 
-// Nouvelle fonction de rendu unifiée pour toutes les statistiques utilisateur
+// Nouvelle fonction de rendu unifiÃ©e pour toutes les statistiques utilisateur
 function renderUserStats() {
     const { total, bibleVerses, bibleChapters, prayerMinutes } = userPoints;
 
-    const safeTotal = Math.max(0, Number(total) || 0);
+    // Mise Ã  jour du solde de fidÃ©litÃ©
+    setText('display-points', `${total.toFixed(2)} Points`);
 
-    /*
-     * =========================
-     * NIVEAU + PROGRESSION XP
-     * =========================
-     */
+    // Calcul et mise Ã  jour de la progression (Niveau et Cercle)
+    const level = calculateLevel(total);
+    const progress = calculateProgress(total);
 
-    const level = calculateLevel(safeTotal);
-    const progress = calculateProgress(safeTotal);
-
-    const currentXP = Math.floor(safeTotal % 100);
-    const nextLevelXP = 100;
-    const remainingXP = nextLevelXP - currentXP;
-
-    // Solde principal
-    setText(
-        'display-points',
-        `${safeTotal.toFixed(2)} Points`
-    );
-
-    // Badge Niveau
     const levelBtn = document.querySelector('.progress-btn');
-
-    if (levelBtn) {
-        levelBtn.innerHTML = `
-            <span class="level-badge-icon">
-				<i data-feather="zap"></i>
-			</span>
-            <span>Niveau ${level}</span>
-        `;
-
-        levelBtn.setAttribute(
-            'aria-label',
-            `Niveau ${level}, ${currentXP} points sur 100`
-        );
-    }
-
-    /*
-     * =========================
-     * CERCLE DE PROGRESSION
-     * =========================
-     */
+    if (levelBtn) levelBtn.innerText = `Niveau ${level}`;
 
     const circleText = document.querySelector('.circle-text');
+    if (circleText) circleText.innerText = `${Math.floor(total % 100)} pts`; // Points absolus dans le cycle
 
-    if (circleText) {
-        circleText.innerHTML = `
-            <strong>${currentXP}</strong>
-            <small>/ 100 XP</small>
-        `;
-    }
-
-    const circleSub = document.querySelector('.circle-sub');
-
-    if (circleSub) {
-        circleSub.textContent =
-            remainingXP === 100
-                ? 'Commencez votre progression'
-                : `${remainingXP} XP avant le niveau ${level + 1}`;
-    }
-
-    const progressCircle =
-        document.querySelector('.progress-circle');
-
+    const progressCircle = document.querySelector('.progress-circle');
     if (progressCircle) {
-
-        const percentage =
-            Math.min(100, Math.max(0, progress));
-
         progressCircle.style.background =
-            `conic-gradient(
-                #ef4444 0%,
-                #f97316 ${percentage}%,
-                #e2e8f0 ${percentage}%,
-                #e2e8f0 100%
-            )`;
-
-        progressCircle.setAttribute(
-            'aria-label',
-            `Progression du niveau ${level} : ${currentXP} sur 100 XP`
-        );
+            `conic-gradient(rgb(209 107 116) 0%, rgb(255 11 11) 34%, rgb(226, 232, 240) 34%, rgb(226, 232, 240) 100%)`;
     }
 
-    /*
-     * =========================
-     * STATISTIQUES
-     * =========================
-     */
-
+    // Mise Ã  jour des statistiques d'activitÃ© spÃ©cifiques avec les donnÃ©es rÃ©elles
     setText('stats-versets', bibleVerses);
     setText('stats-lecons', bibleChapters);
+    setText('stats-priere', `${total * 2}m`); // Garde la dÃ©rivation actuelle pour la priÃ¨re
 
-    setText(
-        'stats-priere',
-        `${Math.floor(safeTotal * 2)}m`
-    );
+    // GÃ©nÃ©ration des trophÃ©es
+    generateTrophies(total);
 
-    /*
-     * =========================
-     * TROPHÃ‰ES
-     * =========================
-     */
-
-    generateTrophies(safeTotal);
-
-    if (typeof feather !== 'undefined') {
-        feather.replace();
-    }
+    // feather.replace() est appelÃ© par generateTrophies() si nÃ©cessaire et n'est pas nÃ©cessaire ici.
 }
+
 function generateTrophies(points) {
     const trophyGrid = document.querySelector('.trophy-grid');
     if (!trophyGrid) return;
     trophyGrid.setAttribute('aria-busy', 'false');
 
     const trophies = [
-        { name: "Pionnier", desc: "Premier pas sur l'app", req: 0, icon: "🌱" }, // Toujours débloqué
-        { name: "Chercheur", desc: "Atteindre 50 pts", req: 50, icon: "🕯️" },
-        { name: "Explorateur", desc: "Atteindre 120 pts", req: 120, icon: "🧭" },
-        { name: "Disciple", desc: "Atteindre 220 pts", req: 220, icon: "📖" },
-        { name: "Semeur", desc: "Atteindre 350 pts", req: 350, icon: "🌾" },
-        { name: "Serviteur", desc: "Atteindre 500 pts", req: 500, icon: "🤲" },
-        { name: "Intercesseur", desc: "Atteindre 700 pts", req: 700, icon: "🙏" },
-        { name: "Berger", desc: "Atteindre 950 pts", req: 950, icon: "🐑" },
-        { name: "Baptisé dans la Parole", desc: "Atteindre 1 250 pts", req: 1250, icon: "🌊" },
-        { name: "Veilleur", desc: "Atteindre 1 600 pts", req: 1600, icon: "🕊️" },
-        { name: "Bâtisseur", desc: "Atteindre 2 000 pts", req: 2000, icon: "⛪" },
-        { name: "Porteur de Lumière", desc: "Atteindre 2 500 pts", req: 2500, icon: "🪔" },
-        { name: "Messager", desc: "Atteindre 3 100 pts", req: 3100, icon: "📜" },
-        { name: "Héraut", desc: "Atteindre 3 800 pts", req: 3800, icon: "📣" },
-        { name: "Cœur Ardent", desc: "Atteindre 4 600 pts", req: 4600, icon: "🔥" },
-        { name: "Guerrier de la Foi", desc: "Atteindre 5 500 pts", req: 5500, icon: "🛡️" },
-        { name: "Ancre d'Espérance", desc: "Atteindre 6 500 pts", req: 6500, icon: "⚓" },
-        { name: "Lion de Juda", desc: "Atteindre 7 600 pts", req: 7600, icon: "🦁" },
-        { name: "Sage", desc: "Atteindre 8 800 pts", req: 8800, icon: "⚖️" },
-        { name: "Porteur de Croix", desc: "Atteindre 10 200 pts", req: 10200, icon: "✝️" },
-        { name: "Vigne Fructueuse", desc: "Atteindre 11 800 pts", req: 11800, icon: "🍇" },
-        { name: "Pain de Vie", desc: "Atteindre 13 600 pts", req: 13600, icon: "🍞" },
-        { name: "Étoile du Matin", desc: "Atteindre 15 600 pts", req: 15600, icon: "🌟" },
-        { name: "Alliance Éternelle", desc: "Atteindre 17 800 pts", req: 17800, icon: "🌈" },
-        { name: "Pêcheur d'Hommes", desc: "Atteindre 20 200 pts", req: 20200, icon: "🐟" },
-        { name: "Gardien des Clés", desc: "Atteindre 23 000 pts", req: 23000, icon: "🗝️" },
-        { name: "Arbre de Vie", desc: "Atteindre 26 000 pts", req: 26000, icon: "🌳" },
-        { name: "Aigle Renouvelé", desc: "Atteindre 29 500 pts", req: 29500, icon: "🦅" },
-        { name: "Sommet de Sion", desc: "Atteindre 33 500 pts", req: 33500, icon: "⛰️" },
-        { name: "Couronné", desc: "Atteindre 38 000 pts", req: 38000, icon: "👑" }
+        { name: "Pionnier", desc: "Premier pas sur l'app", req: 0, icon: "ðŸŒ±" }, // Toujours dÃ©bloquÃ©
+        { name: "Chercheur", desc: "Atteindre 50 pts", req: 50, icon: "ðŸ•¯ï¸" },
+        { name: "Explorateur", desc: "Atteindre 120 pts", req: 120, icon: "ðŸ§­" },
+        { name: "Disciple", desc: "Atteindre 220 pts", req: 220, icon: "ðŸ“–" },
+        { name: "Semeur", desc: "Atteindre 350 pts", req: 350, icon: "ðŸŒ¾" },
+        { name: "Serviteur", desc: "Atteindre 500 pts", req: 500, icon: "ðŸ¤²" },
+        { name: "Intercesseur", desc: "Atteindre 700 pts", req: 700, icon: "ðŸ™" },
+        { name: "Berger", desc: "Atteindre 950 pts", req: 950, icon: "ðŸ‘" },
+        { name: "BaptisÃ© dans la Parole", desc: "Atteindre 1 250 pts", req: 1250, icon: "ðŸŒŠ" },
+        { name: "Veilleur", desc: "Atteindre 1 600 pts", req: 1600, icon: "ðŸ•Šï¸" },
+        { name: "BÃ¢tisseur", desc: "Atteindre 2 000 pts", req: 2000, icon: "â›ª" },
+        { name: "Porteur de LumiÃ¨re", desc: "Atteindre 2 500 pts", req: 2500, icon: "ðŸª”" },
+        { name: "Messager", desc: "Atteindre 3 100 pts", req: 3100, icon: "ðŸ“œ" },
+        { name: "HÃ©raut", desc: "Atteindre 3 800 pts", req: 3800, icon: "ðŸ“£" },
+        { name: "CÅ“ur Ardent", desc: "Atteindre 4 600 pts", req: 4600, icon: "ðŸ”¥" },
+        { name: "Guerrier de la Foi", desc: "Atteindre 5 500 pts", req: 5500, icon: "ðŸ›¡ï¸" },
+        { name: "Ancre d'EspÃ©rance", desc: "Atteindre 6 500 pts", req: 6500, icon: "âš“" },
+        { name: "Lion de Juda", desc: "Atteindre 7 600 pts", req: 7600, icon: "ðŸ¦" },
+        { name: "Sage", desc: "Atteindre 8 800 pts", req: 8800, icon: "âš–ï¸" },
+        { name: "Porteur de Croix", desc: "Atteindre 10 200 pts", req: 10200, icon: "âœï¸" },
+        { name: "Vigne Fructueuse", desc: "Atteindre 11 800 pts", req: 11800, icon: "ðŸ‡" },
+        { name: "Pain de Vie", desc: "Atteindre 13 600 pts", req: 13600, icon: "ðŸž" },
+        { name: "Ã‰toile du Matin", desc: "Atteindre 15 600 pts", req: 15600, icon: "ðŸŒŸ" },
+        { name: "Alliance Ã‰ternelle", desc: "Atteindre 17 800 pts", req: 17800, icon: "ðŸŒˆ" },
+        { name: "PÃªcheur d'Hommes", desc: "Atteindre 20 200 pts", req: 20200, icon: "ðŸŸ" },
+        { name: "Gardien des ClÃ©s", desc: "Atteindre 23 000 pts", req: 23000, icon: "ðŸ—ï¸" },
+        { name: "Arbre de Vie", desc: "Atteindre 26 000 pts", req: 26000, icon: "ðŸŒ³" },
+        { name: "Aigle RenouvelÃ©", desc: "Atteindre 29 500 pts", req: 29500, icon: "ðŸ¦…" },
+        { name: "Sommet de Sion", desc: "Atteindre 33 500 pts", req: 33500, icon: "â›°ï¸" },
+        { name: "CouronnÃ©", desc: "Atteindre 38 000 pts", req: 38000, icon: "ðŸ‘‘" }
     ];
 
 // ==========================================
-// Icônes 3D des trophées (SVG dessinés sur mesure, un par trophée, dans
-// l'ordre du tableau "trophies" ci-dessus). Chaque icône est un pictogramme
+// IcÃ´nes 3D des trophÃ©es (SVG dessinÃ©s sur mesure, un par trophÃ©e, dans
+// l'ordre du tableau "trophies" ci-dessus). Chaque icÃ´ne est un pictogramme
 // simple et lisible ; l'effet "3D" vient de la combinaison avec le badge
-// sphérique en dégradé (.trophy-icon-wrap) + le reflet superposé ci-dessous.
+// sphÃ©rique en dÃ©gradÃ© (.trophy-icon-wrap) + le reflet superposÃ© ci-dessous.
 // ==========================================
 const TROPHY_ICON_SHAPES = [
-    // 1. Pionnier — pousse
+    // 1. Pionnier â€” pousse
     `<path d="M24 40 V22" stroke-width="3" fill="none"/>
      <path d="M24 26 C13 26 9 15 11 7 C24 9 27 18 24 26 Z"/>
      <path d="M24 31 C35 31 39 20 37 12 C24 14 21 23 24 31 Z"/>`,
-    // 2. Chercheur — bougie
+    // 2. Chercheur â€” bougie
     `<rect x="19" y="21" width="10" height="17" rx="2"/>
      <rect x="18" y="36" width="12" height="4" rx="1"/>
      <path d="M24 20 C21 15 22 11 24 6 C26 11 27 15 24 20 Z" fill="#fbbf24" stroke="none"/>`,
-    // 3. Explorateur — boussole
+    // 3. Explorateur â€” boussole
     `<circle cx="24" cy="24" r="15" fill="none" stroke-width="2.5"/>
      <polygon points="24,13 28,24 24,35 20,24" fill="#ef4444" stroke="none"/>
      <polygon points="24,13 28,24 24,24 20,24" fill="#ffffff" stroke="rgba(0,0,0,0.16)"/>
      <circle cx="24" cy="24" r="2.4" fill="#0f172a" stroke="none"/>`,
-    // 4. Disciple — livre ouvert
+    // 4. Disciple â€” livre ouvert
     `<path d="M24 14 C19 10 12 9 8 11 V34 C12 32 19 33 24 37 C29 33 36 32 40 34 V11 C36 9 29 10 24 14 Z"/>
      <line x1="24" y1="14" x2="24" y2="37" stroke="rgba(0,0,0,0.18)" stroke-width="1.4"/>`,
-    // 5. Semeur — épi de blé
+    // 5. Semeur â€” Ã©pi de blÃ©
     `<path d="M24 40 V16" stroke-width="2.5" fill="none"/>
      <g fill="#fbbf24" stroke="rgba(0,0,0,0.16)" stroke-width="0.6">
        <ellipse cx="24" cy="12" rx="3" ry="5"/>
@@ -4264,59 +3974,59 @@ const TROPHY_ICON_SHAPES = [
        <ellipse cx="19" cy="26" rx="3" ry="5" transform="rotate(-30 19 26)"/>
        <ellipse cx="29" cy="26" rx="3" ry="5" transform="rotate(30 29 26)"/>
      </g>`,
-    // 6. Serviteur — coupe/bol offert
+    // 6. Serviteur â€” coupe/bol offert
     `<path d="M14 18 H34 C34 28 30 33 24 33 C18 33 14 28 14 18 Z"/>
      <rect x="22" y="33" width="4" height="4"/>
      <path d="M13 40 H35 L31 44 H17 Z"/>`,
-    // 7. Intercesseur — mains jointes en prière
+    // 7. Intercesseur â€” mains jointes en priÃ¨re
     `<path d="M24 8 C16 20 13 30 13 39 H22 C22 30 23 18 24 8 Z"/>
      <path d="M24 8 C32 20 35 30 35 39 H26 C26 30 25 18 24 8 Z"/>
      <rect x="13" y="35" width="22" height="5" rx="2" fill="rgba(0,0,0,0.14)" stroke="none"/>`,
-    // 8. Berger — agneau
+    // 8. Berger â€” agneau
     `<ellipse cx="22" cy="26" rx="11" ry="9"/>
      <circle cx="34" cy="21" r="6"/>
      <circle cx="37" cy="19" r="1.6" fill="#0f172a" stroke="none"/>
      <rect x="14" y="33" width="3" height="7" rx="1"/>
      <rect x="27" y="33" width="3" height="7" rx="1"/>`,
-    // 9. Baptisé dans la Parole — vague
+    // 9. BaptisÃ© dans la Parole â€” vague
     `<path d="M6 22 C11 17 15 27 20 22 C25 17 29 27 34 22 C39 17 42 22 42 22 V30 H6 Z" fill="#38bdf8" stroke="none"/>
      <path d="M6 30 C11 25 15 35 20 30 C25 25 29 35 34 30 C39 25 42 30 42 30 V38 H6 Z" fill="#0ea5e9" stroke="none" opacity="0.85"/>`,
-    // 10. Veilleur — colombe
+    // 10. Veilleur â€” colombe
     `<path d="M10 26 C16 18 26 17 32 22 C38 20 41 16 41 16 C41 22 37 26 33 27 C34 31 31 35 25 35 C17 35 11 31 10 26 Z"/>
      <circle cx="16" cy="24" r="1.6" fill="#0f172a" stroke="none"/>
      <path d="M9 25 L4 23 L9 28 Z" fill="#fbbf24" stroke="none"/>`,
-    // 11. Bâtisseur — église
+    // 11. BÃ¢tisseur â€” Ã©glise
     `<polygon points="24,7 33,17 15,17"/>
      <rect x="17" y="17" width="14" height="21"/>
      <rect x="21" y="26" width="6" height="12" fill="rgba(0,0,0,0.16)" stroke="none"/>
      <rect x="22.5" y="2" width="3" height="7"/>
      <rect x="20" y="4" width="8" height="3"/>`,
-    // 12. Porteur de Lumière — lampe à huile
+    // 12. Porteur de LumiÃ¨re â€” lampe Ã  huile
     `<path d="M9 28 C9 21 16 18 24 18 C32 18 39 21 39 28 C39 34 32 37 24 37 C16 37 9 34 9 28 Z"/>
      <path d="M35 24 L44 22 L44 26 Z"/>
      <path d="M24 17 C21 12 22 9 24 5 C26 9 27 12 24 17 Z" fill="#fbbf24" stroke="none"/>`,
-    // 13. Messager — parchemin
+    // 13. Messager â€” parchemin
     `<rect x="10" y="16" width="28" height="16" rx="2"/>
      <circle cx="10" cy="16" r="4"/><circle cx="10" cy="32" r="4"/>
      <circle cx="38" cy="16" r="4"/><circle cx="38" cy="32" r="4"/>
      <line x1="16" y1="21" x2="32" y2="21" stroke="rgba(0,0,0,0.2)" stroke-width="1.2"/>
      <line x1="16" y1="26" x2="32" y2="26" stroke="rgba(0,0,0,0.2)" stroke-width="1.2"/>`,
-    // 14. Héraut — trompette
+    // 14. HÃ©raut â€” trompette
     `<path d="M8 21 C8 18 11 17 14 18 L30 22 C36 20 42 22 42 27 C42 32 36 34 30 32 L14 36 C11 37 8 36 8 33 C8 30 10 29 12 28.5 C10 27.5 8 26 8 21 Z"/>
      <circle cx="12" cy="27" r="2.2" fill="rgba(0,0,0,0.15)" stroke="none"/>`,
-    // 15. Cœur Ardent — flamme
+    // 15. CÅ“ur Ardent â€” flamme
     `<path d="M24 6 C30 14 34 19 30 27 C34 24 36 30 32 35 C28 40 20 40 16 35 C11 29 14 24 17 26 C15 18 18 12 24 6 Z" fill="#f97316" stroke="rgba(0,0,0,0.16)"/>
      <path d="M24 20 C27 25 27 29 24 33 C21 30 21 26 24 20 Z" fill="#fde047" stroke="none"/>`,
-    // 16. Guerrier de la Foi — bouclier
+    // 16. Guerrier de la Foi â€” bouclier
     `<path d="M24 5 L39 11 V23 C39 33 33 39 24 43 C15 39 9 33 9 23 V11 Z"/>
      <rect x="21.5" y="14" width="5" height="20" fill="rgba(0,0,0,0.14)" stroke="none"/>
      <rect x="14" y="21.5" width="20" height="5" fill="rgba(0,0,0,0.14)" stroke="none"/>`,
-    // 17. Ancre d'Espérance — ancre
+    // 17. Ancre d'EspÃ©rance â€” ancre
     `<circle cx="24" cy="10" r="4" fill="none" stroke-width="2.5"/>
      <line x1="24" y1="14" x2="24" y2="38" stroke-width="3"/>
      <line x1="14" y1="18" x2="34" y2="18" stroke-width="3"/>
      <path d="M10 24 C10 33 16 39 24 40 C32 39 38 33 38 24" fill="none" stroke-width="3"/>`,
-    // 18. Lion de Juda — tête de lion stylisée
+    // 18. Lion de Juda â€” tÃªte de lion stylisÃ©e
     `<g fill="#f59e0b" stroke="rgba(0,0,0,0.18)" stroke-width="0.6">
        <polygon points="24,4 28,14 20,14"/><polygon points="24,44 28,34 20,34"/>
        <polygon points="4,24 14,28 14,20"/><polygon points="44,24 34,28 34,20"/>
@@ -4327,16 +4037,16 @@ const TROPHY_ICON_SHAPES = [
      <circle cx="20" cy="22" r="1.4" fill="#0f172a" stroke="none"/>
      <circle cx="28" cy="22" r="1.4" fill="#0f172a" stroke="none"/>
      <path d="M22 27 Q24 29 26 27" fill="none" stroke="#0f172a" stroke-width="1.2"/>`,
-    // 19. Sage — balance
+    // 19. Sage â€” balance
     `<line x1="24" y1="6" x2="24" y2="38" stroke-width="2.5"/>
      <line x1="10" y1="14" x2="38" y2="14" stroke-width="2.5"/>
      <rect x="19" y="38" width="10" height="3" rx="1"/>
      <path d="M6 15 L14 15 L10 24 Z"/>
      <path d="M34 15 L42 15 L38 24 Z"/>`,
-    // 20. Porteur de Croix — croix
+    // 20. Porteur de Croix â€” croix
     `<rect x="20.5" y="6" width="7" height="36" rx="1.5"/>
      <rect x="9" y="17" width="30" height="7" rx="1.5"/>`,
-    // 21. Vigne Fructueuse — grappe de raisin
+    // 21. Vigne Fructueuse â€” grappe de raisin
     `<path d="M22 8 C22 12 26 12 26 8" fill="none" stroke="#16a34a" stroke-width="2"/>
      <g fill="#a78bfa" stroke="rgba(0,0,0,0.16)" stroke-width="0.5">
        <circle cx="24" cy="14" r="4.4"/>
@@ -4345,42 +4055,42 @@ const TROPHY_ICON_SHAPES = [
        <circle cx="18" cy="29" r="4.4"/><circle cx="30" cy="29" r="4.4"/>
        <circle cx="24" cy="34" r="4.4"/>
      </g>`,
-    // 22. Pain de Vie — pain
+    // 22. Pain de Vie â€” pain
     `<path d="M8 26 C8 16 16 12 24 12 C32 12 40 16 40 26 C40 33 32 37 24 37 C16 37 8 33 8 26 Z" fill="#d97706"/>
      <path d="M17 18 C18 24 18 30 16 34" fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="1.3"/>
      <path d="M24 16 C25 23 25 29 23 35" fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="1.3"/>
      <path d="M31 18 C32 24 32 30 30 34" fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="1.3"/>`,
-    // 23. Étoile du Matin — étoile
+    // 23. Ã‰toile du Matin â€” Ã©toile
     `<polygon points="24,4 29,18 44,18 32,27 36,42 24,33 12,42 16,27 4,18 19,18" fill="#fde047"/>`,
-    // 24. Alliance Éternelle — arc-en-ciel
+    // 24. Alliance Ã‰ternelle â€” arc-en-ciel
     `<path d="M6 34 A18 18 0 0 1 42 34" fill="none" stroke="#ef4444" stroke-width="4"/>
      <path d="M10 34 A14 14 0 0 1 38 34" fill="none" stroke="#fbbf24" stroke-width="4"/>
      <path d="M14 34 A10 10 0 0 1 34 34" fill="none" stroke="#38bdf8" stroke-width="4"/>
      <rect x="2" y="34" width="44" height="6" fill="#e0f2fe" stroke="none"/>`,
-    // 25. Pêcheur d'Hommes — poisson (ichthus)
+    // 25. PÃªcheur d'Hommes â€” poisson (ichthus)
     `<path d="M6 24 C14 12 34 12 42 24 C34 36 14 36 6 24 Z"/>
      <path d="M42 24 L48 18 V30 Z" stroke="none"/>
      <circle cx="14" cy="22" r="1.6" fill="#0f172a" stroke="none"/>`,
-    // 26. Gardien des Clés — clé
+    // 26. Gardien des ClÃ©s â€” clÃ©
     `<circle cx="15" cy="15" r="8" fill="none" stroke-width="3"/>
      <rect x="14" y="21" width="4" height="20" rx="1"/>
      <rect x="18" y="30" width="6" height="4"/>
      <rect x="18" y="36" width="6" height="4"/>`,
-    // 27. Arbre de Vie — arbre
+    // 27. Arbre de Vie â€” arbre
     `<rect x="21" y="27" width="6" height="14" rx="1" fill="#92400e" stroke="rgba(0,0,0,0.2)"/>
      <circle cx="24" cy="16" r="13" fill="#22c55e"/>
      <circle cx="15" cy="22" r="8" fill="#16a34a"/>
      <circle cx="33" cy="22" r="8" fill="#16a34a"/>`,
-    // 28. Aigle Renouvelé — aigle ailes déployées
+    // 28. Aigle RenouvelÃ© â€” aigle ailes dÃ©ployÃ©es
     `<path d="M24 14 C24 10 26 8 30 8 C24 18 24 24 24 30 C24 24 24 18 18 8 C22 8 24 10 24 14 Z"/>
      <path d="M22 16 C14 14 4 16 2 22 C10 22 16 24 22 28 Z"/>
      <path d="M26 16 C34 14 44 16 46 22 C38 22 32 24 26 28 Z"/>
      <path d="M20 30 H28 L26 40 H22 Z"/>`,
-    // 29. Sommet de Sion — montagne
+    // 29. Sommet de Sion â€” montagne
     `<polygon points="6,38 18,16 24,26 30,14 42,38"/>
      <polygon points="18,16 22,22 14,22" fill="#e2e8f0" stroke="rgba(0,0,0,0.14)"/>
      <polygon points="30,14 34,20 26,20" fill="#e2e8f0" stroke="rgba(0,0,0,0.14)"/>`,
-    // 30. Couronné — couronne
+    // 30. CouronnÃ© â€” couronne
     `<polygon points="9,34 9,18 17,26 24,12 31,26 39,18 39,34"/>
      <rect x="8" y="34" width="32" height="6" rx="1.5"/>
      <circle cx="24" cy="18" r="2.2" fill="#ef4444" stroke="none"/>
@@ -4433,7 +4143,7 @@ function renderTrophyIcon(index) {
         const ratio = isMax ? 1 : Math.min(points / t.req, 1);
         const filledStars = Math.max(0, Math.min(5, Math.round(ratio * 5)));
         const starsHTML = Array.from({ length: 5 }, (_, s) =>
-            `<span class="star ${s < filledStars ? 'filled' : ''}">★</span>`
+            `<span class="star ${s < filledStars ? 'filled' : ''}">â˜…</span>`
         ).join('');
         return `
             <div class="trophy-card ${isLocked ? 'locked' : ''}" data-trophy="${t.name}" title="${t.desc}">
@@ -4471,7 +4181,7 @@ function renderTrophyIcon(index) {
                             </svg>
                         </span>` : ''}
                         <span class="trophy-icon-emoji">${renderTrophyIcon(i)}</span>
-                        ${isLocked ? '<span class="trophy-lock-badge">🔒</span>' : ''}
+                        ${isLocked ? '<span class="trophy-lock-badge">ðŸ”’</span>' : ''}
                     </div>
                 </div>
                 <div class="trophy-name">${t.name}</div>
@@ -4484,9 +4194,9 @@ function renderTrophyIcon(index) {
         `;
     }).join('');
 
-    // Détecte les trophées nouvellement débloqués depuis la dernière visite
-    // pour déclencher une petite célébration (confettis + toast), sans
-    // fêter tous les trophées dès la toute première visite.
+    // DÃ©tecte les trophÃ©es nouvellement dÃ©bloquÃ©s depuis la derniÃ¨re visite
+    // pour dÃ©clencher une petite cÃ©lÃ©bration (confettis + toast), sans
+    // fÃªter tous les trophÃ©es dÃ¨s la toute premiÃ¨re visite.
     const unlockedNames = trophies.filter(t => points >= t.req).map(t => t.name);
     const storageKey = `unlocked_trophies_${currentUsername || 'guest'}`;
     const previouslyUnlocked = getCache(storageKey);
@@ -4499,15 +4209,15 @@ function renderTrophyIcon(index) {
             setCache(storageKey, unlockedNames);
             newlyUnlocked.forEach((name, i) => {
                 const trophy = trophies.find(t => t.name === name);
-                setTimeout(() => celebrateTrophy(name, trophy ? trophy.icon : '🏆'), i * 500);
+                setTimeout(() => celebrateTrophy(name, trophy ? trophy.icon : 'ðŸ†'), i * 500);
             });
         }
     }
 }
 
 /**
- * Célèbre le déblocage d'un nouveau trophée : petite animation sur la carte,
- * confettis à l'écran et notification toast.
+ * CÃ©lÃ¨bre le dÃ©blocage d'un nouveau trophÃ©e : petite animation sur la carte,
+ * confettis Ã  l'Ã©cran et notification toast.
  */
 function celebrateTrophy(name, icon) {
     const card = document.querySelector(`.trophy-card[data-trophy="${CSS.escape(name)}"]`);
@@ -4516,7 +4226,7 @@ function celebrateTrophy(name, icon) {
         setTimeout(() => card.classList.remove('just-unlocked'), 700);
     }
     spawnConfetti();
-    showToast(`${icon} Nouveau trophée débloqué : ${name} !`, 'success', 5000);
+    showToast(`${icon} Nouveau trophÃ©e dÃ©bloquÃ© : ${name} !`, 'success', 5000);
 }
 
 function spawnConfetti() {
@@ -4557,4 +4267,5 @@ function spawnConfetti() {
 
 </body>
 </html>
+
 

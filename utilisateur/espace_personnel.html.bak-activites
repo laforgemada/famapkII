@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -890,130 +890,27 @@ html[data-theme="dark"] @keyframes cardGlow {
 
     </section>
 
-	
-<section class="card" id="recent-activities-card">
+		<section class="card" id="recent-activities-card">
 
-    <div class="section-badge">
-        ⚡ Activités récentes
-    </div>
+			<div class="section-badge">
+				⚡ Activités récentes
+			</div>
 
-    <div class="impact-title">
-        Votre activité récente
-    </div>
+			<div class="impact-title">
+				Votre activité récente
+			</div>
 
-    <div class="activity-summary" id="activity-summary">
-        <span>
-            <i data-feather="activity"></i>
-            <strong id="activity-total-count">0</strong>
-            activité(s)
-        </span>
+			<div class="activity-list" id="activity-list-skeleton" aria-busy="true">
+				<div class="skel-activity-item"><div class="skeleton skel-circle"></div><div class="skel-activity-content"><div class="skeleton skel-line short"></div><div class="skeleton skel-line" style="margin-bottom:0;"></div></div></div>
+				<div class="skel-activity-item"><div class="skeleton skel-circle"></div><div class="skel-activity-content"><div class="skeleton skel-line short"></div><div class="skeleton skel-line" style="margin-bottom:0;"></div></div></div>
+				<div class="skel-activity-item"><div class="skeleton skel-circle"></div><div class="skel-activity-content"><div class="skeleton skel-line short"></div><div class="skeleton skel-line" style="margin-bottom:0;"></div></div></div>
+			</div>
 
-        <span class="activity-summary-label">
-            Votre progression
-        </span>
-    </div>
+			<div id="activity-display-area"></div>
 
-    <!-- Chargement -->
-    <div class="activity-list"
-         id="activity-list-skeleton"
-         aria-busy="true">
+			<div id="activity-pagination" class="activity-pagination" style="display:none;"></div>
 
-        <div class="skel-activity-item">
-            <div class="skeleton skel-circle"></div>
-            <div class="skel-activity-content">
-                <div class="skeleton skel-line short"></div>
-                <div class="skeleton skel-line" style="margin-bottom:0;"></div>
-            </div>
-        </div>
-
-        <div class="skel-activity-item">
-            <div class="skeleton skel-circle"></div>
-            <div class="skel-activity-content">
-                <div class="skeleton skel-line short"></div>
-                <div class="skeleton skel-line" style="margin-bottom:0;"></div>
-            </div>
-        </div>
-
-        <div class="skel-activity-item">
-            <div class="skeleton skel-circle"></div>
-            <div class="skel-activity-content">
-                <div class="skeleton skel-line short"></div>
-                <div class="skeleton skel-line" style="margin-bottom:0;"></div>
-            </div>
-        </div>
-
-    </div>
-
-
-		<!-- Activités affichées -->
-		<div id="activity-display-area"></div>
-
-		<!-- Historique complet -->
-		<!-- Activités affichées -->
-<div id="activity-display-area"></div>
-
-<!-- Bouton pour afficher l'historique complet -->
-<button
-    type="button"
-    id="activity-toggle-btn"
-    class="activity-toggle-btn"
-    style="display:none;"
-    onclick="toggleFullActivityHistory()">
-
-    <span class="activity-toggle-icon">
-        <i data-feather="list"></i>
-    </span>
-
-    <span id="activity-toggle-text">
-        Voir toute mon activité
-    </span>
-
-</button>
-
-<!-- Historique complet des activités -->
-<div
-    id="full-activity-history"
-    class="full-activity-history"
-    style="display:none;"
-></div>
-
-
-
-    <!-- Historique complet masqué par défaut -->
-    <div
-        id="activity-full-history"
-        class="activity-full-history"
-        style="display:none;">
-
-        <div class="activity-full-history-header">
-            <div>
-                <strong>Historique complet</strong>
-                <span>Retrouvez toutes vos activités</span>
-            </div>
-
-            <button
-                type="button"
-                class="activity-close-btn"
-                onclick="toggleFullActivityHistory()"
-                aria-label="Fermer l'historique">
-
-                <i data-feather="x"></i>
-            </button>
-        </div>
-
-        <div id="activity-full-history-content"></div>
-
-        <div
-            id="activity-pagination"
-            class="activity-pagination"
-            style="display:none;">
-        </div>
-
-    </div>
-
-</section>
-
-
+		</section>
 
 <section class="card earn-points-section" id="earn-points-section">
     <div class="section-badge">
@@ -1788,9 +1685,7 @@ function handleSearchInput(query) {
             : `onclick="closeModal('searchModal');"`;
         return `
         <a class="search-result-item" ${hrefAttr} ${clickAttr}>
-            <div class="search-result-icon">
-				<i data-feather="${item.icon || 'search'}"></i>
-			</div>
+            <div class="search-result-icon"><i data-feather="${item.icon}"></i></div>
             <div class="search-result-text">
                 <strong>${item.title}</strong>
                 <span>${item.desc}</span>
@@ -2414,7 +2309,7 @@ function renderVerticalDropdownMenu() {
         return `
         <a href="${href}" class="notif-item ${notif.unread ? 'unread' : ''}" onclick="${clickHandler}">
             <div class="notif-item-icon ${notif.type}">
-                <i data-feather="${notif.icon || 'bell'}"></i>
+                <i data-feather="${notif.icon}"></i>
             </div>
             <div class="notif-details">
                 <span class="notif-message">${notif.message}</span>
@@ -3335,573 +3230,98 @@ async function claimDailyLoginReward() {
  * en les groupant par jour et en gérant le chargement progressif.
  * @param {Array} allData Toutes les activités brutes de l'API.
  */
- 
- /**
- * Sécurise le texte avant de l'insérer dans du HTML.
- * Évite qu'un contenu provenant de l'API puisse casser l'affichage.
- */
-function escapeActivityHtml(value) {
-    if (value === null || value === undefined) {
-        return '';
-    }
-
-    return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
-
-
-/**
- * ==========================================
- * OUTILS - ACTIVITÉS RÉCENTES
- * ==========================================
- */
-
-/**
- * Formate une date en temps relatif.
- * Exemple :
- *   À l'instant
- *   Il y a 5 min
- *   Il y a 2 h
- *   Hier
- *   Il y a 3 jours
- */
-function formatActivityRelativeTime(dateInput) {
-    if (!dateInput) return 'Date inconnue';
-
-    const date = new Date(dateInput);
-
-    if (isNaN(date.getTime())) {
-        console.warn('Date activité invalide :', dateInput);
-        return 'Date inconnue';
-    }
-
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffSeconds = Math.floor(diffMs / 1000);
-
-    if (diffSeconds < 10) {
-        return "À l'instant";
-    }
-
-    if (diffSeconds < 60) {
-        return `Il y a ${diffSeconds}s`;
-    }
-
-    const diffMinutes = Math.floor(diffSeconds / 60);
-
-    if (diffMinutes < 60) {
-        return `Il y a ${diffMinutes} min`;
-    }
-
-    const diffHours = Math.floor(diffMinutes / 60);
-
-    if (diffHours < 24) {
-        return `Il y a ${diffHours} h`;
-    }
-
-    const diffDays = Math.floor(diffHours / 24);
-
-    if (diffDays === 1) {
-        return 'Hier';
-    }
-
-    if (diffDays < 7) {
-        return `Il y a ${diffDays} jours`;
-    }
-
-    return date.toLocaleDateString('fr-FR', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-    });
-}
-
-
-/**
- * Échappe le HTML pour éviter d'injecter directement
- * des données provenant de l'API dans le DOM.
- */
-function escapeActivityHtml(value) {
-    if (value === null || value === undefined) {
-        return '';
-    }
-
-    return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
-
-
-/**
- * Ouvre/ferme l'historique complet.
- */
-
-
-function toggleFullActivityHistory() {
-
-    const history =
-        document.getElementById('full-activity-history');
-
-    const button =
-        document.getElementById('activity-toggle-btn');
-
-    const buttonText =
-        document.getElementById('activity-toggle-text');
-
-    if (!history) {
-        console.warn(
-            'Conteneur #full-activity-history introuvable.'
-        );
-        return;
-    }
-
-    const isHidden =
-        history.style.display === 'none' ||
-        history.style.display === '';
-
-    if (isHidden) {
-
-        history.style.display = 'block';
-
-        if (buttonText) {
-            buttonText.textContent =
-                'Masquer l’historique';
-        }
-
-        if (button) {
-            button.classList.add('is-open');
-        }
-
-    } else {
-
-        history.style.display = 'none';
-
-        if (buttonText) {
-            buttonText.textContent =
-                'Voir toute mon activité';
-        }
-
-        if (button) {
-            button.classList.remove('is-open');
-        }
-    }
-
-    if (
-        typeof feather !== 'undefined' &&
-        typeof feather.replace === 'function'
-    ) {
-        feather.replace();
-    }
-}
-
-
-
-
-
-
-/**
- * Rend l'historique complet dans le conteneur prévu.
- */
-function renderFullActivityHistory(activities) {
-
-    const container =
-        document.getElementById('full-activity-history');
-
-    if (!container) {
-        console.warn(
-            'Conteneur #full-activity-history introuvable.'
-        );
-        return;
-    }
-
-    if (!Array.isArray(activities) || activities.length === 0) {
-        container.innerHTML = `
-            <div class="activity-empty-state">
-                <div class="activity-empty-icon">
-                    <i data-feather="book-open"></i>
-                </div>
-
-                <p>Aucune activité enregistrée.</p>
-
-                <span>
-                    Vos activités apparaîtront ici au fur et à mesure.
-                </span>
-            </div>
-        `;
-
-        if (typeof feather !== 'undefined') {
-            feather.replace();
-        }
-
-        return;
-    }
-
-    const sortedActivities = [...activities].sort((a, b) => {
-        const dateA = new Date(a.created_at);
-        const dateB = new Date(b.created_at);
-
-        return dateB.getTime() - dateA.getTime();
-    });
-
-    let html = '';
-
-    sortedActivities.forEach((item) => {
-
-        const book = escapeActivityHtml(item.book || 'Bible');
-        const chapter = escapeActivityHtml(item.chapter || '');
-        const verses = Array.isArray(item.verses)
-            ? item.verses.map(escapeActivityHtml).join(', ')
-            : '';
-
-        const relativeTime =
-            formatActivityRelativeTime(item.created_at);
-
-        html += `
-            <div class="activity-full-item">
-
-                <div class="activity-icon icon-blue">
-                    <i data-feather="book-open"></i>
-                </div>
-
-                <div class="activity-content">
-
-                    <div class="activity-title">
-                        Lecture Biblique
-                    </div>
-
-                    <div class="activity-text">
-                        Vous avez terminé
-                        ${book}
-                        chapitre ${chapter}
-                        ${verses ? ` — versets ${verses}` : ''}
-                    </div>
-
-                    <div class="activity-time">
-                        ${escapeActivityHtml(relativeTime)}
-                    </div>
-
-                </div>
-
-            </div>
-        `;
-    });
-
-    container.innerHTML = html;
-
-    if (typeof feather !== 'undefined') {
-        feather.replace();
-    }
-}
-
-
-
 function renderActivities(allData) {
+    const activityDisplayArea = document.getElementById('activity-display-area');
+    const activityListSkeleton = document.getElementById('activity-list-skeleton');
+    const paginationBar = document.getElementById('activity-pagination');
 
-    const activityDisplayArea =
-        document.getElementById('activity-display-area');
+    if (!activityDisplayArea || !activityListSkeleton || !paginationBar) return;
 
-    const activityListSkeleton =
-        document.getElementById('activity-list-skeleton');
+    activityListSkeleton.style.display = 'none'; // Masque le squelette
 
-    const paginationBar =
-        document.getElementById('activity-pagination');
-
-    const toggleBtn =
-        document.getElementById('activity-toggle-btn');
-
-    const totalCount =
-        document.getElementById('activity-total-count');
-
-    if (!activityDisplayArea) {
-        console.error(
-            '❌ #activity-display-area introuvable'
-        );
-        return;
-    }
-
-    if (activityListSkeleton) {
-        activityListSkeleton.style.display = 'none';
-    }
-
-    /*
-     * Vérification des données
-     */
-    if (!Array.isArray(allData) || allData.length === 0) {
-
+    if (!allData || allData.length === 0) {
         activityDisplayArea.innerHTML = `
             <div class="activity-empty-state">
-
-                <div class="activity-empty-icon">
-                    <i data-feather="book-open"></i>
-                </div>
-
+                <div class="activity-empty-icon"><i data-feather="book-open"></i></div>
                 <p>Aucune activité récente pour le moment.</p>
-
-                <span>
-                    Commencez à lire la Bible pour voir
-                    votre progression ici !
-                </span>
-
+                <span>Commencez à lire la Bible pour voir votre progression ici !</span>
             </div>
         `;
-
-        if (toggleBtn) {
-            toggleBtn.style.display = 'none';
-        }
-
-        if (paginationBar) {
-            paginationBar.style.display = 'none';
-        }
-
-        if (totalCount) {
-            totalCount.textContent = '0';
-        }
-
-        if (typeof feather !== 'undefined') {
-            feather.replace();
-        }
-
+        paginationBar.style.display = 'none';
+        feather.replace();
         return;
     }
 
-    /*
-     * Nombre total
-     */
-    if (totalCount) {
-        totalCount.textContent = allData.length;
-    }
+    // Grouper les activités par date
+    const groupedActivities = allData.reduce((acc, item) => {
+        const dateKey = formatDateForDisplay(item.created_at);
+        if (!acc[dateKey]) {
+            acc[dateKey] = [];
+        }
+        acc[dateKey].push(item);
+        return acc;
+    }, {});
 
-    /*
-     * Copie + tri par date
-     */
-    const sortedActivities = [...allData].sort((a, b) => {
-
-        const dateA = new Date(a.created_at || 0).getTime();
-        const dateB = new Date(b.created_at || 0).getTime();
-
-        return dateB - dateA;
+    const sortedDateKeys = Object.keys(groupedActivities).sort((a, b) => {
+        // Simple tri alphabétique pour "Aujourd'hui", "Hier", puis dates complètes
+        // Une logique plus robuste impliquerait de parser les dates originales
+        // pour un tri chronologique exact, mais ce n'est pas nécessaire pour ce besoin.
+        const dateA = new Date(groupedActivities[a][0].created_at);
+        const dateB = new Date(groupedActivities[b][0].created_at);
+        return dateB.getTime() - dateA.getTime(); // Du plus récent au plus ancien
     });
 
-    /*
-     * Seulement les 3 dernières activités
-     */
-    const recentActivities =
-        sortedActivities.slice(0, 3);
+    // --- Pagination par groupes de jours ---
+    const totalPages = Math.max(1, Math.ceil(sortedDateKeys.length / ACTIVITIES_DAYS_PER_PAGE));
+    currentActivityPage = Math.min(Math.max(1, currentActivityPage), totalPages);
+
+    const startIndex = (currentActivityPage - 1) * ACTIVITIES_DAYS_PER_PAGE;
+    const endIndex = Math.min(startIndex + ACTIVITIES_DAYS_PER_PAGE, sortedDateKeys.length);
+    const pageKeys = sortedDateKeys.slice(startIndex, endIndex);
 
     let htmlContent = '';
 
+    // Réinitialise l'index de couleur pour un nouveau rendu des activités
     activityColorIndex = 0;
 
-    recentActivities.forEach((item, index) => {
+    pageKeys.forEach(dateKey => {
+        const dayActivities = groupedActivities[dateKey];
 
-        /*
-         * Sécurisation des valeurs
-         */
-        const book =
-            item.book !== undefined && item.book !== null
-                ? String(item.book)
-                : 'Bible';
-
-        const chapter =
-            item.chapter !== undefined && item.chapter !== null
-                ? String(item.chapter)
-                : '';
-
-        /*
-         * Les versets peuvent être :
-         * - un tableau
-         * - une chaîne
-         * - null
-         */
-        let verses = '';
-
-        if (Array.isArray(item.verses)) {
-
-            verses = item.verses.join(', ');
-
-        } else if (
-            item.verses !== undefined &&
-            item.verses !== null
-        ) {
-
-            verses = String(item.verses);
-        }
-
-        /*
-         * Couleur de l'icône
-         */
-        let iconClass = 'icon-blue';
-
-        try {
-
-            iconClass =
-                getNextActivityIconColorClass();
-
-        } catch (e) {
-
-            console.warn(
-                'Couleur activité indisponible :',
-                e
-            );
-        }
-
-        /*
-         * Date relative
-         */
-        let relativeTime = '';
-
-        try {
-
-            relativeTime =
-                formatActivityRelativeTime(
-                    item.created_at
-                );
-
-        } catch (e) {
-
-            console.warn(
-                'Date activité invalide :',
-                e
-            );
-        }
-
-        /*
-         * Construction de l'activité
-         */
         htmlContent += `
-
-            <div class="activity-item is-visible">
-
-                <div class="activity-icon ${iconClass}">
-                    <i data-feather="book-open"></i>
-                </div>
-
-                <div class="activity-content">
-
-                    <div class="activity-title">
-                        Lecture Biblique
-                    </div>
-
-                    <div class="activity-text">
-
-                        Vous avez terminé
-                        <strong>
-                            ${escapeActivityHtml(book)}
-                        </strong>
-
-                        chapitre
-                        <strong>
-                            ${escapeActivityHtml(chapter)}
-                        </strong>
-
-                        ${
-                            verses
-                                ? `
-                                    <span>
-                                        · versets
-                                        ${escapeActivityHtml(verses)}
-                                    </span>
-                                  `
-                                : ''
-                        }
-
-                    </div>
-
-                    ${
-                        relativeTime
-                            ? `
-                                <div class="activity-time">
-                                    ${escapeActivityHtml(relativeTime)}
-                                </div>
-                              `
-                            : ''
-                    }
-
-                </div>
-
-            </div>
+            <div class="activity-day-group">
+                <div class="activity-date-header">${dateKey}</div>
+                <div class="activity-list">
         `;
+        dayActivities.forEach(item => {
+            const verses = item.verses ? item.verses.join(', ') : '';
+            const iconClass = getNextActivityIconColorClass();
+
+            htmlContent += `
+                <div class="activity-item">
+                    <div class="activity-icon ${iconClass}">
+                        <i data-feather="book-open"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">Lecture Biblique</div>
+                        <div class="activity-text">
+                            Vous avez terminé ${item.book} chapitre ${item.chapter}
+                            versets ${verses}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        htmlContent += `</div></div>`;
     });
 
-    /*
-     * Insérer les 3 activités
-     */
     activityDisplayArea.innerHTML = htmlContent;
+    feather.replace(); // Important pour les icônes dans les nouvelles activités
 
-    /*
-     * Bouton historique complet
-     */
-    if (toggleBtn) {
+    renderActivityPagination(totalPages, sortedDateKeys.length);
 
-        if (allData.length > 3) {
-
-            toggleBtn.style.display = 'flex';
-
-        } else {
-
-            toggleBtn.style.display = 'none';
-
-        }
-    }
-
-    /*
-     * Préparer l'historique complet
-     */
-    try {
-
-        renderFullActivityHistory(
-            sortedActivities
-        );
-
-    } catch (error) {
-
-        console.error(
-            '❌ Erreur historique complet :',
-            error
-        );
-    }
-
-    /*
-     * Pas de pagination visible
-     * dans la vue compacte.
-     */
-    if (paginationBar) {
-        paginationBar.style.display = 'none';
-    }
-
-    /*
-     * Remplacement des icônes Feather
-     */
-    if (typeof feather !== 'undefined') {
-        feather.replace();
-    }
-
-    /*
-     * Animation
-     */
-    try {
-
-        observeActivityElements();
-
-    } catch (error) {
-
-        console.warn(
-            'Animation des activités indisponible :',
-            error
-        );
-    }
+    // Observer les éléments d'activité après le rendu pour l'animation
+    observeActivityElements();
 }
-
-
-
-
 
 /**
  * Construit et affiche la barre de pagination des activités
@@ -4084,116 +3504,36 @@ function calculateProgress(points) {
 function renderUserStats() {
     const { total, bibleVerses, bibleChapters, prayerMinutes } = userPoints;
 
-    const safeTotal = Math.max(0, Number(total) || 0);
+    // Mise à jour du solde de fidélité
+    setText('display-points', `${total.toFixed(2)} Points`);
 
-    /*
-     * =========================
-     * NIVEAU + PROGRESSION XP
-     * =========================
-     */
+    // Calcul et mise à jour de la progression (Niveau et Cercle)
+    const level = calculateLevel(total);
+    const progress = calculateProgress(total);
 
-    const level = calculateLevel(safeTotal);
-    const progress = calculateProgress(safeTotal);
-
-    const currentXP = Math.floor(safeTotal % 100);
-    const nextLevelXP = 100;
-    const remainingXP = nextLevelXP - currentXP;
-
-    // Solde principal
-    setText(
-        'display-points',
-        `${safeTotal.toFixed(2)} Points`
-    );
-
-    // Badge Niveau
     const levelBtn = document.querySelector('.progress-btn');
-
-    if (levelBtn) {
-        levelBtn.innerHTML = `
-            <span class="level-badge-icon">
-				<i data-feather="zap"></i>
-			</span>
-            <span>Niveau ${level}</span>
-        `;
-
-        levelBtn.setAttribute(
-            'aria-label',
-            `Niveau ${level}, ${currentXP} points sur 100`
-        );
-    }
-
-    /*
-     * =========================
-     * CERCLE DE PROGRESSION
-     * =========================
-     */
+    if (levelBtn) levelBtn.innerText = `Niveau ${level}`;
 
     const circleText = document.querySelector('.circle-text');
+    if (circleText) circleText.innerText = `${Math.floor(total % 100)} pts`; // Points absolus dans le cycle
 
-    if (circleText) {
-        circleText.innerHTML = `
-            <strong>${currentXP}</strong>
-            <small>/ 100 XP</small>
-        `;
-    }
-
-    const circleSub = document.querySelector('.circle-sub');
-
-    if (circleSub) {
-        circleSub.textContent =
-            remainingXP === 100
-                ? 'Commencez votre progression'
-                : `${remainingXP} XP avant le niveau ${level + 1}`;
-    }
-
-    const progressCircle =
-        document.querySelector('.progress-circle');
-
+    const progressCircle = document.querySelector('.progress-circle');
     if (progressCircle) {
-
-        const percentage =
-            Math.min(100, Math.max(0, progress));
-
         progressCircle.style.background =
-            `conic-gradient(
-                #ef4444 0%,
-                #f97316 ${percentage}%,
-                #e2e8f0 ${percentage}%,
-                #e2e8f0 100%
-            )`;
-
-        progressCircle.setAttribute(
-            'aria-label',
-            `Progression du niveau ${level} : ${currentXP} sur 100 XP`
-        );
+            `conic-gradient(rgb(209 107 116) 0%, rgb(255 11 11) 34%, rgb(226, 232, 240) 34%, rgb(226, 232, 240) 100%)`;
     }
 
-    /*
-     * =========================
-     * STATISTIQUES
-     * =========================
-     */
-
+    // Mise à jour des statistiques d'activité spécifiques avec les données réelles
     setText('stats-versets', bibleVerses);
     setText('stats-lecons', bibleChapters);
+    setText('stats-priere', `${total * 2}m`); // Garde la dérivation actuelle pour la prière
 
-    setText(
-        'stats-priere',
-        `${Math.floor(safeTotal * 2)}m`
-    );
+    // Génération des trophées
+    generateTrophies(total);
 
-    /*
-     * =========================
-     * TROPHÃ‰ES
-     * =========================
-     */
-
-    generateTrophies(safeTotal);
-
-    if (typeof feather !== 'undefined') {
-        feather.replace();
-    }
+    // feather.replace() est appelé par generateTrophies() si nécessaire et n'est pas nécessaire ici.
 }
+
 function generateTrophies(points) {
     const trophyGrid = document.querySelector('.trophy-grid');
     if (!trophyGrid) return;
@@ -4557,4 +3897,3 @@ function spawnConfetti() {
 
 </body>
 </html>
-
