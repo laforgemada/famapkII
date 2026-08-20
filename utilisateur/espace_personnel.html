@@ -866,19 +866,25 @@ html[data-theme="dark"] @keyframes cardGlow {
             </div>
 
             <div class="impact-grid">
-                <div class="impact-box box-blue">
-                    <span class="box-value" id="stats-priere" aria-live="polite">·</span>
-                    <span class="box-label">Prière</span>
-                </div>
-                <div class="impact-box box-orange">
-                    <span class="box-value" id="stats-lecons" aria-live="polite">·</span>
-                    <span class="box-label">Leçons</span>
-                </div>
-                <div class="impact-box box-green">
-                    <span class="box-value" id="stats-versets" aria-live="polite">·</span>
-                    <span class="box-label">Versets</span>
-                </div>
-            </div>
+
+				<div class="impact-box box-blue">
+					<span class="box-value" id="stats-priere">0m</span>
+					<span class="box-label">Prière</span>
+				</div>
+
+				<div class="impact-box box-orange">
+					<span class="box-value" id="stats-lecons">0</span>
+					<span class="box-label">Leçons</span>
+				</div>
+
+				<div class="impact-box box-green">
+					<span class="box-value" id="stats-versets">0</span>
+					<span class="box-label">Versets</span>
+				</div>
+
+				
+
+			</div>
 
         </div>
 
@@ -1253,11 +1259,17 @@ if (typeof loadedNotificationsArray === 'undefined') {
 }
 
 // ==========================================
-// Persistance des notifications (façon Facebook) : elles restent visibles
-// tant que l'utilisateur n'a pas cliqué dessus, même après un rafraîchissement
-// de page ou une déconnexion/reconnexion. Stockage dans localStorage, lié au
-// compte (pas à la session), avec un historique limité aux 50 dernières.
+// Persistance des notifications (façon Facebook)
 // ==========================================
+// Le flux temps réel (SSE, plus bas) ne délivre les événements qu'aux
+// utilisateurs connectés AU MOMENT PRÉCIS où ils se produisent — il ne
+// peut donc jamais, à lui seul, montrer une notification à quelqu'un qui
+// était hors ligne quand elle a été créée. La vraie source de vérité est
+// donc le serveur : au chargement de la page, on RÉCUPÈRE les
+// notifications non lues via une requête (fetchNotificationsFromServer),
+// puis le flux SSE prend le relais pour le temps réel pendant que la page
+// reste ouverte. Le localStorage sert uniquement de cache d'appoint si le
+// réseau est momentanément indisponible.
 const NOTIF_STORAGE_MAX = 50;
 
 function getNotifStorageKey() {
@@ -1288,6 +1300,107 @@ function saveNotificationsToStorage() {
         localStorage.setItem(key, JSON.stringify(loadedNotificationsArray.slice(0, NOTIF_STORAGE_MAX)));
     } catch (e) {
         console.warn("Impossible de sauvegarder l'historique des notifications :", e);
+    }
+}
+
+/**
+ * Récupère depuis le serveur les notifications réelles de l'utilisateur
+ * (lues + non lues, les plus récentes), avec leur véritable état "lu"
+ * mémorisé côté serveur — donc valable même s'il était déconnecté quand
+ * elles ont été créées. Nécessite un endpoint backend GET /api/notifications/list
+ * (voir le code PHP fourni séparément). Tant qu'il n'existe pas encore
+ * côté serveur (404) ou est injoignable, on se rabat silencieusement sur
+ * le cache local pour que l'interface reste utilisable.
+ */
+async function fetchNotificationsFromServer() {
+    if (!currentUsername) return;
+			try {
+				const response = await fetch(
+			`${API_BASE_URL}/api/notifications/list?username=${encodeURIComponent(currentUsername)}`,
+			{
+				headers: {
+					'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+				}
+			}
+		);
+        if (!response.ok) throw new Error(`Statut HTTP ${response.status}`);
+        const data = await response.json();
+        if (!Array.isArray(data.notifications)) throw new Error("Format de réponse invalide (champ 'notifications' manquant)");
+
+        loadedNotificationsArray = data.notifications.map(n => ({
+            id: n.id,
+            realId: n.id,
+            type: n.type || 'article',
+            title: n.title || '',
+            message: n.message || '',
+            link: n.link || null,
+            unread: !n.read,
+            date: n.createdAt || new Date().toISOString()
+        }));
+        notificationCount = loadedNotificationsArray.filter(n => n.unread).length;
+        saveNotificationsToStorage(); // On garde aussi une copie locale en secours
+    } catch (e) {
+        console.warn("Notifications : endpoint serveur indisponible, utilisation du cache local en attendant.", e);
+        loadNotificationsFromStorage();
+    }
+    renderNotificationBadge();
+    renderVerticalDropdownMenu();
+}
+
+/**
+ * Prévient le serveur qu'une notification a été lue, pour que l'état "lu"
+ * soit valable sur tous les appareils/sessions de ce compte — pas juste
+ * dans ce navigateur. Nécessite POST /api/notifications/{id}/read côté
+ * backend. Si l'appel échoue, l'état reste marqué localement quand même
+ * (l'utilisateur ne revoit pas la notif dans CETTE session), mais sans
+ * garantie de synchronisation tant que le backend n'est pas en place.
+ */
+async function markNotificationReadOnServer(realId) {
+    if (!currentUsername || !realId) return;
+
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/api/notifications/${realId}/read?username=${encodeURIComponent(currentUsername)}`,
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+                }
+            }
+        );
+
+        if (!response.ok) {
+            console.warn(
+                `Erreur serveur lors du marquage de la notification ${realId} : HTTP ${response.status}`
+            );
+            return;
+        }
+
+        const data = await response.json();
+        console.log('Notification marquée comme lue :', data);
+
+    } catch (e) {
+        console.warn(
+            `Impossible de synchroniser la lecture de la notification ${realId} avec le serveur :`,
+            e
+        );
+    }
+}
+
+async function markAllNotificationsReadOnServer() {
+    if (!currentUsername) return;
+    try {
+        await fetch(
+			`${API_BASE_URL}/api/notifications/read-all?username=${encodeURIComponent(currentUsername)}`,
+			{
+				method: 'POST',
+				headers: {
+					'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+				}
+			}
+		);
+    } catch (e) {
+        console.warn("Impossible de synchroniser le marquage global comme lu avec le serveur :", e);
     }
 }
 
@@ -1670,11 +1783,14 @@ function renderProfileAvatar(username) {
 }
 
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     feather.replace();
 	
 
     currentUsername = localStorage.getItem('user_name');
+	if (currentUsername) {
+		await updateLoginStreak();
+	}
     setActiveBottomNav();
 
     const welcomeTitle = document.getElementById('welcome-user-title');
@@ -1691,15 +1807,20 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchAppUpdateSettings();
 
     if (currentUsername) {
+        // Affiche d'abord instantanément ce qu'on a en cache local (pas
+        // d'écran vide le temps du chargement), PUIS récupère la vraie
+        // liste côté serveur (avec son état "lu" fiable, peu importe si
+        // l'utilisateur était déconnecté quand les notifs sont arrivées).
         loadNotificationsFromStorage();
         renderNotificationBadge();
         renderVerticalDropdownMenu();
+        fetchNotificationsFromServer();
 
         loadLoyaltyData();
         loadActivities(); // Charger la première page d'activités
         initRealtimeNotifications();
         updateEarnCardsState(); // Affiche l'état des activités du jour (fait/verrouillé) et l'objectif quotidien
-        updateStreakSystem(currentUsername); // Met à jour le compteur "jours d'affilée" (#streakCount)
+       
     } else {
         console.warn("Mode invité : Certaines fonctionnalités sont désactivées.");
         // Explicitly set guest states
@@ -2209,6 +2330,7 @@ function markOneAsRead(id) {
         saveNotificationsToStorage();
         renderNotificationBadge();
         renderVerticalDropdownMenu();
+        markNotificationReadOnServer(notif.realId || notif.id);
     }
 }
 
@@ -2219,6 +2341,7 @@ function markAllAsRead(event) {
     saveNotificationsToStorage();
     renderNotificationBadge();
     renderVerticalDropdownMenu();
+    markAllNotificationsReadOnServer();
 }
 
 if (window.Notification && Notification.permission !== "denied" && Notification.permission !== "granted") {
@@ -2789,6 +2912,96 @@ function updateEarnCardsState() {
     }
 }
 
+async function updateLoginStreak() {
+
+    if (!currentUsername) {
+        console.warn("⚠️ Aucun utilisateur pour calculer le streak.");
+        return;
+    }
+
+    const token = localStorage.getItem('token');
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/reward/daily-login`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token
+                        ? {
+                            'Authorization': `Bearer ${token}`
+                        }
+                        : {})
+                },
+                body: JSON.stringify({
+                    username: currentUsername
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        console.log("🔥 Login streak :", data);
+
+        /*
+         * Même si l'utilisateur s'est déjà connecté aujourd'hui,
+         * le serveur renvoie quand même son streak actuel.
+         */
+        if (
+            data.success ||
+            data.alreadyLoggedToday
+        ) {
+
+            const streak = Number(data.streak || 0);
+
+            /*
+             * Badge principal :
+             * 🔥 1 jour de suite
+             * 🔥 2 jours de suite
+             * 🔥 3 jours de suite...
+             */
+            const streakText =
+                document.getElementById('streakText');
+
+            if (streakText) {
+
+                streakText.innerText =
+                    streak <= 1
+                        ? `${streak} jour de suite`
+                        : `${streak} jours de suite`;
+            }
+
+            
+
+            /*
+             * Affichage du badge
+             */
+            const streakBadge =
+                document.getElementById('streakBadge');
+
+            if (streakBadge) {
+                streakBadge.style.display = 'flex';
+            }
+
+        } else {
+
+            console.warn(
+                "⚠️ Impossible de récupérer le streak :",
+                data.message
+            );
+        }
+
+    } catch (error) {
+
+        console.error(
+            "❌ Erreur lors de la mise à jour du streak :",
+            error
+        );
+    }
+}
+
 /**
  * ==========================================
  * GESTION DE LA FIDÉLITÉ (MISE À JOUR)
@@ -3274,7 +3487,7 @@ function updateUserStatsFromActivities(activities) {
     userPoints.bibleVerses = totalVersesRead;
     userPoints.bibleChapters = uniqueChapters.size;
 
-    renderStreak(computeReadingStreak(activities || []));
+    
     renderUserStats();
 }
 
@@ -3679,56 +3892,7 @@ function spawnConfetti() {
 
 </script>
 
-<script>
-function updateStreakSystem(username) {
-    if (!username) return;
 
-    const todayStr = new Date().toISOString().split('T')[0]; // Format "YYYY-MM-DD"
-    const lastLoginKey = `last_login_date_${username}`;
-    const streakKey = `user_streak_count_${username}`;
-
-    let currentStreak = parseInt(localStorage.getItem(streakKey)) || 0;
-    let lastLoginDate = localStorage.getItem(lastLoginKey);
-
-    if (lastLoginDate === todayStr) {
-        // Déjà connecté aujourd'hui, on ne touche à rien
-        setStreakDisplay(currentStreak);
-        return;
-    }
-
-    if (lastLoginDate) {
-        const lastDate = new Date(lastLoginDate);
-        const currentDate = new Date(todayStr);
-        const diffTime = currentDate - lastDate;
-        const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
-
-        if (diffDays === 1) {
-            // Connexion le lendemain : on incrémente la série !
-            currentStreak += 1;
-        } else if (diffDays > 1) {
-            // Plus d'un jour manqué : la série retombe à 1
-            currentStreak = 1;
-        }
-    } else {
-        // Première visite absolue
-        currentStreak = 1;
-    }
-
-    // Sauvegarde
-    localStorage.setItem(lastLoginKey, todayStr);
-    localStorage.setItem(streakKey, currentStreak);
-
-    // Affichage
-    setStreakDisplay(currentStreak);
-}
-
-function setStreakDisplay(count) {
-    const countEl = document.getElementById('streakCount');
-    if (countEl) {
-        countEl.textContent = count;
-    }
-}
-</script>
 
 
 </body>
