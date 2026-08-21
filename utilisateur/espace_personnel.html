@@ -1566,11 +1566,45 @@ html[data-theme="dark"] @keyframes cardGlow {
 
     </div>
 
-    <div class="trophy-progress-line" aria-hidden="true">
-        <div class="trophy-progress-track">
-            <div class="trophy-progress-fill"></div>
-        </div>
-    </div>
+		<div class="trophy-progress-line">
+
+			<div class="trophy-progress-info">
+
+				<div class="trophy-next-label">
+					<span class="trophy-next-icon">🎯</span>
+					<span id="trophyNextText">Prochain trophée</span>
+				</div>
+
+				<div class="trophy-points-text">
+					<strong id="trophyCurrentPoints">0</strong>
+					<span>/</span>
+					<span id="trophyNextPoints">50</span>
+					<span>pts</span>
+				</div>
+
+			</div>
+
+			<div class="trophy-progress-track">
+
+				<div
+					class="trophy-progress-fill"
+					id="trophyProgressFill"
+					style="width: 0%;"
+				></div>
+
+			</div>
+
+			<div class="trophy-progress-bottom">
+
+				<span id="trophyProgressPercent">0%</span>
+
+				<span id="trophyRemainingText">
+					Encore 50 pts
+				</span>
+
+			</div>
+
+		</div>
 
     <div class="trophy-grid" aria-busy="true">
 
@@ -6136,47 +6170,201 @@ function generateTrophies(points) {
         { name: "Couronné", desc: "Atteindre 38 000 pts", req: 38000, icon: "👑" }
     ];
 	
+	
 	// ==========================================
 // PROGRESSION VERS LE PROCHAIN TROPHÉE
 // ==========================================
 
-const progressFill = document.querySelector('.trophy-progress-fill');
+const progressFill =
+    document.getElementById('trophyProgressFill');
+
+const currentPointsElement =
+    document.getElementById('trophyCurrentPoints');
+
+const nextPointsElement =
+    document.getElementById('trophyNextPoints');
+
+const nextTextElement =
+    document.getElementById('trophyNextText');
+
+const progressPercentElement =
+    document.getElementById('trophyProgressPercent');
+
+const remainingTextElement =
+    document.getElementById('trophyRemainingText');
 
 
 if (progressFill) {
 
-    // Trouver le prochain trophée non débloqué
-    const nextTrophy = trophies.find(t => points < t.req);
+    // Cherche le prochain trophée non débloqué
+    const nextTrophy = trophies.find(
+        trophy => points < trophy.req
+    );
+
 
     if (nextTrophy) {
 
-        // Trouver le trophée précédent
-        const currentIndex = trophies.indexOf(nextTrophy);
-        const previousTrophy = trophies[currentIndex - 1];
+        const nextIndex =
+            trophies.indexOf(nextTrophy);
 
-        const previousReq = previousTrophy ? previousTrophy.req : 0;
-        const nextReq = nextTrophy.req;
 
-        // Calcul de la progression réelle
-        const progress =
-            ((points - previousReq) /
-            (nextReq - previousReq)) * 100;
+        // Trophée précédent
+        const previousTrophy =
+            trophies[nextIndex - 1];
 
-        const safeProgress = Math.max(
-            0,
-            Math.min(100, progress)
-        );
 
+        const previousReq =
+            previousTrophy
+                ? previousTrophy.req
+                : 0;
+
+
+        const nextReq =
+            nextTrophy.req;
+
+
+        // Calcul de la progression
+        const range =
+            nextReq - previousReq;
+
+
+        const currentProgress =
+            points - previousReq;
+
+
+        let progress =
+            range > 0
+                ? (currentProgress / range) * 100
+                : 0;
+
+
+        progress =
+            Math.max(
+                0,
+                Math.min(100, progress)
+            );
+
+
+        // Points restants
+        const remaining =
+            Math.max(
+                0,
+                nextReq - points
+            );
+
+
+        // --------------------------------------
+        // Mise à jour du texte
+        // --------------------------------------
+
+        if (nextTextElement) {
+
+            nextTextElement.textContent =
+                `Prochain trophée : ${nextTrophy.name}`;
+        }
+
+
+        if (currentPointsElement) {
+
+            currentPointsElement.textContent =
+                Math.floor(points);
+        }
+
+
+        if (nextPointsElement) {
+
+            nextPointsElement.textContent =
+                nextReq;
+        }
+
+
+        if (progressPercentElement) {
+
+            progressPercentElement.textContent =
+                `${Math.round(progress)}%`;
+        }
+
+
+        if (remainingTextElement) {
+
+            remainingTextElement.textContent =
+                remaining === 1
+                    ? 'Encore 1 pt'
+                    : `Encore ${remaining} pts`;
+        }
+
+
+        // --------------------------------------
         // Animation de la barre
+        // --------------------------------------
+
         requestAnimationFrame(() => {
-            progressFill.style.width = `${safeProgress}%`;
+
+            progressFill.style.width =
+                `${progress}%`;
+
+            progressFill.classList.remove(
+                'progress-updated'
+            );
+
+            // Force le navigateur à recalculer
+            void progressFill.offsetWidth;
+
+            progressFill.classList.add(
+                'progress-updated'
+            );
         });
+
 
     } else {
 
-        // Tous les trophées sont débloqués
+        // ======================================
+        // TOUS LES TROPHÉES SONT DÉBLOQUÉS
+        // ======================================
+
+        if (nextTextElement) {
+
+            nextTextElement.textContent =
+                '🏆 Tous les trophées débloqués !';
+        }
+
+
+        if (currentPointsElement) {
+
+            currentPointsElement.textContent =
+                Math.floor(points);
+        }
+
+
+        if (nextPointsElement) {
+
+            nextPointsElement.textContent =
+                Math.floor(points);
+        }
+
+
+        if (progressPercentElement) {
+
+            progressPercentElement.textContent =
+                '100%';
+        }
+
+
+        if (remainingTextElement) {
+
+            remainingTextElement.textContent =
+                'Niveau maximum atteint';
+        }
+
+
         requestAnimationFrame(() => {
-            progressFill.style.width = '100%';
+
+            progressFill.style.width =
+                '100%';
+
+            progressFill.classList.add(
+                'progress-updated'
+            );
         });
     }
 }

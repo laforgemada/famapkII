@@ -5977,7 +5977,7 @@ body.dark-theme .notif-tab {
 
 
 /* =========================================================
-   BARRE DE PROGRESSION
+   PROGRESSION VERS LE PROCHAIN TROPHÉE
 ========================================================= */
 
 .trophy-progress-line {
@@ -5987,16 +5987,131 @@ body.dark-theme .notif-tab {
 
     width: 100%;
 
-    height: 5px;
-
     margin-bottom: 20px;
 }
 
 
+/* =========================================================
+   INFORMATIONS AU-DESSUS DE LA BARRE
+========================================================= */
+
+.trophy-progress-info {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 8px;
+}
+
+
+.trophy-next-label {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    min-width: 0;
+
+    color: #64748b;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+.trophy-next-icon {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 22px;
+    height: 22px;
+
+    flex-shrink: 0;
+
+    border-radius: 7px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff7ed,
+            #ffedd5
+        );
+
+    box-shadow:
+        0 3px 8px rgba(245, 158, 11, 0.12);
+
+    font-size: 12px;
+}
+
+
+#trophyNextText {
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+	color:aliceblue;
+}
+
+
+/* =========================================================
+   COMPTEUR DE POINTS
+========================================================= */
+
+.trophy-points-text {
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 3px;
+
+    flex-shrink: 0;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+.trophy-points-text strong {
+    color: aliceblue;
+
+    font-size: 13px;
+
+    font-weight: 900;
+}
+
+
+.trophy-points-text span:last-child {
+    margin-left: 2px;
+
+    font-size: 9px;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   BARRE
+========================================================= */
+
 .trophy-progress-track {
+    position: relative;
+
     width: 100%;
 
-    height: 5px;
+    height: 7px;
 
     overflow: hidden;
 
@@ -6004,10 +6119,15 @@ body.dark-theme .notif-tab {
 
     background:
         rgba(226, 232, 240, 0.75);
+
+    box-shadow:
+        inset 0 1px 2px rgba(15, 23, 42, 0.06);
 }
 
 
 .trophy-progress-fill {
+    position: relative;
+
     width: 0%;
 
     height: 100%;
@@ -6023,25 +6143,193 @@ body.dark-theme .notif-tab {
         );
 
     box-shadow:
-        0 0 10px rgba(139, 92, 246, 0.35);
+        0 0 12px rgba(139, 92, 246, 0.38);
 
     transition:
         width 1s cubic-bezier(0.22, 1, 0.36, 1);
-
-    animation:
-        progressGlow 2.5s ease-in-out infinite;
 }
 
 
-@keyframes progressGlow {
+/* Reflet animé */
 
-    0%,
+.trophy-progress-fill::after {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -80px;
+
+    width: 60px;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,0.65),
+            transparent
+        );
+
+    transform: skewX(-20deg);
+
+    animation:
+        progressShine 2.8s ease-in-out infinite;
+}
+
+
+@keyframes progressShine {
+
+    0% {
+        left: -80px;
+    }
+
+    55%,
     100% {
-        opacity: 0.85;
+        left: calc(100% + 80px);
+    }
+}
+
+
+/* =========================================================
+   INFORMATIONS SOUS LA BARRE
+========================================================= */
+
+.trophy-progress-bottom {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-top: 5px;
+
+    color: #94a3b8;
+
+    font-size: 9px;
+
+    font-weight: 700;
+}
+
+
+#trophyProgressPercent {
+    color: aliceblue;
+
+    font-weight: 900;
+}
+
+
+#trophyRemainingText {
+    text-align: right;
+	color:aliceblue;
+}
+
+
+/* =========================================================
+   ANIMATION LORSQU'IL Y A UNE NOUVELLE PROGRESSION
+========================================================= */
+
+.trophy-progress-fill.progress-updated {
+    animation:
+        progressPulse 0.7s ease;
+}
+
+
+@keyframes progressPulse {
+
+    0% {
+        filter: brightness(1);
     }
 
     50% {
-        opacity: 1;
+        filter: brightness(1.35);
+    }
+
+    100% {
+        filter: brightness(1);
+    }
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+body.dark-mode .trophy-next-label,
+body.dark-theme .trophy-next-label {
+    color: #94a3b8;
+}
+
+
+body.dark-mode .trophy-next-icon,
+body.dark-theme .trophy-next-icon {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(245, 158, 11, 0.12),
+            rgba(245, 158, 11, 0.05)
+        );
+}
+
+
+body.dark-mode .trophy-points-text,
+body.dark-theme .trophy-points-text {
+    color: #64748b;
+}
+
+
+body.dark-mode .trophy-points-text strong,
+body.dark-theme .trophy-points-text strong {
+    color: #a78bfa;
+}
+
+
+body.dark-mode .trophy-progress-track,
+body.dark-theme .trophy-progress-track {
+    background:
+        rgba(51, 65, 85, 0.65);
+}
+
+
+body.dark-mode #trophyProgressPercent,
+body.dark-theme #trophyProgressPercent {
+    color: #a78bfa;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .trophy-progress-info {
+        margin-bottom: 7px;
+    }
+
+    .trophy-next-label {
+        font-size: 9px;
+    }
+
+    .trophy-next-icon {
+        width: 20px;
+        height: 20px;
+
+        font-size: 11px;
+    }
+
+    .trophy-points-text strong {
+        font-size: 12px;
+    }
+
+    .trophy-progress-track {
+        height: 6px;
+    }
+
+    .trophy-progress-bottom {
+        font-size: 8px;
     }
 }
 
