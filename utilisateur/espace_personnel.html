@@ -1537,59 +1537,51 @@ html[data-theme="dark"] @keyframes cardGlow {
 
 	<section class="card trophies-card" id="trophies">
 
-		<div class="trophy-header">
+    <div class="trophy-header">
 
-			<div class="trophy-heading">
+        <div class="trophy-heading">
 
-				<div class="trophy-main-icon">
-					<span>🏆</span>
-				</div>
+            <div class="trophy-main-icon" aria-hidden="true">
+                <span>🏆</span>
+            </div>
 
-				<div class="trophy-title-wrapper">
+            <div class="trophy-title-wrapper">
 
-					<div class="trophy-title">
-						Mes Trophées
-					</div>
+                <div class="trophy-title">
+                    Mes Trophées
+                </div>
 
-					<div class="trophy-subtitle">
-						Vos récompenses et accomplissements
-					</div>
+                <div class="trophy-subtitle">
+                    Progressez et débloquez de nouvelles récompenses
+                </div>
 
-				</div>
+            </div>
 
-			</div>
+        </div>
 
+        <div class="progress-btn">
+            <span class="level-icon">✦</span>
+            Niveau 8
+        </div>
 
-			<div class="progress-btn">
-				<span class="level-icon">✦</span>
-				<span>Niveau 8</span>
-			</div>
+    </div>
 
-		</div>
+    <div class="trophy-progress-line" aria-hidden="true">
+        <div class="trophy-progress-track">
+            <div class="trophy-progress-fill"></div>
+        </div>
+    </div>
 
+    <div class="trophy-grid" aria-busy="true">
 
-		<div class="trophy-progress-line">
+        <div class="skeleton skel-trophy"></div>
+        <div class="skeleton skel-trophy"></div>
+        <div class="skeleton skel-trophy"></div>
+        <div class="skeleton skel-trophy"></div>
 
-			<div class="trophy-progress-track">
-				<div class="trophy-progress-fill"></div>
-			</div>
+    </div>
 
-			<span class="trophy-progress-glow"></span>
-
-		</div>
-
-
-		<div
-			class="trophy-grid"
-			aria-busy="true"
-		>
-			<div class="skeleton skel-trophy"></div>
-			<div class="skeleton skel-trophy"></div>
-			<div class="skeleton skel-trophy"></div>
-			<div class="skeleton skel-trophy"></div>
-		</div>
-
-	</section>
+</section>
 
 
 
