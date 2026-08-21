@@ -1,0 +1,3876 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Utilisateurs - Apokalypsy Admin</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/admin-style.css">
+
+    <style>
+        /* =========================================================
+           PAGE UTILISATEURS
+        ========================================================= */
+
+        .users-page {
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .users-hero {
+            background:
+                radial-gradient(circle at top right, rgba(99,102,241,.18), transparent 35%),
+                linear-gradient(135deg, #111827, #1e293b);
+            color: #fff;
+            border-radius: 22px;
+            padding: 28px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(15,23,42,.15);
+        }
+
+        .users-hero::after {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            right: -70px;
+            top: -90px;
+            border-radius: 50%;
+            background: rgba(99,102,241,.15);
+        }
+
+        .users-hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .users-hero h1 {
+            margin: 0 0 8px;
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            font-weight: 800;
+        }
+
+        .users-hero p {
+            margin: 0;
+            color: #cbd5e1;
+            max-width: 700px;
+        }
+
+        .users-hero-icon {
+            display: inline-flex;
+            width: 48px;
+            height: 48px;
+            border-radius: 15px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            background: rgba(255,255,255,.12);
+            backdrop-filter: blur(8px);
+            font-size: 1.3rem;
+        }
+
+        /* =========================================================
+           STATISTIQUES
+        ========================================================= */
+
+        .users-stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .user-stat-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 18px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 8px 25px rgba(15,23,42,.06);
+            transition: .25s ease;
+        }
+
+        .user-stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 32px rgba(15,23,42,.10);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            flex: 0 0 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+        }
+
+        .stat-icon.total {
+            background: #eef2ff;
+            color: #4f46e5;
+        }
+
+        .stat-icon.online {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .stat-icon.recent {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .stat-icon.offline {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .stat-content {
+            min-width: 0;
+        }
+
+        .stat-content strong {
+            display: block;
+            font-size: 1.55rem;
+            line-height: 1;
+            color: #0f172a;
+            margin-bottom: 5px;
+        }
+
+        .stat-content span {
+            color: #64748b;
+            font-size: .82rem;
+        }
+
+        /* =========================================================
+           BARRE DE CONTROLE
+        ========================================================= */
+
+        .users-toolbar {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 18px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 8px 25px rgba(15,23,42,.05);
+        }
+
+        .users-search {
+            flex: 1;
+            min-width: 240px;
+            position: relative;
+        }
+
+        .users-search i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .users-search input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 14px 12px 42px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            outline: none;
+            font-family: inherit;
+            background: #f8fafc;
+            transition: .2s;
+        }
+
+        .users-search input:focus {
+            border-color: #6366f1;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(99,102,241,.10);
+        }
+
+        .users-filter {
+            min-width: 160px;
+        }
+
+        .users-filter select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f8fafc;
+            font-family: inherit;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .refresh-users-btn {
+            border: none;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: #6366f1;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: .2s;
+        }
+
+        .refresh-users-btn:hover {
+            background: #4f46e5;
+            transform: translateY(-1px);
+        }
+
+        .refresh-users-btn.loading i {
+            animation: rotateRefresh .8s linear infinite;
+        }
+
+        @keyframes rotateRefresh {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* =========================================================
+           TABLE
+        ========================================================= */
+
+        .users-table-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(15,23,42,.06);
+        }
+
+        .users-table-header {
+            padding: 20px 22px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .users-table-header h2 {
+            margin: 0;
+            color: #0f172a;
+            font-size: 1.1rem;
+        }
+
+        .users-count-label {
+            color: #64748b;
+            font-size: .85rem;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .users-table {
+            width: 100%;
+            min-width: 1050px;
+            border-collapse: collapse;
+        }
+
+        .users-table th {
+            background: #f8fafc;
+            color: #64748b;
+            font-size: .73rem;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            font-weight: 700;
+            padding: 14px 16px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .users-table td {
+            padding: 15px 16px;
+            border-top: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+
+        .users-table tbody tr {
+            transition: .18s ease;
+        }
+
+        .users-table tbody tr:hover {
+            background: #fafbff;
+        }
+
+        /* =========================================================
+           UTILISATEUR
+        ========================================================= */
+
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 220px;
+        }
+
+        .user-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            object-fit: cover;
+            background: #eef2ff;
+            border: 2px solid #fff;
+            box-shadow: 0 4px 12px rgba(15,23,42,.10);
+            flex: 0 0 46px;
+        }
+
+        .user-name {
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 3px;
+        }
+
+        .user-username {
+            color: #94a3b8;
+            font-size: .78rem;
+        }
+
+        .user-email {
+            color: #475569;
+            font-size: .83rem;
+        }
+
+        /* =========================================================
+           PRESENCE
+        ========================================================= */
+
+        .presence-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: .76rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .presence-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .presence-online {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .presence-online .presence-dot {
+            background: #22c55e;
+            box-shadow: 0 0 0 4px rgba(34,197,94,.12);
+            animation: onlinePulse 1.8s infinite;
+        }
+
+        .presence-recent {
+            background: #fef3c7;
+            color: #a16207;
+        }
+
+        .presence-recent .presence-dot {
+            background: #f59e0b;
+        }
+
+        .presence-offline {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .presence-offline .presence-dot {
+            background: #94a3b8;
+        }
+
+        @keyframes onlinePulse {
+            0%, 100% {
+                box-shadow: 0 0 0 3px rgba(34,197,94,.10);
+            }
+            50% {
+                box-shadow: 0 0 0 6px rgba(34,197,94,.03);
+            }
+        }
+
+        /* =========================================================
+           BADGES
+        ========================================================= */
+
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 9px;
+            border-radius: 8px;
+            font-size: .7rem;
+            font-weight: 800;
+            margin: 2px;
+        }
+
+        .role-admin {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .role-redacteur {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .role-user {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .account-active {
+            color: #16a34a;
+            font-weight: 700;
+            font-size: .8rem;
+        }
+
+        .account-disabled {
+            color: #dc2626;
+            font-weight: 700;
+            font-size: .8rem;
+        }
+
+        /* =========================================================
+           POINTS
+        ========================================================= */
+
+        .points-value {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #d97706;
+            font-weight: 800;
+        }
+
+        .streak-value {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #dc2626;
+            font-weight: 800;
+        }
+
+        /* =========================================================
+           DATES
+        ========================================================= */
+
+        .date-main {
+            font-size: .8rem;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        .date-secondary {
+            display: block;
+            font-size: .7rem;
+            color: #94a3b8;
+            margin-top: 3px;
+        }
+
+        /* =========================================================
+           ACTIONS
+        ========================================================= */
+
+        .user-actions {
+            display: flex;
+            gap: 7px;
+        }
+
+        .user-action-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .user-action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .action-view {
+            background: #eef2ff;
+            color: #4f46e5;
+        }
+
+        .action-disable {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .action-enable {
+            background: #ecfdf5;
+            color: #16a34a;
+        }
+
+        /* =========================================================
+           ETAT CHARGEMENT
+        ========================================================= */
+
+        .users-loading {
+            padding: 60px 20px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .users-loading i {
+            font-size: 2rem;
+            color: #6366f1;
+            animation: spin .8s linear infinite;
+            margin-bottom: 12px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .users-empty {
+            padding: 60px 20px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .users-empty i {
+            font-size: 2.5rem;
+            color: #cbd5e1;
+            margin-bottom: 12px;
+        }
+
+        .users-error {
+            padding: 30px 20px;
+            text-align: center;
+            color: #dc2626;
+        }
+
+        .users-error i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        /* =========================================================
+           MODAL
+        ========================================================= */
+
+        .user-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15,23,42,.60);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 9999;
+        }
+
+        .user-modal.show {
+            display: flex;
+        }
+
+        .user-modal-card {
+            width: min(620px, 100%);
+            max-height: 90vh;
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 22px;
+            box-shadow: 0 25px 70px rgba(15,23,42,.30);
+            animation: modalIn .25s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            padding: 20px 22px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #0f172a;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 10px;
+            background: #f1f5f9;
+            cursor: pointer;
+            color: #475569;
+        }
+
+        .modal-body {
+            padding: 22px;
+        }
+
+        .modal-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .modal-profile img {
+            width: 65px;
+            height: 65px;
+            border-radius: 18px;
+            object-fit: cover;
+        }
+
+        .modal-profile h4 {
+            margin: 0 0 5px;
+            color: #0f172a;
+            font-size: 1.15rem;
+        }
+
+        .modal-profile span {
+            color: #64748b;
+            font-size: .85rem;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .detail-box {
+            padding: 14px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .detail-box label {
+            display: block;
+            font-size: .7rem;
+            text-transform: uppercase;
+            color: #94a3b8;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .detail-box strong {
+            color: #334155;
+            font-size: .88rem;
+            word-break: break-word;
+        }
+
+        /* =========================================================
+   RESPONSIVE MOBILE APP
+========================================================= */
+
+/* ---------------------------------------------------------
+   TABLETTE
+--------------------------------------------------------- */
+
+/* =========================================================
+   RESPONSIVE PROFESSIONNEL
+========================================================= */
+
+/* ---------------------------------------------------------
+   GRANDS ÉCRANS
+--------------------------------------------------------- */
+
+@media (min-width: 1400px) {
+
+    .users-page {
+        max-width: 1500px;
+    }
+
+    .users-table {
+        min-width: 0;
+        table-layout: fixed;
+    }
+
+    .users-table th,
+    .users-table td {
+        padding: 13px 12px;
+    }
+
+    .users-table th:nth-child(1) {
+        width: 18%;
+    }
+
+    .users-table th:nth-child(2) {
+        width: 15%;
+    }
+
+    .users-table th:nth-child(3) {
+        width: 11%;
+    }
+
+    .users-table th:nth-child(4) {
+        width: 10%;
+    }
+
+    .users-table th:nth-child(5) {
+        width: 8%;
+    }
+
+    .users-table th:nth-child(6) {
+        width: 7%;
+    }
+
+    .users-table th:nth-child(7) {
+        width: 12%;
+    }
+
+    .users-table th:nth-child(8) {
+        width: 9%;
+    }
+
+    .users-table th:nth-child(9) {
+        width: 10%;
+    }
+}
+
+
+/* ---------------------------------------------------------
+   ORDINATEURS / LAPTOPS
+--------------------------------------------------------- */
+
+@media (min-width: 1001px) and (max-width: 1399px) {
+
+    .main-content {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .users-page {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .users-hero {
+        padding: 24px;
+    }
+
+    .users-stats {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+
+        gap: 12px;
+    }
+
+    .user-stat-card {
+        padding: 15px;
+        gap: 10px;
+    }
+
+    .stat-icon {
+        width: 42px;
+        height: 42px;
+        flex-basis: 42px;
+    }
+
+    .stat-content strong {
+        font-size: 1.3rem;
+    }
+
+    .stat-content span {
+        font-size: .75rem;
+    }
+
+
+    /* Toolbar */
+
+    .users-toolbar {
+        padding: 13px;
+        gap: 9px;
+    }
+
+    .users-search {
+        min-width: 220px;
+    }
+
+    .users-filter {
+        min-width: 140px;
+    }
+
+    .refresh-users-btn {
+        padding: 11px 13px;
+    }
+
+
+    /* TABLEAU */
+
+    .table-wrapper {
+        overflow-x: hidden;
+    }
+
+    .users-table {
+        width: 100%;
+        min-width: 0;
+        table-layout: fixed;
+    }
+
+    .users-table th,
+    .users-table td {
+        padding: 11px 8px;
+    }
+
+    .users-table th {
+        font-size: .65rem;
+    }
+
+    .user-cell {
+        min-width: 0;
+        gap: 8px;
+    }
+
+    .user-avatar {
+        width: 38px;
+        height: 38px;
+        flex-basis: 38px;
+        border-radius: 11px;
+    }
+
+    .user-name {
+        font-size: .78rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .user-username {
+        font-size: .68rem;
+    }
+
+    .user-email {
+        font-size: .7rem;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .presence-badge {
+        font-size: .65rem;
+        padding: 5px 7px;
+    }
+
+    .role-badge {
+        font-size: .6rem;
+        padding: 4px 6px;
+    }
+
+    .points-value,
+    .streak-value {
+        font-size: .72rem;
+    }
+
+    .date-main {
+        font-size: .68rem;
+    }
+
+    .date-secondary {
+        font-size: .62rem;
+    }
+
+    .account-active,
+    .account-disabled {
+        font-size: .68rem;
+    }
+
+    .user-action-btn {
+        width: 31px;
+        height: 31px;
+    }
+
+    .user-actions {
+        gap: 4px;
+    }
+}
+
+
+/* ---------------------------------------------------------
+   TABLETTES
+--------------------------------------------------------- */
+
+@media (max-width: 1000px) {
+
+    .users-stats {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 12px;
+    }
+
+    .users-toolbar {
+        align-items: stretch;
+    }
+
+    .users-search {
+        flex: 1 1 100%;
+        min-width: 100%;
+    }
+
+    .users-filter {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .refresh-users-btn {
+        flex: 1;
+        justify-content: center;
+    }
+
+    /*
+     * À partir d'ici le tableau devient
+     * volontairement plus compact.
+     */
+
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .users-table {
+        min-width: 900px;
+    }
+}
+
+
+/* ---------------------------------------------------------
+   SMARTPHONE
+--------------------------------------------------------- */
+
+@media (max-width: 650px) {
+
+    .main-content {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 90px;
+    }
+
+
+    /* HERO */
+
+    .users-hero {
+        padding: 20px;
+        border-radius: 18px;
+        margin-bottom: 15px;
+    }
+
+    .users-hero h1 {
+        font-size: 1.45rem;
+    }
+
+    .users-hero p {
+        font-size: .82rem;
+        line-height: 1.5;
+    }
+
+    .users-hero-icon {
+        width: 42px;
+        height: 42px;
+        margin-bottom: 10px;
+    }
+
+
+    /* STATISTIQUES */
+
+    .users-stats {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+
+    .user-stat-card {
+        padding: 12px;
+        border-radius: 14px;
+        gap: 9px;
+    }
+
+    .stat-icon {
+        width: 36px;
+        height: 36px;
+        flex-basis: 36px;
+        border-radius: 10px;
+        font-size: .9rem;
+    }
+
+    .stat-content strong {
+        font-size: 1.15rem;
+    }
+
+    .stat-content span {
+        font-size: .65rem;
+    }
+
+
+    /* TOOLBAR */
+
+    .users-toolbar {
+        padding: 10px;
+        border-radius: 15px;
+        gap: 8px;
+    }
+
+    .users-search,
+    .users-filter {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .users-search input,
+    .users-filter select {
+        min-height: 44px;
+    }
+
+    .refresh-users-btn {
+        width: 100%;
+        min-height: 44px;
+    }
+
+
+    /* TABLEAU */
+
+    .users-table-card {
+        border-radius: 16px;
+    }
+
+    .users-table-header {
+        padding: 15px;
+    }
+
+    .users-table-header h2 {
+        font-size: .95rem;
+    }
+
+    .users-count-label {
+        font-size: .72rem;
+    }
+
+    /*
+     * On transforme le tableau en cartes.
+     */
+
+    .table-wrapper {
+        overflow: visible;
+    }
+
+    .users-table {
+        min-width: 0;
+        width: 100%;
+        display: block;
+    }
+
+    .users-table thead {
+        display: none;
+    }
+
+    .users-table tbody {
+        display: block;
+        padding: 8px;
+    }
+
+    .users-table tbody tr {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px;
+
+        background: #fff;
+
+        border: 1px solid #e5e7eb;
+        border-radius: 15px;
+
+        margin-bottom: 10px;
+        padding: 13px;
+
+        box-shadow:
+            0 4px 15px rgba(15,23,42,.05);
+    }
+
+    .users-table tbody tr:hover {
+        background: #fff;
+    }
+
+    .users-table td {
+        display: block;
+        padding: 0;
+        border: none;
+    }
+
+
+    /* UTILISATEUR */
+
+    /* AVATAR */
+.users-table td:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+/* UTILISATEUR */
+.users-table td:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+}
+
+/* EMAIL */
+.users-table td:nth-child(3) {
+    grid-column: 1 / -1;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* PRESENCE */
+.users-table td:nth-child(4) {
+    grid-column: 1;
+}
+
+/* ROLE */
+.users-table td:nth-child(5) {
+    grid-column: 2;
+}
+
+/* POINTS */
+.users-table td:nth-child(6) {
+    grid-column: 1;
+}
+
+/* STREAK */
+.users-table td:nth-child(7) {
+    grid-column: 2;
+}
+
+/* DERNIÈRE CONNEXION */
+.users-table td:nth-child(8) {
+    grid-column: 1 / -1;
+}
+
+/* COMPTE */
+.users-table td:nth-child(9) {
+    grid-column: 1;
+}
+
+/* ACTIONS */
+.users-table td:nth-child(10) {
+    grid-column: 2;
+    display: flex;
+    justify-content: flex-end;
+}
+
+    .user-actions {
+        gap: 6px;
+    }
+
+    .user-action-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 11px;
+    }
+
+
+    /* MODAL */
+
+    .user-modal {
+        padding: 10px;
+        align-items: flex-end;
+    }
+
+    .user-modal-card {
+        width: 100%;
+        max-height: 92vh;
+        border-radius: 22px 22px 0 0;
+    }
+
+    .modal-header {
+        padding: 16px;
+    }
+
+    .modal-body {
+        padding: 16px;
+    }
+
+    .modal-profile {
+        margin-bottom: 16px;
+    }
+
+    .modal-profile img {
+        width: 55px;
+        height: 55px;
+        border-radius: 15px;
+    }
+
+    .detail-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .detail-box {
+        padding: 12px;
+    }
+}
+
+
+/* ---------------------------------------------------------
+   TRÈS PETITS ÉCRANS
+--------------------------------------------------------- */
+
+@media (max-width: 380px) {
+
+    .users-hero {
+        padding: 16px;
+    }
+
+    .users-hero h1 {
+        font-size: 1.25rem;
+    }
+
+    .user-stat-card {
+        padding: 10px;
+    }
+
+    .stat-icon {
+        width: 32px;
+        height: 32px;
+        flex-basis: 32px;
+    }
+
+    .stat-content strong {
+        font-size: 1rem;
+    }
+
+    .stat-content span {
+        font-size: .58rem;
+    }
+
+    .users-table tbody {
+        padding: 5px;
+    }
+
+    .users-table tbody tr {
+        padding: 11px;
+    }
+}
+
+
+/* ---------------------------------------------------------
+   MOBILE
+--------------------------------------------------------- */
+
+@media (max-width: 650px) {
+
+    /* ==============================
+       CONTENU PRINCIPAL
+    ============================== */
+
+    .main-content {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+
+        /* espace pour la bottom navigation */
+        padding-bottom: 90px !important;
+    }
+
+
+    .users-page {
+        width: 100%;
+        max-width: 100%;
+    }
+
+
+    /* ==============================
+       HERO
+    ============================== */
+
+    .users-hero {
+        margin-bottom: 14px;
+        padding: 20px 18px;
+        border-radius: 20px;
+
+        box-shadow:
+            0 10px 28px rgba(15,23,42,.12);
+    }
+
+
+    .users-hero-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        margin-bottom: 12px;
+        font-size: 1.1rem;
+    }
+
+
+    .users-hero h1 {
+        font-size: 1.45rem;
+        line-height: 1.2;
+        margin-bottom: 7px;
+    }
+
+
+    .users-hero p {
+        font-size: .82rem;
+        line-height: 1.5;
+    }
+
+
+    /* ==============================
+       STATISTIQUES
+    ============================== */
+
+    .users-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+        margin-bottom: 14px;
+    }
+
+
+    .user-stat-card {
+        min-width: 0;
+        padding: 13px 10px;
+        border-radius: 16px;
+        gap: 9px;
+
+        box-shadow:
+            0 5px 18px rgba(15,23,42,.06);
+    }
+
+
+    .user-stat-card:hover {
+        transform: none;
+    }
+
+
+    .stat-icon {
+        width: 38px;
+        height: 38px;
+        flex: 0 0 38px;
+        border-radius: 11px;
+        font-size: .9rem;
+    }
+
+
+    .stat-content {
+        overflow: hidden;
+    }
+
+
+    .stat-content strong {
+        font-size: 1.15rem;
+        margin-bottom: 3px;
+    }
+
+
+    .stat-content span {
+        display: block;
+        font-size: .67rem;
+        line-height: 1.2;
+        white-space: normal;
+    }
+
+
+    /* ==============================
+       BARRE OUTILS
+    ============================== */
+
+    .users-toolbar {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+
+        padding: 11px;
+        gap: 8px;
+        margin-bottom: 14px;
+
+        border-radius: 17px;
+    }
+
+
+    .users-search,
+    .users-filter {
+        width: 100%;
+        min-width: 0;
+    }
+
+
+    .users-search input,
+    .users-filter select {
+        width: 100%;
+        min-height: 45px;
+
+        font-size: .84rem;
+        border-radius: 11px;
+    }
+
+
+    .users-search input {
+        padding-left: 40px;
+    }
+
+
+    .refresh-users-btn {
+        width: 100%;
+        min-height: 45px;
+
+        justify-content: center;
+
+        border-radius: 11px;
+        font-size: .84rem;
+    }
+
+
+    /* ==============================
+       CONTENEUR DES MEMBRES
+    ============================== */
+
+    .users-table-card {
+        border-radius: 18px;
+        border: none;
+
+        background: transparent;
+        box-shadow: none;
+
+        overflow: visible;
+    }
+
+
+    .users-table-header {
+        background: #fff;
+
+        padding: 14px 15px;
+        margin-bottom: 10px;
+
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+
+        box-shadow:
+            0 5px 18px rgba(15,23,42,.05);
+    }
+
+
+    .users-table-header h2 {
+        font-size: .95rem;
+    }
+
+
+    .users-count-label {
+        font-size: .72rem;
+        white-space: nowrap;
+    }
+
+
+    /* ==============================
+       TRANSFORMATION DU TABLEAU
+       EN CARTES UTILISATEURS
+    ============================== */
+
+    .table-wrapper {
+        width: 100%;
+        overflow: visible;
+    }
+
+
+    .users-table {
+		width: 100%;
+		min-width: 0;
+		border-collapse: collapse;
+	}
+
+
+    .users-table thead {
+        display: none;
+    }
+
+
+    .users-table tbody {
+        display: block;
+        width: 100%;
+    }
+
+
+    .users-table tbody tr {
+        display: block;
+        width: 100%;
+
+        background: #fff;
+
+        border: 1px solid #e5e7eb;
+        border-radius: 18px;
+
+        overflow: hidden;
+
+        box-shadow:
+            0 6px 22px rgba(15,23,42,.06);
+
+        margin-bottom: 10px;
+    }
+
+
+    .users-table tbody tr:hover {
+        background: #fff;
+    }
+
+
+    .users-table td {
+        display: flex;
+
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 12px;
+
+        width: 100%;
+        box-sizing: border-box;
+
+        padding: 10px 14px;
+
+        border-top: 1px solid #f1f5f9;
+
+        font-size: .8rem;
+
+        min-height: 42px;
+    }
+	
+	.users-table td {
+    padding: 15px 12px;
+    border-top: 1px solid #f1f5f9;
+    vertical-align: middle;
+	}
+	
+	.users-table td:nth-child(2) .user-email {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+	/* Évite que certaines colonnes élargissent inutilement le tableau */
+	.users-table td:nth-child(2) {
+		max-width: 180px;
+	}
+
+	.users-table td:nth-child(4) {
+		max-width: 130px;
+	}
+
+	.users-table td:nth-child(7) {
+		max-width: 120px;
+	}
+
+
+    .users-table td:first-child {
+        border-top: none;
+
+        padding-top: 15px;
+        padding-bottom: 14px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #ffffff,
+                #f8faff
+            );
+    }
+
+
+    /* Label automatique des colonnes */
+
+    .users-table td[data-label]::before {
+        content: attr(data-label);
+
+        flex: 0 0 auto;
+
+        color: #94a3b8;
+
+        font-size: .68rem;
+        font-weight: 700;
+
+        text-transform: uppercase;
+        letter-spacing: .035em;
+    }
+
+
+    /* Première cellule :
+       pas de label */
+
+    .users-table td:first-child::before {
+        display: none;
+    }
+
+
+    /* Cellule utilisateur */
+
+    .user-cell {
+        width: 100%;
+        min-width: 0;
+
+        display: flex;
+        align-items: center;
+
+        gap: 11px;
+    }
+
+
+    .user-avatar {
+        width: 48px;
+        height: 48px;
+        flex: 0 0 48px;
+
+        border-radius: 15px;
+    }
+
+
+    .user-name {
+        font-size: .9rem;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+
+    .user-username {
+        font-size: .7rem;
+    }
+
+
+    .user-email {
+        max-width: 62%;
+
+        text-align: right;
+
+        overflow-wrap: anywhere;
+
+        font-size: .76rem;
+    }
+
+
+    /* ==============================
+       PRESENCE
+    ============================== */
+
+    .presence-badge {
+        padding: 5px 8px;
+        gap: 5px;
+
+        font-size: .68rem;
+    }
+
+
+    .presence-dot {
+        width: 7px;
+        height: 7px;
+    }
+
+
+    /* ==============================
+       ROLES
+    ============================== */
+
+    .role-badge {
+        font-size: .62rem;
+        padding: 4px 7px;
+        border-radius: 7px;
+        margin: 1px;
+    }
+
+
+    /* ==============================
+       POINTS
+    ============================== */
+
+    .points-value,
+    .streak-value {
+        font-size: .82rem;
+    }
+
+
+    /* ==============================
+       DATES
+    ============================== */
+
+    .date-main {
+        font-size: .75rem;
+
+        text-align: right;
+    }
+
+
+    .date-secondary {
+        font-size: .66rem;
+
+        text-align: right;
+    }
+
+
+    /* ==============================
+       COMPTE
+    ============================== */
+
+    .account-active,
+    .account-disabled {
+        font-size: .72rem;
+    }
+
+
+    /* ==============================
+       ACTIONS
+    ============================== */
+
+    .users-table td:last-child {
+        padding-top: 13px;
+        padding-bottom: 14px;
+
+        justify-content: flex-end;
+
+        background: #fafbff;
+    }
+
+
+    .users-table td:last-child::before {
+        margin-right: auto;
+    }
+
+
+    .user-actions {
+        gap: 8px;
+    }
+
+
+    .user-action-btn {
+        width: 40px;
+        height: 40px;
+
+        border-radius: 11px;
+
+        font-size: .85rem;
+    }
+
+
+    /* ==============================
+       ETATS
+    ============================== */
+
+    .users-loading,
+    .users-empty,
+    .users-error {
+        padding: 45px 15px;
+    }
+
+
+    /* ==============================
+       MODAL MOBILE
+    ============================== */
+
+    .user-modal {
+        padding: 0;
+
+        align-items: flex-end;
+    }
+
+
+    .user-modal-card {
+        width: 100%;
+        max-width: 100%;
+
+        max-height: 92vh;
+
+        border-radius: 24px 24px 0 0;
+
+        animation: modalMobileIn .25s ease;
+    }
+
+
+    @keyframes modalMobileIn {
+
+        from {
+            opacity: 0;
+            transform: translateY(100%);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    }
+
+
+    .modal-header {
+        padding: 16px 17px;
+
+        position: sticky;
+        top: 0;
+
+        background: #fff;
+
+        z-index: 5;
+    }
+
+
+    .modal-header h3 {
+        font-size: .95rem;
+    }
+
+
+    .modal-body {
+        padding: 17px;
+    }
+
+
+    .modal-profile {
+        padding: 13px;
+
+        margin-bottom: 16px;
+
+        border-radius: 16px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #f8faff,
+                #fff
+            );
+    }
+
+
+    .modal-profile img {
+        width: 58px;
+        height: 58px;
+        border-radius: 16px;
+    }
+
+
+    .modal-profile h4 {
+        font-size: 1rem;
+    }
+
+
+    .modal-profile span {
+        font-size: .76rem;
+    }
+
+
+    .detail-grid {
+        grid-template-columns: 1fr 1fr;
+
+        gap: 8px;
+    }
+
+
+    .detail-box {
+        padding: 12px;
+
+        border-radius: 12px;
+    }
+
+
+    .detail-box label {
+        font-size: .62rem;
+    }
+
+
+    .detail-box strong {
+        font-size: .78rem;
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   PETITS TELEPHONES
+--------------------------------------------------------- */
+
+@media (max-width: 390px) {
+
+    .main-content {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+
+
+    .users-hero {
+        padding: 17px 15px;
+    }
+
+
+    .users-hero h1 {
+        font-size: 1.3rem;
+    }
+
+
+    .users-hero p {
+        font-size: .76rem;
+    }
+
+
+    .users-stats {
+        gap: 7px;
+    }
+
+
+    .user-stat-card {
+        padding: 11px 8px;
+        gap: 7px;
+    }
+
+
+    .stat-icon {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+    }
+
+
+    .stat-content strong {
+        font-size: 1.05rem;
+    }
+
+
+    .stat-content span {
+        font-size: .61rem;
+    }
+
+
+    .users-table td {
+        padding-left: 11px;
+        padding-right: 11px;
+    }
+
+
+    .user-avatar {
+        width: 44px;
+        height: 44px;
+        flex-basis: 44px;
+    }
+
+
+    .user-name {
+        font-size: .83rem;
+    }
+
+
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+.user-name {
+    position: relative;
+    cursor: help;
+}
+
+.user-name:hover {
+    color: #4f46e5;
+}
+
+.avatar-column {
+    width: 65px;
+    text-align: center;
+}
+
+.avatar-column .user-avatar {
+    display: inline-block;
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.avatar-column .user-avatar:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 18px rgba(99,102,241,.20);
+}
+    </style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     MENU BAS ADMIN
+========================================================= -->
+
+<nav class="bottom-bar">
+    <a href="../index.html" class="bottom-item">
+        <span class="bottom-item-icon">🏠</span>
+        <span>Accueil</span>
+    </a>
+
+    <a href="#" class="bottom-item">
+        <span class="bottom-item-icon">💬</span>
+        <span>Chat</span>
+    </a>
+
+    <a href="gestion_articles.html" class="bottom-item">
+        <span class="bottom-item-icon">📖</span>
+        <span>Articles</span>
+    </a>
+
+    <a href="dashboard_admin.html" class="bottom-item active">
+        <span class="bottom-item-icon">⚙️</span>
+        <span>Admin</span>
+    </a>
+</nav>
+
+
+<!-- =========================================================
+     PARTIALS
+========================================================= -->
+
+<div id="sidebar-placeholder"></div>
+<div id="header-placeholder"></div>
+
+
+<!-- =========================================================
+     CONTENU
+========================================================= -->
+
+<main class="main-content">
+
+    <div class="users-page">
+
+        <!-- HERO -->
+
+        <section class="users-hero">
+
+            <div class="users-hero-content">
+
+                <div class="users-hero-icon">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+
+                <h1>Gestion des utilisateurs</h1>
+
+                <p>
+                    Consultez les membres de la communauté,
+                    leur activité, leurs points de fidélité et leur statut.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             STATISTIQUES
+        ====================================================== -->
+
+        <section class="users-stats">
+
+            <div class="user-stat-card">
+
+                <div class="stat-icon total">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+
+                <div class="stat-content">
+                    <strong id="totalUsers">0</strong>
+                    <span>Total utilisateurs</span>
+                </div>
+
+            </div>
+
+
+            <div class="user-stat-card">
+
+                <div class="stat-icon online">
+                    <i class="fa-solid fa-circle"></i>
+                </div>
+
+                <div class="stat-content">
+                    <strong id="onlineUsers">0</strong>
+                    <span>En ligne</span>
+                </div>
+
+            </div>
+
+
+            <div class="user-stat-card">
+
+                <div class="stat-icon recent">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+
+                <div class="stat-content">
+                    <strong id="recentUsers">0</strong>
+                    <span>Actifs récemment</span>
+                </div>
+
+            </div>
+
+
+            <div class="user-stat-card">
+
+                <div class="stat-icon offline">
+                    <i class="fa-solid fa-user-clock"></i>
+                </div>
+
+                <div class="stat-content">
+                    <strong id="offlineUsers">0</strong>
+                    <span>Hors ligne</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             OUTILS
+        ====================================================== -->
+
+        <section class="users-toolbar">
+
+            <div class="users-search">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="search"
+                    id="userSearch"
+                    placeholder="Rechercher par nom, email ou identifiant..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div class="users-filter">
+
+                <select id="statusFilter">
+
+                    <option value="all">
+                        Tous les statuts
+                    </option>
+
+                    <option value="online">
+                        🟢 En ligne
+                    </option>
+
+                    <option value="recent">
+                        🟡 Actifs récemment
+                    </option>
+
+                    <option value="offline">
+                        ⚪ Hors ligne
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="users-filter">
+
+                <select id="roleFilter">
+
+                    <option value="all">
+                        Tous les rôles
+                    </option>
+
+                    <option value="ROLE_ADMIN">
+                        Administrateurs
+                    </option>
+
+                    <option value="ROLE_REDACTEUR">
+                        Rédacteurs
+                    </option>
+
+                    <option value="ROLE_USER">
+                        Utilisateurs
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="refresh-users-btn"
+                id="refreshUsersBtn"
+                onclick="loadUsers()"
+            >
+                <i class="fa-solid fa-rotate"></i>
+                Actualiser
+            </button>
+
+        </section>
+
+
+        <!-- =====================================================
+             TABLEAU
+        ====================================================== -->
+
+        <section class="users-table-card">
+
+            <div class="users-table-header">
+
+                <div>
+
+                    <h2>
+                        <i class="fa-solid fa-list" style="margin-right:7px;color:#6366f1;"></i>
+                        Membres
+                    </h2>
+
+                </div>
+
+                <span
+                    class="users-count-label"
+                    id="displayedUsersCount"
+                >
+                    0 utilisateur
+                </span>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table class="users-table">
+
+                    <thead>
+
+                        <tr>
+							<th>Avatar</th>
+							<th>Utilisateur</th>
+							<th>Email</th>
+							<th>Présence</th>
+							<th>Rôle</th>
+							<th>Points</th>
+							<th>Streak</th>
+							<th>Dernière connexion</th>
+							<th>Compte</th>
+							<th>Actions</th>
+						</tr>
+
+                    </thead>
+
+
+                    <tbody id="usersTableBody">
+
+                        <tr>
+
+                            <td colspan="9">
+
+                                <div class="users-loading">
+
+                                    <i class="fa-solid fa-spinner"></i>
+
+                                    <div>
+                                        Chargement des utilisateurs...
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<!-- =========================================================
+     MODAL PROFIL
+========================================================= -->
+
+<div
+    class="user-modal"
+    id="userModal"
+    onclick="closeModalOutside(event)"
+>
+
+    <div
+        class="user-modal-card"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="modal-header">
+
+            <h3>
+                <i class="fa-solid fa-user" style="color:#6366f1;margin-right:7px;"></i>
+                Profil utilisateur
+            </h3>
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeUserModal()"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+            <div class="modal-profile">
+
+                <img
+                    id="modalUserPhoto"
+                    src="../icons/default-avatar.png"
+                    alt="Photo utilisateur"
+                >
+
+                <div>
+
+                    <h4 id="modalUserName">
+                        Utilisateur
+                    </h4>
+
+                    <span id="modalUserUsername">
+                        @username
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="detail-grid">
+
+                <div class="detail-box">
+
+                    <label>Email</label>
+
+                    <strong id="modalEmail">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <label>Téléphone</label>
+
+                    <strong id="modalTelephone">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <label>Nom</label>
+
+                    <strong id="modalNom">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <label>Prénom</label>
+
+                    <strong id="modalPrenom">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <label>Points fidélité</label>
+
+                    <strong id="modalPoints">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <label>Série de connexion</label>
+
+                    <strong id="modalStreak">
+                        0 jour
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <label>Dernière connexion</label>
+
+                    <strong id="modalLastLogin">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <label>Dernière activité</label>
+
+                    <strong id="modalLastActivity">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <label>Statut</label>
+
+                    <strong id="modalStatus">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <label>Compte</label>
+
+                    <strong id="modalAccount">
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* =========================================================
+       CONFIGURATION
+    ========================================================= */
+	
+	
+
+    const API_BASE_URL = 'https://apokalypsy.com';
+
+	const DEFAULT_AVATAR = '../icons/default-avatar.png';
+
+	let allUsers = [];
+
+
+    /* =========================================================
+       CHARGEMENT DES PARTIALS
+    ========================================================= */
+
+    async function loadComponents() {
+
+        checkAdminAccess();
+
+        try {
+
+            const menuRes =
+                await fetch('partials/menu.html');
+
+            if (menuRes.ok) {
+
+                document.getElementById(
+                    'sidebar-placeholder'
+                ).innerHTML =
+                    await menuRes.text();
+
+            }
+
+
+            const headerRes =
+                await fetch('partials/header.html');
+
+            if (headerRes.ok) {
+
+                document.getElementById(
+                    'header-placeholder'
+                ).innerHTML =
+                    await headerRes.text();
+
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                'Erreur chargement des composants :',
+                error
+            );
+
+        }
+
+
+        setActiveLink();
+
+        updateHeaderDate();
+
+        await loadUsers();
+
+    }
+
+
+    /* =========================================================
+       SECURITE ADMIN
+    ========================================================= */
+
+    function checkAdminAccess() {
+
+        let userData = null;
+
+        try {
+
+            userData =
+                JSON.parse(
+                    localStorage.getItem(
+                        'user_full_data'
+                    )
+                );
+
+        } catch (error) {
+
+            console.error(
+                'Données utilisateur invalides',
+                error
+            );
+
+        }
+
+
+        if (!userData) {
+
+            alert(
+                'Veuillez vous connecter.'
+            );
+
+            window.location.replace(
+                '../login/connexion.html'
+            );
+
+            return false;
+        }
+
+
+        if (
+            !Array.isArray(userData.roles) ||
+            !userData.roles.includes('ROLE_ADMIN')
+        ) {
+
+            alert(
+                'Accès refusé. Administrateur uniquement.'
+            );
+
+            window.location.replace(
+                '../index.html'
+            );
+
+            return false;
+        }
+
+
+        return true;
+    }
+
+
+    /* =========================================================
+       DATE HEADER
+    ========================================================= */
+
+    function updateHeaderDate() {
+
+        const headerDate =
+            document.getElementById(
+                'headerDate'
+            );
+
+        if (!headerDate) {
+            return;
+        }
+
+        headerDate.innerText =
+            new Date().toLocaleDateString(
+                'fr-FR',
+                {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                }
+            );
+    }
+
+
+    /* =========================================================
+       LIEN ACTIF
+    ========================================================= */
+
+    function setActiveLink() {
+
+        const dashboardLink =
+            document.getElementById(
+                'link-dashboard'
+            );
+
+        const usersLink =
+            document.getElementById(
+                'link-users'
+            );
+
+        if (dashboardLink) {
+
+            dashboardLink.classList.remove(
+                'active'
+            );
+
+        }
+
+        if (usersLink) {
+
+            usersLink.classList.add(
+                'active'
+            );
+
+        }
+    }
+
+
+    /* =========================================================
+       CHARGEMENT DES UTILISATEURS
+    ========================================================= */
+
+    async function loadUsers() {
+
+        const token =
+            localStorage.getItem('token');
+
+        if (!token) {
+
+            showUsersError(
+                'Votre session a expiré. Veuillez vous reconnecter.'
+            );
+
+            return;
+        }
+
+
+        const button =
+            document.getElementById(
+                'refreshUsersBtn'
+            );
+
+        if (button) {
+
+            button.classList.add('loading');
+
+            button.disabled = true;
+
+        }
+
+
+        showUsersLoading();
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/api/users/list`,
+                    {
+                        method: 'GET',
+
+                        headers: {
+                            'Authorization':
+                                `Bearer ${token}`,
+
+                            'Accept':
+                                'application/json'
+                        },
+
+                        cache: 'no-store'
+                    }
+                );
+
+
+            if (response.status === 401) {
+
+                handleExpiredSession();
+
+                return;
+            }
+
+
+            if (response.status === 403) {
+
+                showUsersError(
+                    'Accès refusé. Votre compte ne possède pas les droits administrateur.'
+                );
+
+                return;
+            }
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `Erreur HTTP ${response.status}`
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                !data ||
+                data.success !== true ||
+                !Array.isArray(data.users)
+            ) {
+
+                throw new Error(
+                    'Réponse serveur invalide.'
+                );
+
+            }
+
+
+            allUsers =
+                data.users;
+
+
+            updateStatistics();
+
+            renderUsers();
+
+
+        } catch (error) {
+
+            console.error(
+                'Erreur chargement utilisateurs :',
+                error
+            );
+
+            showUsersError(
+                'Impossible de charger les utilisateurs. Vérifiez votre connexion.'
+            );
+
+        } finally {
+
+            if (button) {
+
+                button.classList.remove(
+                    'loading'
+                );
+
+                button.disabled = false;
+
+            }
+
+        }
+    }
+
+
+    /* =========================================================
+       STATISTIQUES
+    ========================================================= */
+
+    function updateStatistics() {
+
+        const total =
+            allUsers.length;
+
+
+        const online =
+            allUsers.filter(
+                user =>
+                    user.status === 'online'
+            ).length;
+
+
+        const recent =
+            allUsers.filter(
+                user =>
+                    user.status === 'recent'
+            ).length;
+
+
+        const offline =
+            allUsers.filter(
+                user =>
+                    user.status === 'offline'
+            ).length;
+
+
+        document.getElementById(
+            'totalUsers'
+        ).textContent = total;
+
+
+        document.getElementById(
+            'onlineUsers'
+        ).textContent = online;
+
+
+        document.getElementById(
+            'recentUsers'
+        ).textContent = recent;
+
+
+        document.getElementById(
+            'offlineUsers'
+        ).textContent = offline;
+
+    }
+
+
+    /* =========================================================
+       FILTRAGE
+    ========================================================= */
+
+    function getFilteredUsers() {
+
+        const search =
+            document.getElementById(
+                'userSearch'
+            ).value
+            .trim()
+            .toLowerCase();
+
+
+        const status =
+            document.getElementById(
+                'statusFilter'
+            ).value;
+
+
+        const role =
+            document.getElementById(
+                'roleFilter'
+            ).value;
+
+
+        return allUsers.filter(
+            user => {
+
+                const searchText =
+                    [
+                        user.username,
+                        user.email,
+                        user.nom,
+                        user.prenom,
+                        user.fullName,
+                        user.telephone
+                    ]
+                    .filter(Boolean)
+                    .join(' ')
+                    .toLowerCase();
+
+
+                const matchesSearch =
+                    !search ||
+                    searchText.includes(search);
+
+
+                const matchesStatus =
+                    status === 'all' ||
+                    user.status === status;
+
+
+                const userRoles =
+                    Array.isArray(user.roles)
+                        ? user.roles
+                        : [];
+
+
+                const matchesRole =
+                    role === 'all' ||
+                    userRoles.includes(role);
+
+
+                return (
+                    matchesSearch &&
+                    matchesStatus &&
+                    matchesRole
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       AFFICHAGE
+    ========================================================= */
+
+    function renderUsers() {
+
+        const users =
+            getFilteredUsers();
+
+
+        const tbody =
+            document.getElementById(
+                'usersTableBody'
+            );
+
+
+        document.getElementById(
+            'displayedUsersCount'
+        ).textContent =
+            `${users.length} utilisateur${users.length > 1 ? 's' : ''}`;
+
+
+        if (!users.length) {
+
+            tbody.innerHTML = `
+
+                <tr>
+
+                    <td colspan="9">
+
+                        <div class="users-empty">
+
+                            <i class="fa-solid fa-user-slash"></i>
+
+                            <div>
+                                Aucun utilisateur trouvé.
+                            </div>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+        }
+
+
+        tbody.innerHTML =
+            users
+                .map(
+                    user =>
+                        createUserRow(user)
+                )
+                .join('');
+
+    }
+	
+	function getPresenceBadge(user) {
+
+    let className = 'presence-offline';
+    let label = 'Hors ligne';
+
+    if (user.status === 'online') {
+
+        className = 'presence-online';
+        label = 'En ligne';
+
+    } else if (user.status === 'recent') {
+
+        className = 'presence-recent';
+        label = 'Actif récemment';
+
+    }
+
+    return `
+        <span class="presence-badge ${className}">
+            <span class="presence-dot"></span>
+            ${label}
+        </span>
+    `;
+}
+
+
+    /* =========================================================
+       LIGNE UTILISATEUR
+    ========================================================= */
+
+    function createUserRow(user) {
+
+        const photo =
+            getUserPhoto(user);
+
+
+        const statusHtml =
+            getPresenceBadge(user);
+
+
+        const rolesHtml =
+            getRolesHtml(user);
+
+
+        const points =
+            Number(
+                user.loyaltyPoints || 0
+            ).toFixed(2);
+
+
+        const streak =
+            Number(
+                user.loginStreak || 0
+            );
+
+
+        const lastLogin =
+            formatDate(
+                user.lastLoginAt
+            );
+
+
+        const accountHtml =
+            user.isActif
+                ? `
+                    <span class="account-active">
+                        <i class="fa-solid fa-circle-check"></i>
+                        Actif
+                    </span>
+                  `
+                : `
+                    <span class="account-disabled">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                        Désactivé
+                    </span>
+                  `;
+
+
+        const actionClass =
+            user.isActif
+                ? 'action-disable'
+                : 'action-enable';
+
+
+        const actionIcon =
+            user.isActif
+                ? 'fa-user-slash'
+                : 'fa-user-check';
+
+
+        const actionTitle =
+            user.isActif
+                ? 'Désactiver'
+                : 'Activer';
+
+
+        return `
+
+    <tr>
+
+        <!-- AVATAR -->
+
+        <td class="avatar-column">
+
+            <img
+                src="${escapeHtml(photo)}"
+                class="user-avatar"
+                alt="Avatar de ${escapeHtml(
+                    user.prenom ||
+                    user.username ||
+                    'Utilisateur'
+                )}"
+                title="${escapeHtml(
+                    user.fullName ||
+                    user.username ||
+                    'Utilisateur'
+                )}"
+                onerror="this.src='../icons/default-avatar.png'"
+            >
+
+        </td>
+
+
+        <!-- UTILISATEUR -->
+
+        <td>
+
+            <div class="user-cell">
+
+                <div>
+
+                    <div
+                        class="user-name"
+                        title="${escapeHtml(
+                            user.fullName ||
+                            user.username ||
+                            'Utilisateur'
+                        )}"
+                    >
+                        ${escapeHtml(
+                            user.prenom ||
+                            user.username ||
+                            'Utilisateur'
+                        )}
+                    </div>
+
+                    <div class="user-username">
+                        @${escapeHtml(
+                            user.username ||
+                            'utilisateur'
+                        )}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </td>
+
+
+        <!-- EMAIL -->
+
+        <td>
+
+            <span class="user-email">
+                ${escapeHtml(
+                    user.email || '-'
+                )}
+            </span>
+
+        </td>
+
+
+        <!-- PRESENCE -->
+
+        <td>
+            ${statusHtml}
+        </td>
+
+
+        <!-- ROLE -->
+
+        <td>
+            ${rolesHtml}
+        </td>
+
+
+        <!-- POINTS -->
+
+        <td>
+
+            <span class="points-value">
+
+                <i class="fa-solid fa-star"></i>
+
+                ${points}
+
+            </span>
+
+        </td>
+
+
+        <!-- STREAK -->
+
+        <td>
+
+            <span class="streak-value">
+
+                <i class="fa-solid fa-fire"></i>
+
+                ${streak}
+
+            </span>
+
+        </td>
+
+
+        <!-- DERNIERE CONNEXION -->
+
+        <td>
+            ${lastLogin}
+        </td>
+
+
+        <!-- COMPTE -->
+
+        <td>
+            ${accountHtml}
+        </td>
+
+
+        <!-- ACTIONS -->
+
+        <td>
+
+            <div class="user-actions">
+
+                <button
+                    type="button"
+                    class="user-action-btn action-view"
+                    title="Voir le profil"
+                    onclick="openUserModal(${Number(user.id)})"
+                >
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+
+                <button
+                    type="button"
+                    class="user-action-btn ${actionClass}"
+                    title="${actionTitle}"
+                    onclick="toggleUserStatus(${Number(user.id)})"
+                >
+                    <i class="fa-solid ${actionIcon}"></i>
+                </button>
+
+            </div>
+
+        </td>
+
+    </tr>
+
+`;
+
+    }
+
+
+    /* =========================================================
+       ROLES
+    ========================================================= */
+
+    function getRolesHtml(user) {
+
+        const roles =
+            Array.isArray(user.roles)
+                ? user.roles
+                : [];
+
+
+        return roles
+            .map(
+                role => {
+
+                    let className =
+                        'role-user';
+
+
+                    if (
+                        role === 'ROLE_ADMIN'
+                    ) {
+
+                        className =
+                            'role-admin';
+
+                    } else if (
+                        role === 'ROLE_REDACTEUR'
+                    ) {
+
+                        className =
+                            'role-redacteur';
+
+                    }
+
+
+                    return `
+
+                        <span class="role-badge ${className}">
+                            ${escapeHtml(
+                                role.replace(
+                                    'ROLE_',
+                                    ''
+                                )
+                            )}
+                        </span>
+
+                    `;
+
+                }
+            )
+            .join('');
+
+    }
+
+
+    /* =========================================================
+       DATE
+    ========================================================= */
+
+    function formatDate(value) {
+
+        if (!value) {
+
+            return `
+                <span class="date-main">
+                    Jamais
+                </span>
+            `;
+
+        }
+
+
+        const date =
+            new Date(value);
+
+
+        if (Number.isNaN(
+            date.getTime()
+        )) {
+
+            return `
+                <span class="date-main">
+                    Date inconnue
+                </span>
+            `;
+
+        }
+
+
+        return `
+
+            <span class="date-main">
+                ${date.toLocaleDateString(
+                    'fr-FR'
+                )}
+            </span>
+
+            <span class="date-secondary">
+                ${date.toLocaleTimeString(
+                    'fr-FR',
+                    {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    }
+                )}
+            </span>
+
+        `;
+
+    }
+
+
+    /* =========================================================
+       PHOTO
+    ========================================================= */
+
+    function getUserPhoto(user) {
+
+    if (
+        user.photo &&
+        user.photo !== 'NULL' &&
+        user.photo !== ''
+    ) {
+        return user.photo;
+    }
+
+    return DEFAULT_AVATAR;
+}
+
+
+    /* =========================================================
+       MODAL
+    ========================================================= */
+
+    function openUserModal(userId) {
+
+        const user =
+            allUsers.find(
+                item =>
+                    Number(item.id) ===
+                    Number(userId)
+            );
+
+
+        if (!user) {
+            return;
+        }
+
+
+        document.getElementById(
+            'modalUserPhoto'
+        ).src =
+            getUserPhoto(user);
+
+
+        document.getElementById(
+            'modalUserName'
+        ).textContent =
+            user.fullName ||
+            user.username ||
+            'Utilisateur';
+
+
+        document.getElementById(
+            'modalUserUsername'
+        ).textContent =
+            '@' +
+            (
+                user.username ||
+                'utilisateur'
+            );
+
+
+        document.getElementById(
+            'modalEmail'
+        ).textContent =
+            user.email || '-';
+
+
+        document.getElementById(
+            'modalTelephone'
+        ).textContent =
+            user.telephone ||
+            'Non renseigné';
+
+
+        document.getElementById(
+            'modalNom'
+        ).textContent =
+            user.nom ||
+            'Non renseigné';
+
+
+        document.getElementById(
+            'modalPrenom'
+        ).textContent =
+            user.prenom ||
+            'Non renseigné';
+
+
+        document.getElementById(
+            'modalPoints'
+        ).textContent =
+            Number(
+                user.loyaltyPoints || 0
+            ).toFixed(2) +
+            ' points';
+
+
+        document.getElementById(
+            'modalStreak'
+        ).textContent =
+            Number(
+                user.loginStreak || 0
+            ) +
+            ' jour' +
+            (
+                Number(
+                    user.loginStreak || 0
+                ) > 1
+                    ? 's'
+                    : ''
+            );
+
+
+        document.getElementById(
+            'modalLastLogin'
+        ).textContent =
+            formatDatePlain(
+                user.lastLoginAt
+            );
+
+
+        document.getElementById(
+            'modalLastActivity'
+        ).textContent =
+            formatDatePlain(
+                user.lastActivityAt
+            );
+
+
+        document.getElementById(
+            'modalStatus'
+        ).textContent =
+            user.statusLabel ||
+            'Hors ligne';
+
+
+        document.getElementById(
+            'modalAccount'
+        ).textContent =
+            user.isActif
+                ? 'Compte actif'
+                : 'Compte désactivé';
+
+
+        document.getElementById(
+            'userModal'
+        ).classList.add('show');
+
+    }
+
+
+    function closeUserModal() {
+
+        document.getElementById(
+            'userModal'
+        ).classList.remove('show');
+
+    }
+
+
+    function closeModalOutside(event) {
+
+        if (
+            event.target.id ===
+            'userModal'
+        ) {
+
+            closeUserModal();
+
+        }
+
+    }
+
+
+    function formatDatePlain(value) {
+
+        if (!value) {
+            return 'Jamais';
+        }
+
+
+        const date =
+            new Date(value);
+
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return 'Date inconnue';
+
+        }
+
+
+        return date.toLocaleString(
+            'fr-FR',
+            {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       ACTIVATION / DESACTIVATION
+    ========================================================= */
+
+    async function toggleUserStatus(userId) {
+
+        const user =
+            allUsers.find(
+                item =>
+                    Number(item.id) ===
+                    Number(userId)
+            );
+
+
+        if (!user) {
+            return;
+        }
+
+
+        const action =
+            user.isActif
+                ? 'desactiver'
+                : 'activer';
+
+
+        const confirmation =
+            user.isActif
+                ? `Voulez-vous vraiment désactiver le compte de ${user.fullName || user.username} ?`
+                : `Voulez-vous réactiver le compte de ${user.fullName || user.username} ?`;
+
+
+        if (!confirm(
+            confirmation
+        )) {
+
+            return;
+
+        }
+
+
+        /*
+         * IMPORTANT :
+         *
+         * Les routes actuelles de UserController :
+         *
+         * /{_locale}/active/{id}/{option}
+         *
+         * utilisent l'authentification web/session.
+         *
+         * Notre frontend GitHub Pages utilise un Bearer token.
+         *
+         * On ne lance donc PAS encore cette action
+         * tant que l'endpoint API dédié n'est pas créé.
+         */
+
+        alert(
+            'La consultation des utilisateurs est opérationnelle.\\n\\n' +
+            'L’activation/désactivation nécessitera l’endpoint API sécurisé dédié.'
+        );
+
+    }
+
+
+    /* =========================================================
+       ETATS
+    ========================================================= */
+
+    function showUsersLoading() {
+
+        document.getElementById(
+            'usersTableBody'
+        ).innerHTML = `
+
+            <tr>
+
+                <td colspan="9">
+
+                    <div class="users-loading">
+
+                        <i class="fa-solid fa-spinner"></i>
+
+                        <div>
+                            Chargement des utilisateurs...
+                        </div>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+
+    function showUsersError(message) {
+
+        document.getElementById(
+            'usersTableBody'
+        ).innerHTML = `
+
+            <tr>
+
+                <td colspan="9">
+
+                    <div class="users-error">
+
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+
+                        <div>
+                            ${escapeHtml(message)}
+                        </div>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+
+    function handleExpiredSession() {
+
+        alert(
+            'Votre session administrateur a expiré. Veuillez vous reconnecter.'
+        );
+
+
+        localStorage.removeItem(
+            'token'
+        );
+
+
+        localStorage.removeItem(
+            'user_full_data'
+        );
+
+
+        window.location.replace(
+            '../login/connexion.html'
+        );
+
+    }
+
+
+    /* =========================================================
+       SECURITE HTML
+    ========================================================= */
+
+    function escapeHtml(value) {
+
+        return String(
+            value ?? ''
+        )
+        .replace(
+            /&/g,
+            '&amp;'
+        )
+        .replace(
+            /</g,
+            '&lt;'
+        )
+        .replace(
+            />/g,
+            '&gt;'
+        )
+        .replace(
+            /"/g,
+            '&quot;'
+        )
+        .replace(
+            /'/g,
+            '&#039;'
+        );
+
+    }
+
+
+    /* =========================================================
+       RECHERCHE
+    ========================================================= */
+
+    document.getElementById(
+        'userSearch'
+    ).addEventListener(
+        'input',
+        renderUsers
+    );
+
+
+    document.getElementById(
+        'statusFilter'
+    ).addEventListener(
+        'change',
+        renderUsers
+    );
+
+
+    document.getElementById(
+        'roleFilter'
+    ).addEventListener(
+        'change',
+        renderUsers
+    );
+
+
+    /* =========================================================
+       FERMETURE MODAL AVEC ESC
+    ========================================================= */
+
+    document.addEventListener(
+        'keydown',
+        function(event) {
+
+            if (
+                event.key === 'Escape'
+            ) {
+
+                closeUserModal();
+
+            }
+
+        }
+    );
+
+
+    /* =========================================================
+       ACTUALISATION AUTOMATIQUE
+       Toutes les 60 secondes
+    ========================================================= */
+
+    setInterval(
+        function() {
+
+            if (
+                document.visibilityState ===
+                'visible'
+            ) {
+
+                loadUsers();
+
+            }
+
+        },
+        60000
+    );
+
+
+    /* =========================================================
+       LANCEMENT
+    ========================================================= */
+
+    window.addEventListener(
+        'load',
+        loadComponents
+    );
+
+</script>
+
+</body>
+</html>
