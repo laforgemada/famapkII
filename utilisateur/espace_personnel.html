@@ -2009,6 +2009,127 @@ function saveNotificationsToStorage() {
     }
 }
 
+function updateTrophyProgress(points) {
+    const currentPointsEl = document.getElementById('trophyCurrentPoints');
+    const nextPointsEl = document.getElementById('trophyNextPoints');
+    const progressFillEl = document.getElementById('trophyProgressFill');
+    const progressPercentEl = document.getElementById('trophyProgressPercent');
+    const remainingEl = document.getElementById('trophyRemainingText');
+    const nextTextEl = document.getElementById('trophyNextText');
+
+    if (!currentPointsEl || !nextPointsEl || !progressFillEl) return;
+
+    const trophies = [
+        { name: "Pionnier", req: 0 },
+        { name: "Chercheur", req: 50 },
+        { name: "Explorateur", req: 120 },
+        { name: "Disciple", req: 220 },
+        { name: "Semeur", req: 350 },
+        { name: "Serviteur", req: 500 },
+        { name: "Intercesseur", req: 700 },
+        { name: "Berger", req: 950 },
+        { name: "Baptisé dans la Parole", req: 1250 },
+        { name: "Veilleur", req: 1600 },
+        { name: "Bâtisseur", req: 2000 },
+        { name: "Porteur de Lumière", req: 2500 },
+        { name: "Messager", req: 3100 },
+        { name: "Héraut", req: 3800 },
+        { name: "Cœur Ardent", req: 4600 },
+        { name: "Guerrier de la Foi", req: 5500 },
+        { name: "Ancre d'Espérance", req: 6500 },
+        { name: "Lion de Juda", req: 7600 },
+        { name: "Sage", req: 8800 },
+        { name: "Porteur de Croix", req: 10200 },
+        { name: "Vigne Fructueuse", req: 11800 },
+        { name: "Pain de Vie", req: 13600 },
+        { name: "Étoile du Matin", req: 15600 },
+        { name: "Alliance Éternelle", req: 17800 },
+        { name: "Pêcheur d'Hommes", req: 20200 },
+        { name: "Gardien des Clés", req: 23000 },
+        { name: "Arbre de Vie", req: 26000 },
+        { name: "Aigle Renouvelé", req: 29500 },
+        { name: "Sommet de Sion", req: 33500 },
+        { name: "Couronné", req: 38000 }
+    ];
+
+    points = Number(points) || 0;
+
+    // Trouver le prochain trophée
+    const nextTrophy = trophies.find(t => points < t.req);
+
+    // Si tous les trophées sont débloqués
+    if (!nextTrophy) {
+        currentPointsEl.textContent = Math.floor(points).toLocaleString('fr-FR');
+        nextPointsEl.textContent = 'MAX';
+
+        progressFillEl.style.width = '100%';
+
+        if (progressPercentEl) {
+            progressPercentEl.textContent = '100%';
+        }
+
+        if (remainingEl) {
+            remainingEl.textContent = 'Tous les trophées débloqués 🎉';
+        }
+
+        if (nextTextEl) {
+            nextTextEl.textContent = 'Niveau maximum';
+        }
+
+        return;
+    }
+
+    // Trouver le trophée précédent
+    const previousTrophy = [...trophies]
+        .reverse()
+        .find(t => t.req <= points);
+
+    const previousPoints = previousTrophy ? previousTrophy.req : 0;
+
+    // Progression entre le trophée précédent et le prochain
+    const range = nextTrophy.req - previousPoints;
+
+    const progress = Math.min(
+        Math.max(
+            ((points - previousPoints) / range) * 100,
+            0
+        ),
+        100
+    );
+
+    const remaining = Math.max(
+        nextTrophy.req - points,
+        0
+    );
+
+    // Mise à jour des textes
+    currentPointsEl.textContent =
+        Math.floor(points).toLocaleString('fr-FR');
+
+    nextPointsEl.textContent =
+        nextTrophy.req.toLocaleString('fr-FR');
+
+    if (nextTextEl) {
+        nextTextEl.textContent =
+            `Prochain trophée : ${nextTrophy.name}`;
+    }
+
+    if (progressPercentEl) {
+        progressPercentEl.textContent =
+            `${Math.round(progress)}%`;
+    }
+
+    if (remainingEl) {
+        remainingEl.textContent =
+            `Encore ${remaining.toLocaleString('fr-FR')} pts`;
+    }
+
+    // Animation fluide de la barre
+    requestAnimationFrame(() => {
+        progressFillEl.style.width = `${progress}%`;
+    });
+}
+
 /**
  * Récupère depuis le serveur les notifications réelles de l'utilisateur
  * (lues + non lues, les plus récentes), avec leur véritable état "lu"
@@ -6135,6 +6256,7 @@ function renderUserStats() {
 function generateTrophies(points) {
     const trophyGrid = document.querySelector('.trophy-grid');
     if (!trophyGrid) return;
+	updateTrophyProgress(points);
     trophyGrid.setAttribute('aria-busy', 'false');
 
     const trophies = [
