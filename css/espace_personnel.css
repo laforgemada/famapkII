@@ -6008,7 +6008,7 @@ body.dark-theme .notif-tab {
 
 
 .trophy-progress-fill {
-    width: 68%;
+    width: 0%;
 
     height: 100%;
 
@@ -6025,7 +6025,11 @@ body.dark-theme .notif-tab {
     box-shadow:
         0 0 10px rgba(139, 92, 246, 0.35);
 
-    animation: progressGlow 2.5s ease-in-out infinite;
+    transition:
+        width 1s cubic-bezier(0.22, 1, 0.36, 1);
+
+    animation:
+        progressGlow 2.5s ease-in-out infinite;
 }
 
 

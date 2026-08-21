@@ -6135,6 +6135,52 @@ function generateTrophies(points) {
         { name: "Sommet de Sion", desc: "Atteindre 33 500 pts", req: 33500, icon: "⛰️" },
         { name: "Couronné", desc: "Atteindre 38 000 pts", req: 38000, icon: "👑" }
     ];
+	
+	// ==========================================
+// PROGRESSION VERS LE PROCHAIN TROPHÉE
+// ==========================================
+
+const progressFill = document.querySelector('.trophy-progress-fill');
+
+
+if (progressFill) {
+
+    // Trouver le prochain trophée non débloqué
+    const nextTrophy = trophies.find(t => points < t.req);
+
+    if (nextTrophy) {
+
+        // Trouver le trophée précédent
+        const currentIndex = trophies.indexOf(nextTrophy);
+        const previousTrophy = trophies[currentIndex - 1];
+
+        const previousReq = previousTrophy ? previousTrophy.req : 0;
+        const nextReq = nextTrophy.req;
+
+        // Calcul de la progression réelle
+        const progress =
+            ((points - previousReq) /
+            (nextReq - previousReq)) * 100;
+
+        const safeProgress = Math.max(
+            0,
+            Math.min(100, progress)
+        );
+
+        // Animation de la barre
+        requestAnimationFrame(() => {
+            progressFill.style.width = `${safeProgress}%`;
+        });
+
+    } else {
+
+        // Tous les trophées sont débloqués
+        requestAnimationFrame(() => {
+            progressFill.style.width = '100%';
+        });
+    }
+}
+
 
 // ==========================================
 // Icônes 3D des trophées (SVG dessinés sur mesure, un par trophée, dans
@@ -6573,6 +6619,7 @@ function celebrateEarnReward(cardId, points) {
 
     }, 1200);
 }
+
 
 </script>
 
