@@ -902,55 +902,157 @@ html[data-theme="dark"] @keyframes cardGlow {
         <i data-feather="message-square"></i>
     </button>
 
-<header class="top-nav">
+
+<header class="top-nav" id="personalTopNav">
 
     <div class="nav-content">
 
+        <!-- =========================
+             LOGO / IDENTITÉ
+        ========================== -->
         <div class="logo-box">
 
             <div class="logo-icon">
-				<img src="/famapkII/logo/logo.png" alt="Apokalypsy Logo" width="45" height="45">
-			</div>
+                <img
+                    src="/famapkII/logo/logo.png"
+                    alt="Apokalypsy Logo"
+                    width="45"
+                    height="45"
+                >
+            </div>
 
             <div class="logo-text">
                 <div class="logo-title">APOKALYPSY</div>
-                <div class="logo-sub">Espace membre</div>
+                <div class="logo-sub">
+                    <span class="online-dot"></span>
+                    Espace membre
+                </div>
             </div>
 
         </div>
 
+
+        <!-- =========================
+             ACTIONS NAVIGATION
+        ========================== -->
         <div class="nav-right">
 
-            <button class="nav-btn theme-toggle" aria-label="Changer de thème (clair/sombre)" onclick="toggleTheme()">
+            <!-- THÈME -->
+            <button
+                class="nav-btn theme-toggle"
+                aria-label="Changer de thème (clair/sombre)"
+                title="Changer de thème"
+                onclick="toggleTheme()"
+            >
                 <i data-feather="moon" class="feather-moon"></i>
                 <i data-feather="sun" class="feather-sun"></i>
             </button>
 
-            <button class="nav-btn" aria-label="Ouvrir la recherche" onclick="openSearchModal()">
+
+            <!-- RECHERCHE -->
+            <button
+                class="nav-btn"
+                aria-label="Ouvrir la recherche"
+                title="Rechercher"
+                onclick="openSearchModal()"
+            >
                 <i data-feather="search"></i>
             </button>
 
+
+            <!-- NOTIFICATIONS -->
             <div class="notif-wrapper">
-                <button class="nav-btn" id="notif-btn" aria-label="Ouvrir les notifications" aria-haspopup="true" aria-expanded="false" onclick="toggleNotifMenu(event)">
+
+                <button
+                    class="nav-btn notification-btn"
+                    id="notif-btn"
+                    aria-label="Ouvrir les notifications"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    title="Notifications"
+                    onclick="toggleNotifMenu(event)"
+                >
+
                     <i data-feather="bell"></i>
-                    <span class="notif-badge" id="notif-badge">0</span>
-                    <span class="sse-status" id="sseStatus" title="État de la connexion en direct" aria-hidden="true"></span>
+
+                    <span
+                        class="notif-badge"
+                        id="notif-badge"
+                    >0</span>
+
+                    <!-- Connexion SSE -->
+                    <span
+                        class="sse-status"
+                        id="sseStatus"
+                        title="État de la connexion en direct"
+                        aria-hidden="true"
+                    ></span>
+
                 </button>
-                
-                <div class="notif-dropdown" id="notifDropdown" role="menu" aria-label="Notifications">
+
+
+                <!-- MENU NOTIFICATIONS -->
+                <div
+                    class="notif-dropdown"
+                    id="notifDropdown"
+                    role="menu"
+                    aria-label="Notifications"
+                >
+
                     <div class="notif-header">
-                        <h3>Notifications</h3>
-                        <span class="mark-all-read" role="button" tabindex="0" onclick="markAllAsRead(event)">Tout lire</span>
-                    </div>
-                    <div class="notif-tabs">
-                        <span class="notif-tab active">Tout</span>
-                    </div>
-                    <div class="notif-list" id="notifVerticalList">
+
+                        <div class="notif-title-wrapper">
+
+                            <div class="notif-title-icon">
+                                <i data-feather="bell"></i>
+                            </div>
+
+                            <div>
+                                <h3>Notifications</h3>
+                                <span class="notif-subtitle">
+                                    Vos dernières activités
+                                </span>
+                            </div>
+
                         </div>
+
+                        <span
+                            class="mark-all-read"
+                            role="button"
+                            tabindex="0"
+                            onclick="markAllAsRead(event)"
+                        >
+                            Tout lire
+                        </span>
+
+                    </div>
+
+
+                    <div class="notif-tabs">
+                        <span class="notif-tab active">
+                            Tout
+                        </span>
+                    </div>
+
+
+                    <div
+                        class="notif-list"
+                        id="notifVerticalList"
+                    ></div>
+
                 </div>
+
             </div>
 
-            <button class="profile-avatar" id="profile-avatar-initials" aria-label="Ouvrir mon profil" onclick="openProfileModal()">
+
+            <!-- PROFIL -->
+            <button
+                class="profile-avatar"
+                id="profile-avatar-initials"
+                aria-label="Ouvrir mon profil"
+                title="Mon profil"
+                onclick="openProfileModal()"
+            >
                 ??
             </button>
 
@@ -959,6 +1061,8 @@ html[data-theme="dark"] @keyframes cardGlow {
     </div>
 
 </header>
+
+
 
 <section class="hero-card">
 
@@ -1431,28 +1535,63 @@ html[data-theme="dark"] @keyframes cardGlow {
     </div>
 </section>
 
-    <section class="card" id="trophies">
+	<section class="card trophies-card" id="trophies">
 
-        <div class="trophy-header">
+		<div class="trophy-header">
 
-            <div class="trophy-title">
-                🏆 Mes Trophées
-            </div>
+			<div class="trophy-heading">
 
-            <div class="progress-btn">
-                Niveau 8
-            </div>
+				<div class="trophy-main-icon">
+					<span>🏆</span>
+				</div>
 
-        </div>
+				<div class="trophy-title-wrapper">
 
-        <div class="trophy-grid" aria-busy="true">
-            <div class="skeleton skel-trophy"></div>
-            <div class="skeleton skel-trophy"></div>
-            <div class="skeleton skel-trophy"></div>
-            <div class="skeleton skel-trophy"></div>
-        </div>
+					<div class="trophy-title">
+						Mes Trophées
+					</div>
 
-    </section>
+					<div class="trophy-subtitle">
+						Vos récompenses et accomplissements
+					</div>
+
+				</div>
+
+			</div>
+
+
+			<div class="progress-btn">
+				<span class="level-icon">✦</span>
+				<span>Niveau 8</span>
+			</div>
+
+		</div>
+
+
+		<div class="trophy-progress-line">
+
+			<div class="trophy-progress-track">
+				<div class="trophy-progress-fill"></div>
+			</div>
+
+			<span class="trophy-progress-glow"></span>
+
+		</div>
+
+
+		<div
+			class="trophy-grid"
+			aria-busy="true"
+		>
+			<div class="skeleton skel-trophy"></div>
+			<div class="skeleton skel-trophy"></div>
+			<div class="skeleton skel-trophy"></div>
+			<div class="skeleton skel-trophy"></div>
+		</div>
+
+	</section>
+
+
 
 </main>
 
