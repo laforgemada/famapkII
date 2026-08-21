@@ -1016,66 +1016,224 @@ html[data-theme="dark"] @keyframes cardGlow {
 
 
 <section class="card earn-points-section" id="earn-points-section">
-    <div class="section-badge">
-        🌟 Gagner plus de points
-    </div>
 
-    <div class="impact-title">
-        Opportunités de Points
-    </div>
+    <div class="earn-section-header">
+        <div class="earn-section-badge">
+            <span class="earn-badge-icon">✨</span>
+            <span>Gagner plus de points</span>
+        </div>
 
-    <p class="impact-desc">
-        Explorez ces activités interactives pour augmenter votre solde de points et débloquer de nouveaux trophées exclusifs !
-    </p>
+        <div class="earn-section-title-row">
+            <div>
+                <h2 class="earn-section-title">Opportunités de Points</h2>
+                <p class="earn-section-desc">
+                    Complétez les activités disponibles et augmentez votre solde de points.
+                </p>
+            </div>
+
+            <div class="earn-coins-decoration">
+                <span>🪙</span>
+            </div>
+        </div>
+    </div>
 
     <div class="earn-grid">
-        <!-- Sondage -->
-        <div class="earn-card" id="earn-card-poll" onclick="startDailyPoll()">
-            <div class="earn-icon-box earn-icon-blue">
-                <span class="emoji-icon">📊</span>
+
+        <!-- =========================
+             SONDAGE
+        ========================== -->
+        <div class="earn-card earn-card-poll"
+             id="earn-card-poll"
+             onclick="startDailyPoll()">
+
+            <div class="earn-card-glow"></div>
+
+            <div class="earn-card-top">
+                <div class="earn-icon-box earn-icon-blue">
+                    <span class="emoji-icon">📊</span>
+                </div>
+
+                <span class="earn-type-badge">
+                    QUOTIDIEN
+                </span>
             </div>
+
             <div class="earn-content">
-                <div class="earn-title">Sondage Quotidien</div>
-                <span class="earn-card-note">Donnez votre avis du jour</span>
+                <div class="earn-title">
+                    Sondage Quotidien
+                </div>
+
+                <span class="earn-card-note">
+                    Donnez votre avis du jour
+                </span>
             </div>
-            <div class="earn-bonus" id="earn-bonus-poll">+5 pts</div>
+
+            <div class="earn-card-footer">
+                <div class="earn-reward">
+                    <span class="reward-coin">🪙</span>
+                    <strong>+5</strong>
+                    <small>pts</small>
+                </div>
+
+                <div class="earn-action">
+                    Gagner
+                    <span>→</span>
+                </div>
+            </div>
+
+            <div class="earn-completed">
+                <span>✓</span>
+                Terminé aujourd'hui
+            </div>
         </div>
 
-        <!-- Quiz -->
-        <div class="earn-card" id="earn-card-quiz" onclick="startBibleQuiz()">
-            <div class="earn-icon-box earn-icon-purple">
-                <span class="emoji-icon">💡</span>
+
+        <!-- =========================
+             QUIZ
+        ========================== -->
+        <div class="earn-card earn-card-quiz"
+             id="earn-card-quiz"
+             onclick="startBibleQuiz()">
+
+            <div class="earn-card-glow"></div>
+
+            <div class="earn-card-top">
+                <div class="earn-icon-box earn-icon-purple">
+                    <span class="emoji-icon">🧠</span>
+                </div>
+
+                <span class="earn-type-badge">
+                    DÉFI
+                </span>
             </div>
+
             <div class="earn-content">
-                <div class="earn-title">Quiz Biblique</div>
-                <span class="earn-card-note">Testez vos connaissances</span>
+                <div class="earn-title">
+                    Quiz Biblique
+                </div>
+
+                <span class="earn-card-note">
+                    Testez vos connaissances bibliques
+                </span>
             </div>
-            <div class="earn-bonus" id="earn-bonus-quiz">+10 pts</div>
+
+            <div class="earn-card-footer">
+                <div class="earn-reward">
+                    <span class="reward-coin">🪙</span>
+                    <strong>+10</strong>
+                    <small>pts</small>
+                </div>
+
+                <div class="earn-action">
+                    Jouer
+                    <span>→</span>
+                </div>
+            </div>
+
+            <div class="earn-completed">
+                <span>✓</span>
+                Terminé aujourd'hui
+            </div>
         </div>
 
-        <!-- Vidéo -->
-        <div class="earn-card" id="earn-card-video" onclick="watchVideoAd()">
-            <div class="earn-icon-box earn-icon-green">
-                <span class="emoji-icon">🎬</span>
+
+        <!-- =========================
+             VIDEO
+        ========================== -->
+        <div class="earn-card earn-card-video"
+             id="earn-card-video"
+             onclick="watchVideoAd()">
+
+            <div class="earn-card-glow"></div>
+
+            <div class="earn-card-top">
+                <div class="earn-icon-box earn-icon-green">
+                    <span class="emoji-icon">🎬</span>
+                </div>
+
+                <span class="earn-type-badge">
+                    BONUS
+                </span>
             </div>
+
             <div class="earn-content">
-                <div class="earn-title">Vidéo Bonus</div>
-                <span class="earn-card-note" id="earn-note-video">Regardez 1 min pour gagner des points</span>
+                <div class="earn-title">
+                    Vidéo Bonus
+                </div>
+
+                <span class="earn-card-note" id="earn-note-video">
+                    Regardez 1 min pour gagner des points
+                </span>
             </div>
-            <div class="earn-bonus" id="earn-bonus-video">+3 pts</div>
+
+            <div class="earn-card-footer">
+                <div class="earn-reward">
+                    <span class="reward-coin">🪙</span>
+                    <strong>+3</strong>
+                    <small>pts</small>
+                </div>
+
+                <div class="earn-action">
+                    Regarder
+                    <span>→</span>
+                </div>
+            </div>
+
+            <div class="earn-completed">
+                <span>✓</span>
+                Terminé aujourd'hui
+            </div>
         </div>
 
-        <!-- Partage -->
-        <div class="earn-card" id="earn-card-share" onclick="shareApp()">
-            <div class="earn-icon-box earn-icon-pink">
-                <span class="emoji-icon">🎁</span>
+
+        <!-- =========================
+             PARTAGE
+        ========================== -->
+        <div class="earn-card earn-card-share"
+             id="earn-card-share"
+             onclick="shareApp()">
+
+            <div class="earn-card-glow"></div>
+
+            <div class="earn-card-top">
+                <div class="earn-icon-box earn-icon-pink">
+                    <span class="emoji-icon">🚀</span>
+                </div>
+
+                <span class="earn-type-badge">
+                    SOCIAL
+                </span>
             </div>
+
             <div class="earn-content">
-                <div class="earn-title">Partager l'App</div>
-                <span class="earn-card-note">Invitez vos proches</span>
+                <div class="earn-title">
+                    Partager l'App
+                </div>
+
+                <span class="earn-card-note">
+                    Invitez vos proches à découvrir Apokalypsy
+                </span>
             </div>
-            <div class="earn-bonus" id="earn-bonus-share">+15 pts</div>
+
+            <div class="earn-card-footer">
+                <div class="earn-reward">
+                    <span class="reward-coin">🪙</span>
+                    <strong>+15</strong>
+                    <small>pts</small>
+                </div>
+
+                <div class="earn-action">
+                    Partager
+                    <span>→</span>
+                </div>
+            </div>
+
+            <div class="earn-completed">
+                <span>✓</span>
+                Terminé aujourd'hui
+            </div>
         </div>
+
     </div>
 </section>
 
@@ -2570,52 +2728,830 @@ const defaultQuizzes = [
 /* ---------- SONDAGE QUOTIDIEN DYNAMIQUE ---------- */
 let currentPoll = null; // Stocke le sondage actuel
 
+/* =========================================================
+ * SONDAGE BIBLIQUE — 5 QUESTIONS
+ * =========================================================
+ *
+ * Fonctionnement :
+ * 1. Le serveur fournit les questions.
+ * 2. L'utilisateur répond aux questions 1 → 5.
+ * 3. Une mauvaise réponse annule la tentative.
+ * 4. L'utilisateur recommence depuis la question 1.
+ * 5. Les points ne sont attribués qu'après 5 bonnes réponses.
+ * 6. Aucun blocage quotidien.
+ * ========================================================= */
+
+let pollQuizState = {
+    questions: [],
+    currentIndex: 0,
+    totalPoints: 0,
+    answering: false
+};
+
+
+/* =========================================================
+ * DÉMARRER LE SONDAGE
+ * ========================================================= */
+
 async function startDailyPoll() {
-    if (!currentUsername) { showToast("Veuillez vous connecter pour participer.", "error"); return; }
-    if (isActionDoneToday('poll')) { showToast("Vous avez déjà répondu au sondage aujourd'hui. Revenez demain !", "info"); return; }
 
-    try {
-        const response = await fetch(DAILY_POLL_API_URL); // Utilisation de l'API
-        const data = await response.json();
-        if (data.success && data.poll) {
-            currentPoll = data.poll;
-        } else {
-            console.warn("API de sondage non disponible, utilisation des questions par défaut.");
-            currentPoll = defaultPolls[Math.floor(Math.random() * defaultPolls.length)]; // Question aléatoire par défaut
-        }
-    } catch (error) {
-        console.error("Erreur lors de la récupération du sondage quotidien :", error);
-        currentPoll = defaultPolls[Math.floor(Math.random() * defaultPolls.length)]; // Question aléatoire par défaut en cas d'erreur réseau
-    }
-
-    if (!currentPoll) {
-        showToast("Impossible de charger le sondage pour le moment.", "error");
+    if (!currentUsername) {
+        showToast(
+            "Veuillez vous connecter pour participer.",
+            "error"
+        );
         return;
     }
 
-    setText('pollQuestionText', currentPoll.question);
+    // Réinitialisation complète de la tentative
+    pollQuizState = {
+        questions: [],
+        currentIndex: 0,
+        totalPoints: 0,
+        answering: false
+    };
 
-    const list = document.getElementById('pollOptionsList');
-    list.innerHTML = currentPoll.options.map((opt, i) => `
-        <button class="poll-option-btn" onclick="submitPollAnswer(${i})">${opt}</button>
-    `).join('');
+    try {
 
-    document.getElementById('pollModal').classList.add('show');
+        console.log("📖 Chargement du sondage biblique...");
+
+        const response = await fetch(
+            DAILY_POLL_API_URL,
+            {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                },
+                cache: 'no-store'
+            }
+        );
+
+        const contentType =
+            response.headers.get('content-type') || '';
+
+        if (!contentType.includes('application/json')) {
+
+            const text = await response.text();
+
+            console.error(
+                "❌ Réponse non JSON :",
+                text
+            );
+
+            throw new Error(
+                `Réponse serveur invalide (HTTP ${response.status})`
+            );
+        }
+
+        const data = await response.json();
+
+        console.log(
+            "📖 Sondage reçu :",
+            data
+        );
+
+        if (
+            !response.ok ||
+            !data.success ||
+            !Array.isArray(data.polls) ||
+            data.polls.length === 0
+        ) {
+
+            throw new Error(
+                data.message ||
+                "Aucun sondage biblique disponible."
+            );
+        }
+
+        /*
+         * Le serveur doit fournir les 5 questions.
+         */
+        pollQuizState.questions = data.polls.slice(0, 5);
+
+        if (pollQuizState.questions.length < 5) {
+
+            throw new Error(
+                "Le serveur n'a pas fourni les 5 questions nécessaires."
+            );
+        }
+
+        /*
+         * Affichage de la première question
+         */
+        renderPollQuestion();
+
+        const modal =
+            document.getElementById('pollModal');
+
+        if (modal) {
+            modal.classList.add('show');
+        }
+
+    } catch (error) {
+
+        console.error(
+            "❌ Erreur lors du chargement du sondage :",
+            error
+        );
+
+        showToast(
+            error.message ||
+            "Impossible de charger le sondage biblique.",
+            "error"
+        );
+    }
+}
+
+
+/* =========================================================
+ * AFFICHER LA QUESTION ACTUELLE
+ * ========================================================= */
+
+function renderPollQuestion() {
+
+    const question =
+        pollQuizState.questions[
+            pollQuizState.currentIndex
+        ];
+
+    if (!question) {
+        console.error(
+            "❌ Question introuvable."
+        );
+        return;
+    }
+
+    console.log(
+        "📖 Question actuelle :",
+        question
+    );
+
+    /*
+     * Question
+     */
+    setText(
+        'pollQuestionText',
+        question.question || ''
+    );
+
+    /*
+     * Progression
+     */
+    const step =
+        pollQuizState.currentIndex + 1;
+
+    const total =
+        pollQuizState.questions.length;
+
+    const stepLabel =
+        document.getElementById('pollStepLabel');
+
+    if (stepLabel) {
+
+        stepLabel.textContent =
+            `Question ${step} / ${total}`;
+    }
+
+    /*
+     * Difficulté
+     */
+    const difficultyLabel =
+        document.getElementById('pollDifficultyLabel');
+
+    if (difficultyLabel) {
+
+        const difficulty =
+            question.difficulty || 'easy';
+
+        const difficultyNames = {
+            easy: 'Facile',
+            medium: 'Moyen',
+            hard: 'Difficile'
+        };
+
+        difficultyLabel.textContent =
+            difficultyNames[difficulty] ||
+            difficulty;
+    }
+
+    /*
+     * Points
+     */
+    const pointsLabel =
+        document.getElementById('pollPointsLabel');
+
+    if (pointsLabel) {
+
+        const points =
+            parseFloat(question.points || 0);
+
+        pointsLabel.textContent =
+            `+${points.toFixed(2)} point${points > 1 ? 's' : ''}`;
+    }
+
+    /*
+     * Options
+     */
+    const list =
+        document.getElementById('pollOptionsList');
+
+    if (!list) {
+
+        console.error(
+            "❌ #pollOptionsList introuvable."
+        );
+
+        return;
+    }
+
+    list.innerHTML = '';
+
+    if (
+        !Array.isArray(question.options) ||
+        question.options.length === 0
+    ) {
+
+        list.innerHTML =
+            '<p class="poll-error">Aucune réponse disponible.</p>';
+
+        return;
+    }
+
+    question.options.forEach((option, index) => {
+
+        const button =
+            document.createElement('button');
+
+        button.type = 'button';
+
+        button.className =
+            'poll-option-btn';
+
+        button.textContent =
+            option;
+
+        button.addEventListener(
+            'click',
+            () => submitPollAnswer(index)
+        );
+
+        list.appendChild(button);
+    });
+}
+
+
+/* =========================================================
+ * RÉPONDRE À UNE QUESTION
+ * ========================================================= */
+
+async function submitPollAnswer(index) {
+
+    if (pollQuizState.answering) {
+        return;
+    }
+
+    const question =
+        pollQuizState.questions[
+            pollQuizState.currentIndex
+        ];
+
+    if (!question) {
+
+        showToast(
+            "Question introuvable.",
+            "error"
+        );
+
+        return;
+    }
+
+    if (
+        !Array.isArray(question.options) ||
+        !question.options[index]
+    ) {
+
+        showToast(
+            "Réponse invalide.",
+            "error"
+        );
+
+        return;
+    }
+
+    pollQuizState.answering = true;
+
+    const buttons =
+        document.querySelectorAll(
+            '#pollOptionsList .poll-option-btn'
+        );
+
+    buttons.forEach((button, i) => {
+
+        button.disabled = true;
+
+        if (i === index) {
+            button.classList.add('selected');
+        }
+    });
+
+    const selectedAnswer =
+        question.options[index];
+
+    console.log(
+        "📖 Réponse sélectionnée :",
+        {
+            question_id: question.id,
+            question: question.question,
+            answer: selectedAnswer
+        }
+    );
+
+    try {
+
+        const token =
+            localStorage.getItem('token');
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/poll/answer`,
+                {
+                    method: 'POST',
+
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+
+                        ...(token
+                            ? {
+                                'Authorization':
+                                    `Bearer ${token}`
+                            }
+                            : {})
+                    },
+
+                    body: JSON.stringify({
+
+                        username:
+                            currentUsername,
+
+                        poll_id:
+                            question.id,
+
+                        answer:
+                            selectedAnswer
+                    })
+                }
+            );
+
+        const contentType =
+            response.headers.get('content-type') || '';
+
+        let result;
+
+        if (
+            contentType.includes(
+                'application/json'
+            )
+        ) {
+
+            result =
+                await response.json();
+
+        } else {
+
+            const text =
+                await response.text();
+
+            console.error(
+                "❌ Réponse non JSON :",
+                text
+            );
+
+            throw new Error(
+                `Réponse serveur invalide (HTTP ${response.status})`
+            );
+        }
+
+        console.log(
+            "📖 Réponse /api/poll/answer :",
+            result
+        );
+
+        /*
+         * =====================================================
+         * MAUVAISE RÉPONSE
+         * =====================================================
+         */
+
+        if (
+            result.success === true &&
+			result.correct === false
+        ) {
+
+            showToast(
+                result.message ||
+                "❌ Mauvaise réponse ! Vous devez recommencer.",
+                "error"
+            );
+
+            /*
+             * Petite pause pour laisser voir
+             * la réponse sélectionnée.
+             */
+            setTimeout(() => {
+
+                pollQuizState.questions =
+                    [];
+
+                pollQuizState.currentIndex =
+                    0;
+
+                pollQuizState.totalPoints =
+                    0;
+
+                pollQuizState.answering =
+                    false;
+
+                closeModal('pollModal');
+
+                showToast(
+                    "🔄 Nouvelle tentative ! Recommencez depuis la question 1.",
+                    "info"
+                );
+
+            }, 1200);
+
+            return;
+        }
+
+        /*
+         * =====================================================
+         * ERREUR SERVEUR
+         * =====================================================
+         */
+
+        if (!response.ok) {
+
+            throw new Error(
+                result?.message ||
+                `Erreur HTTP ${response.status}`
+            );
+        }
+
+        /*
+         * =====================================================
+         * BONNE RÉPONSE
+         * =====================================================
+         */
+
+        if (
+            result.success === true &&
+			result.correct === true
+        ) {
+
+            const earned =
+                parseFloat(
+                    result.question_points ||
+                    question.points ||
+                    0
+                );
+
+            pollQuizState.totalPoints +=
+                earned;
+
+            /*
+             * Les 5 questions sont terminées
+             */
+            if (
+                pollQuizState.currentIndex >=
+                pollQuizState.questions.length - 1
+            ) {
+
+                const total =
+                    parseFloat(
+                        result.points_added ||
+                        pollQuizState.totalPoints
+                    );
+
+                /*
+                 * Mise à jour du solde utilisateur
+                 */
+                if (
+                    typeof result.new_balance !==
+                    'undefined'
+                ) {
+
+                    userPoints.total =
+                        parseFloat(
+                            result.new_balance
+                        );
+
+                } else {
+
+                    userPoints.total =
+                        parseFloat(
+                            userPoints.total || 0
+                        ) + total;
+                }
+
+                renderUserStats();
+
+                /*
+                 * PAS DE :
+                 *
+                 * markActionDoneToday('poll')
+                 *
+                 * car le sondage peut être recommencé
+                 * chaque jour et après chaque échec.
+                 */
+
+                showToast(
+                    `🎉 Bravo ! Vous avez réussi les 5 questions et gagné ${total.toFixed(2)} point(s) !`,
+                    "success"
+                );
+
+                console.log(
+                    `🏆 Sondage terminé : +${total} point(s)`
+                );
+
+                setTimeout(() => {
+
+                    closeModal(
+                        'pollModal'
+                    );
+
+                }, 1500);
+
+                pollQuizState.answering =
+                    false;
+
+                return;
+            }
+
+            /*
+             * Passer à la question suivante
+             */
+            pollQuizState.currentIndex++;
+
+            showToast(
+                `✅ Bonne réponse ! +${earned.toFixed(2)} point`,
+                "success"
+            );
+
+            setTimeout(() => {
+
+                pollQuizState.answering =
+                    false;
+
+                renderPollQuestion();
+
+            }, 700);
+
+            return;
+        }
+
+        /*
+         * =====================================================
+         * CAS INATTENDU
+         * =====================================================
+         */
+
+        throw new Error(
+            result?.message ||
+            "Réponse inattendue du serveur."
+        );
+
+    } catch (error) {
+
+        console.error(
+            "❌ Erreur sondage :",
+            error
+        );
+
+        showToast(
+            error.message ||
+            "Impossible d'enregistrer votre réponse.",
+            "error"
+        );
+
+        /*
+         * Réactiver les boutons
+         */
+        buttons.forEach(button => {
+            button.disabled = false;
+        });
+
+        pollQuizState.answering =
+            false;
+    }
 }
 
 async function submitPollAnswer(index) {
-    const buttons = document.querySelectorAll('#pollOptionsList .poll-option-btn');
+
+    // ==========================================
+    // 1. Vérifications
+    // ==========================================
+    if (!currentUsername) {
+        showToast("Veuillez vous connecter pour participer.", "error");
+        return;
+    }
+
+    if (!currentPoll) {
+        showToast("Le sondage n'est pas disponible.", "error");
+        return;
+    }
+
+    if (
+        !Array.isArray(currentPoll.options) ||
+        !currentPoll.options[index]
+    ) {
+        showToast("Réponse invalide.", "error");
+        return;
+    }
+
+    // Empêche un double-clic
+    const buttons = document.querySelectorAll(
+        '#pollOptionsList .poll-option-btn'
+    );
+
     buttons.forEach((btn, i) => {
         btn.disabled = true;
-        if (i === index) btn.classList.add('selected');
+
+        if (i === index) {
+            btn.classList.add('selected');
+        }
     });
 
-    const ok = await awardPoints(5, "Sondage quotidien");
-    if (ok) {
-        markActionDoneToday('poll');
-        updateEarnCardsState();
+    const selectedAnswer = currentPoll.options[index];
+
+    console.log("📊 Réponse au sondage :", {
+        username: currentUsername,
+        poll_id: currentPoll.id,
+        answer: selectedAnswer
+    });
+
+    // ==========================================
+    // 2. Envoi au véritable endpoint du sondage
+    // ==========================================
+    try {
+
+        const token = localStorage.getItem('token');
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/poll/answer`,
+            {
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+
+                    ...(token
+                        ? {
+                            'Authorization': `Bearer ${token}`
+                        }
+                        : {})
+                },
+
+                body: JSON.stringify({
+                    username: currentUsername,
+                    poll_id: currentPoll.id,
+                    answer: selectedAnswer
+                })
+            }
+        );
+
+        // ==========================================
+        // 3. Vérification de la réponse HTTP
+        // ==========================================
+        const contentType =
+            response.headers.get('content-type') || '';
+
+        let result = null;
+
+        if (contentType.includes('application/json')) {
+            result = await response.json();
+        } else {
+            const text = await response.text();
+
+            console.error(
+                "❌ Réponse non JSON du serveur :",
+                text
+            );
+
+            throw new Error(
+                `Le serveur a retourné une réponse invalide (HTTP ${response.status}).`
+            );
+        }
+
+        console.log(
+            "📊 Réponse /api/poll/answer :",
+            result
+        );
+
+        // ==========================================
+        // 4. Erreur HTTP
+        // ==========================================
+        if (!response.ok) {
+
+            throw new Error(
+                result?.message ||
+                `Erreur HTTP ${response.status}`
+            );
+        }
+
+        // ==========================================
+        // 5. Réponse déjà enregistrée
+        // ==========================================
+        if (result.already_answered) {
+
+            markActionDoneToday('poll');
+            updateEarnCardsState();
+
+            showToast(
+                "Vous avez déjà répondu à ce sondage aujourd'hui.",
+                "info"
+            );
+
+            setTimeout(() => {
+                closeModal('pollModal');
+            }, 1000);
+
+            return;
+        }
+
+        // ==========================================
+        // 6. Succès
+        // ==========================================
+        if (result.success) {
+
+            const pointsAdded =
+                parseFloat(result.points_added || 0);
+
+            // Mise à jour avec le vrai solde retourné
+            if (typeof result.new_balance !== 'undefined') {
+
+                userPoints.total =
+                    parseFloat(result.new_balance);
+
+            } else {
+
+                userPoints.total =
+                    parseFloat(userPoints.total || 0)
+                    + pointsAdded;
+            }
+
+            // Sauvegarde de l'état local
+            markActionDoneToday('poll');
+
+            // Rafraîchissement interface
+            renderUserStats();
+            updateEarnCardsState();
+
+            showToast(
+                `🎉 ${result.message || `Vous avez gagné ${pointsAdded} point(s) !`}`,
+                "success"
+            );
+
+            console.log(
+                `✅ Sondage terminé : +${pointsAdded} point(s)`
+            );
+
+        } else {
+
+            throw new Error(
+                result.message ||
+                "Impossible d'enregistrer votre réponse."
+            );
+        }
+
+    } catch (error) {
+
+        console.error(
+            "❌ Erreur lors de l'envoi du sondage :",
+            error
+        );
+
+        // Réactive les boutons en cas d'erreur
+        buttons.forEach(btn => {
+            btn.disabled = false;
+        });
+
+        showToast(
+            error.message ||
+            "Impossible d'enregistrer votre réponse.",
+            "error"
+        );
+
+        return;
     }
-    setTimeout(() => closeModal('pollModal'), 700);
+
+    // ==========================================
+    // 7. Fermer le sondage
+    // ==========================================
+    setTimeout(() => {
+        closeModal('pollModal');
+    }, 1000);
 }
 
 /* ---------- QUIZ BIBLIQUE DYNAMIQUE ---------- */
@@ -3117,68 +4053,132 @@ async function loadLoyaltyData() {
 
     const cacheKey = `cache_loyalty_${currentUsername}`;
     const cached = getCache(cacheKey);
-    
+
+    // Affichage immédiat depuis le cache
     if (cached) {
-        userPoints.total = cached.total || 0;
+        userPoints.total = Number(cached.total || 0);
         renderLoyaltyActionButton(cached.history || []);
         renderUserStats();
     }
 
-    // Vérification de la présence du token avant même de tenter la requête
     const token = localStorage.getItem('token');
-    if (!token) {
-        console.warn("Utilisateur non authentifié : aucun token trouvé.");
-        return; 
+
+    /*
+     * IMPORTANT
+     * L'endpoint /api/points/history utilise le username.
+     * On n'envoie donc le Bearer token que lorsqu'il existe réellement.
+     */
+    const headers = {
+        'Accept': 'application/json'
+    };
+
+    if (token && token.trim() !== '') {
+        headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const urlHistory = `${API_BASE_URL}/api/points/history?username=${encodeURIComponent(currentUsername)}`;
+    const urlHistory =
+        `${API_BASE_URL}/api/points/history?username=${encodeURIComponent(currentUsername)}`;
 
     try {
         const response = await fetch(urlHistory, {
             method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
+            headers: headers,
+            cache: 'no-store'
         });
 
-        // Gestion de l'erreur 401 (Token expiré ou invalide)
+        /*
+         * Si le token est expiré/invalide :
+         * on ne casse PAS l'affichage de l'espace personnel.
+         *
+         * Le backend de /points/history peut récupérer les points
+         * à partir du username.
+         */
         if (response.status === 401) {
-            console.error("Erreur 401 : Token invalide ou expiré.");
-            // Optionnel : déconnecter l'utilisateur si nécessaire
-            // localStorage.removeItem('token'); 
+
+            console.warn(
+                "⚠️ Token invalide ou expiré pour /api/points/history."
+            );
+
+            /*
+             * On supprime uniquement le token invalide.
+             * Le compte utilisateur et les données locales restent conservés.
+             */
+            localStorage.removeItem('token');
+
+            /*
+             * On conserve le cache si disponible.
+             */
+            if (cached) {
+                userPoints.total = Number(cached.total || 0);
+                renderLoyaltyActionButton(cached.history || []);
+                renderUserStats();
+            }
+
             return;
         }
 
-        if (response.status === 404) {
-            console.warn(`Aucun historique trouvé pour ${currentUsername}.`);
-            userPoints.total = 0;
-            renderLoyaltyActionButton([]);
-            renderUserStats();
-            return;
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP ${response.status}`);
         }
 
-        if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+        const contentType =
+            response.headers.get('content-type') || '';
+
+        if (!contentType.includes('application/json')) {
+            throw new Error(
+                `Réponse serveur inattendue : ${contentType}`
+            );
+        }
 
         const data = await response.json();
-        
+
+        console.log("💎 Données fidélité :", data);
+
         if (data && data.success) {
-            userPoints.total = parseFloat(data.total_points) || 0;
-            renderLoyaltyActionButton(data.history || []);
-            setCache(cacheKey, { total: userPoints.total, history: data.history || [] });
+
+            userPoints.total =
+                Number(data.total_points || 0);
+
+            const history =
+                Array.isArray(data.history)
+                    ? data.history
+                    : [];
+
+            renderLoyaltyActionButton(history);
+            renderUserStats();
+
+            // Sauvegarde du cache
+            setCache(cacheKey, {
+                total: userPoints.total,
+                history: history
+            });
+
         } else {
-            userPoints.total = 0;
-            renderLoyaltyActionButton([]);
+
+            console.warn(
+                "⚠️ Réponse fidélité inattendue :",
+                data
+            );
+
+            if (!cached) {
+                userPoints.total = 0;
+                renderLoyaltyActionButton([]);
+                renderUserStats();
+            }
         }
-        renderUserStats();
 
     } catch (error) {
-        console.error("Erreur lors du chargement de la fidélité :", error);
-        // On ne remet pas forcément à 0 si on a déjà un cache, 
-        // cela évite de faire clignoter l'interface lors d'un problème réseau mineur
+
+        console.error(
+            "❌ Erreur lors du chargement de la fidélité :",
+            error
+        );
+
+        /*
+         * Ne jamais remettre les points à zéro
+         * simplement parce que l'API est momentanément indisponible.
+         */
         if (!cached) {
-            userPoints.total = 0;
             renderLoyaltyActionButton([]);
             renderUserStats();
         }
@@ -4549,6 +5549,126 @@ function spawnConfetti() {
     setTimeout(() => overlay.remove(), 2400);
 }
 
+
+/**
+ * Animation visuelle lorsqu'une opportunité
+ * rapporte effectivement des points.
+ *
+ * Exemple :
+ * celebrateEarnReward('earn-card-quiz', 10);
+ */
+function celebrateEarnReward(cardId, points) {
+
+    const card = document.getElementById(cardId);
+
+    if (!card) return;
+
+    /* -----------------------------------------
+       Animation principale de la carte
+    ----------------------------------------- */
+
+    card.classList.remove('reward-success');
+
+    // Force le navigateur à recalculer l'animation
+    void card.offsetWidth;
+
+    card.classList.add('reward-success');
+
+
+    /* -----------------------------------------
+       +POINTS flottant
+    ----------------------------------------- */
+
+    const floating = document.createElement('div');
+
+    floating.className = 'earn-floating-points';
+
+    floating.innerHTML = `+${points} 🪙`;
+
+    card.appendChild(floating);
+
+
+    /* -----------------------------------------
+       Check de succès
+    ----------------------------------------- */
+
+    const check = document.createElement('div');
+
+    check.className = 'earn-success-check';
+
+    check.innerHTML = '✓';
+
+    card.appendChild(check);
+
+
+    /* -----------------------------------------
+       Particules
+    ----------------------------------------- */
+
+    const particleCount = 12;
+
+    for (let i = 0; i < particleCount; i++) {
+
+        const particle = document.createElement('div');
+
+        particle.className = 'earn-particle';
+
+        const angle =
+            (Math.PI * 2 * i) / particleCount;
+
+        const distance =
+            45 + Math.random() * 45;
+
+        const x =
+            Math.cos(angle) * distance;
+
+        const y =
+            Math.sin(angle) * distance;
+
+        particle.style.setProperty(
+            '--particle-x',
+            `${x}px`
+        );
+
+        particle.style.setProperty(
+            '--particle-y',
+            `${y}px`
+        );
+
+        /*
+         * Quelques formes différentes
+         */
+        const size =
+            4 + Math.random() * 4;
+
+        particle.style.width =
+            `${size}px`;
+
+        particle.style.height =
+            `${size}px`;
+
+        card.appendChild(particle);
+    }
+
+
+    /* -----------------------------------------
+       Nettoyage
+    ----------------------------------------- */
+
+    setTimeout(() => {
+
+        card.classList.remove('reward-success');
+
+        floating.remove();
+
+        check.remove();
+
+        card
+            .querySelectorAll('.earn-particle')
+            .forEach(p => p.remove());
+
+    }, 1200);
+}
 
 </script>
 
