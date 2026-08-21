@@ -698,7 +698,201 @@ html[data-theme="dark"] @keyframes cardGlow {
 }
 </style>
 
+<style>
+.quiz-language-selector {
+    margin-bottom: 18px;
+}
 
+.quiz-language-selector label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--muted, #64748b);
+}
+
+.quiz-language-selector select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid rgba(124, 58, 237, 0.18);
+    border-radius: 12px;
+    background: var(--card, #fff);
+    color: #1f1f24;
+    font-size: 0.95rem;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.quiz-language-selector select:focus {
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.10);
+}
+</style>
+
+<style>
+/* =====================================================
+   QUIZ BIBLIQUE
+   ===================================================== */
+
+.quiz-modal-box {
+    max-width: 560px;
+}
+
+.quiz-subtitle {
+    display: block;
+    margin-top: 3px;
+    font-size: 0.78rem;
+    color: var(--muted, #94a3b8);
+}
+
+.quiz-language-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(124, 58, 237, 0.07);
+    border: 1px solid rgba(124, 58, 237, 0.12);
+}
+
+.quiz-language-box label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text, #1e293b);
+}
+
+.quiz-language-box select {
+    min-width: 145px;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(124, 58, 237, 0.25);
+    background: #fff;
+    color: #334155;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+}
+
+.quiz-info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 9px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--muted, #64748b);
+}
+
+#quizPointsLabel {
+    color: #7c3aed;
+}
+
+.quiz-question-card {
+    position: relative;
+    margin: 20px 0;
+    padding: 24px 20px 20px;
+    border-radius: 18px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(124, 58, 237, 0.10),
+            rgba(59, 130, 246, 0.06)
+        );
+    border: 1px solid rgba(124, 58, 237, 0.15);
+    text-align: center;
+}
+
+.quiz-question-icon {
+    width: 48px;
+    height: 48px;
+    margin: -45px auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.12);
+    font-size: 1.45rem;
+}
+
+.quiz-question-card .poll-question {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    font-weight: 700;
+}
+
+.quiz-progress-bar {
+    width: 100%;
+    height: 8px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.18);
+}
+
+.quiz-progress-fill {
+    width: 20%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,
+        #7c3aed,
+        #a855f7,
+        #3b82f6
+    );
+    transition: width 0.35s ease;
+}
+
+.quiz-option-btn {
+    position: relative;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    background: #fff;
+    text-align: left;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.quiz-option-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    border-color: #7c3aed;
+    box-shadow: 0 7px 18px rgba(124, 58, 237, 0.12);
+}
+
+.quiz-option-btn:disabled {
+    cursor: default;
+}
+
+.quiz-option-btn.selected {
+    border-color: #7c3aed;
+    background: rgba(124, 58, 237, 0.08);
+}
+
+@media (max-width: 600px) {
+
+    .quiz-language-box {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .quiz-language-box select {
+        width: 100%;
+    }
+
+    .quiz-question-card {
+        padding: 22px 15px 18px;
+    }
+}
+</style>
 
 </head>
 
@@ -1406,24 +1600,101 @@ html[data-theme="dark"] @keyframes cardGlow {
     </div>
 </div>
 
-<!-- Modale du quiz biblique -->
-<div class="modal-overlay" id="quizModal" onclick="closeModalOnOverlay(event, 'quizModal')">
-    <div class="modal-box" role="dialog" aria-modal="true" aria-label="Quiz biblique">
-        <div class="modal-header">
-            <h3>📖 Quiz biblique</h3>
-            <button class="modal-close-btn" aria-label="Fermer le quiz" onclick="closeModal('quizModal')">
-                <i data-feather="x"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgressFill"></div></div>
-            <p class="quiz-step-label" id="quizStepLabel">Question 1/3</p>
-            <p class="poll-question" id="quizQuestionText"></p>
-            <div class="poll-options" id="quizOptionsList"></div>
-            <div id="quizResultBox" class="quiz-result-box" style="display:none;"></div>
-        </div>
-    </div>
-</div>
+		<!-- =====================================================
+     MODALE QUIZ BIBLIQUE
+     ===================================================== -->
+		<div class="modal-overlay" id="quizModal"
+			 onclick="closeModalOnOverlay(event, 'quizModal')">
+
+			<div class="modal-box"
+				 role="dialog"
+				 aria-modal="true"
+				 aria-label="Quiz biblique">
+
+				<div class="modal-header">
+
+					<h3>📖 Quiz biblique</h3>
+
+					<button class="modal-close-btn"
+							aria-label="Fermer le quiz"
+							onclick="closeModal('quizModal')">
+						<i data-feather="x"></i>
+					</button>
+
+				</div>
+
+				<div class="modal-body">
+
+				<!-- =========================================
+					 SÉLECTEUR DE LANGUE
+					 ========================================= -->
+
+				<div class="quiz-language-selector"
+					 style="
+						margin-bottom:16px;
+						padding:12px;
+						border-radius:12px;
+						background:rgba(124,58,237,0.08);
+					 ">
+
+					<label for="quizLanguage"
+						   style="
+								display:block;
+								font-weight:700;
+								margin-bottom:7px;
+						   ">
+						🌍 Langue du quiz
+					</label>
+
+					<select id="quizLanguage"
+							onchange="changeBibleQuizLanguage()"
+							class="quiz-language-select">
+
+						<option value="fr">🇫🇷 Français</option>
+						<option value="mg">🇲🇬 Malagasy</option>
+						<option value="en">🇬🇧 English</option>
+
+					</select>
+
+				</div>
+
+
+					<!-- PROGRESSION -->
+
+					<div class="quiz-progress-bar">
+						<div class="quiz-progress-fill"
+							 id="quizProgressFill"></div>
+					</div>
+
+					<p class="quiz-step-label"
+					   id="quizStepLabel">
+						Question 1/3
+					</p>
+
+
+					<!-- QUESTION -->
+
+					<p class="poll-question"
+					   id="quizQuestionText"></p>
+
+
+					<!-- RÉPONSES -->
+
+					<div class="poll-options"
+						 id="quizOptionsList">
+					</div>
+
+
+					<!-- RÉSULTAT -->
+
+					<div id="quizResultBox"
+						 class="quiz-result-box"
+						 style="display:none;">
+					</div>
+
+				</div>
+			</div>
+		</div>
 
 <!-- Modale de la vidéo bonus -->
 <div class="modal-overlay" id="videoModal" onclick="closeModalOnOverlay(event, 'videoModal')">
@@ -1482,7 +1753,16 @@ html[data-theme="dark"] @keyframes cardGlow {
 </div>
 
 
+<script type="module">
+    import { fullBibleContent } from '../data/bible_content.js';
 
+    window.fullBibleContent = fullBibleContent;
+
+    console.log(
+        '📖 Bible chargée pour le quiz :',
+        Object.keys(window.fullBibleContent)
+    );
+</script>
 <script defer>
 const DEBUG = true;
 
@@ -2725,6 +3005,823 @@ const defaultQuizzes = [
     { question: "Dans quel livre trouve-t-on les Dix Commandements ?", options: ["Genèse", "Exode", "Lévitique", "Nombres"], correct: 1 }
 ];
 
+/* =========================================================
+ * QUIZ BIBLIQUE LOCAL
+ * Source : data/bible_content.js
+ *
+ * window.fullBibleContent
+ * ├── mg
+ * ├── fr
+ * └── en
+ * ========================================================= */
+
+const BIBLE_QUIZ_QUESTIONS_PER_GAME = 5;
+
+let bibleQuizState = {
+    language: 'fr',
+    questions: [],
+    currentIndex: 0,
+    correctCount: 0,
+    totalPoints: 0,
+    answering: false
+};
+
+
+/* =========================================================
+ * HISTORIQUE DES QUESTIONS
+ * ========================================================= */
+
+function getBibleQuizHistoryKey() {
+
+    return `bible_quiz_history_${
+        currentUsername || 'guest'
+    }_${bibleQuizState.language}`;
+
+}
+
+
+function getBibleQuizHistory() {
+
+    try {
+
+        const value =
+            localStorage.getItem(
+                getBibleQuizHistoryKey()
+            );
+
+        return value
+            ? JSON.parse(value)
+            : [];
+
+    } catch (error) {
+
+        console.warn(
+            'Impossible de lire l’historique du quiz.',
+            error
+        );
+
+        return [];
+    }
+}
+
+
+function saveBibleQuizHistory(history) {
+
+    try {
+
+        /*
+         * On conserve seulement les 500 derniers passages.
+         */
+        const cleanHistory =
+            history.slice(-500);
+
+        localStorage.setItem(
+            getBibleQuizHistoryKey(),
+            JSON.stringify(cleanHistory)
+        );
+
+    } catch (error) {
+
+        console.warn(
+            'Impossible de sauvegarder l’historique du quiz.',
+            error
+        );
+    }
+}
+
+
+/* =========================================================
+ * MÉLANGER UN TABLEAU
+ * ========================================================= */
+
+function shuffleArray(array) {
+
+    const copy = [...array];
+
+    for (
+        let i = copy.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() * (i + 1)
+            );
+
+        [
+            copy[i],
+            copy[j]
+        ] = [
+            copy[j],
+            copy[i]
+        ];
+    }
+
+    return copy;
+}
+
+
+/* =========================================================
+ * EXTRAIRE LES VERSETS
+ * ========================================================= */
+
+function getBibleVersePool(language) {
+
+    if (
+        !window.fullBibleContent ||
+        !window.fullBibleContent[language]
+    ) {
+
+        console.error(
+            '❌ Bible introuvable pour la langue :',
+            language
+        );
+
+        return [];
+    }
+
+    const bible =
+        window.fullBibleContent[language];
+
+    const pool = [];
+
+    if (!Array.isArray(bible.books)) {
+        return pool;
+    }
+
+    bible.books.forEach(book => {
+
+        if (!Array.isArray(book.chapters)) {
+            return;
+        }
+
+        book.chapters.forEach(chapter => {
+
+            if (!Array.isArray(chapter.verses)) {
+                return;
+            }
+
+            chapter.verses.forEach(
+                (verseText, verseIndex) => {
+
+                    if (
+                        typeof verseText !== 'string' ||
+                        !verseText.trim()
+                    ) {
+                        return;
+                    }
+
+                    pool.push({
+
+                        id:
+                            `${language}_${book.number}_` +
+                            `${chapter.chapter}_` +
+                            `${verseIndex + 1}`,
+
+                        book:
+                            book.name,
+
+                        bookNumber:
+                            book.number,
+
+                        chapter:
+                            chapter.chapter,
+
+                        verse:
+                            verseIndex + 1,
+
+                        text:
+                            verseText.trim()
+
+                    });
+
+                }
+            );
+
+        });
+
+    });
+
+    return pool;
+}
+
+
+/* =========================================================
+ * CRÉER UNE QUESTION
+ *
+ * Pour commencer, on utilise une question extrêmement
+ * fiable puisqu'elle est directement déduite de la Bible :
+ *
+ * "Dans quel livre trouve-t-on ce passage ?"
+ *
+ * Cela permet de générer automatiquement des milliers
+ * de questions lorsque bible_content.js sera complet.
+ * ========================================================= */
+
+function createBibleQuestion(verse, pool, language) {
+
+    const otherBooks = [
+        ...new Set(
+            pool
+                .map(item => item.book)
+                .filter(
+                    book =>
+                        book !== verse.book
+                )
+        )
+    ];
+
+    if (otherBooks.length < 3) {
+        return null;
+    }
+
+    const distractors =
+        shuffleArray(otherBooks)
+            .slice(0, 3);
+
+    const options =
+        shuffleArray([
+            verse.book,
+            ...distractors
+        ]);
+
+    const correctIndex =
+        options.indexOf(
+            verse.book
+        );
+
+    const questions = {
+
+        fr: {
+            text:
+                `Dans quel livre de la Bible ` +
+                `trouve-t-on ce passage ?\n\n` +
+                `« ${verse.text} »`
+        },
+
+        mg: {
+            text:
+                `Ao amin'ny boky inona ao amin'ny Baiboly ` +
+                `no ahitana ity andininy ity ?\n\n` +
+                `« ${verse.text} »`
+        },
+
+        en: {
+            text:
+                `In which book of the Bible ` +
+                `can this passage be found?\n\n` +
+                `“${verse.text}”`
+        }
+
+    };
+
+    return {
+
+        id:
+            `bible_${verse.id}`,
+
+        type:
+            'book_identification',
+
+        language,
+
+        question:
+            questions[language]?.text ||
+            questions.fr.text,
+
+        options,
+
+        correctIndex,
+
+        book:
+            verse.book,
+
+        chapter:
+            verse.chapter,
+
+        verse:
+            verse.verse,
+
+        sourceId:
+            verse.id,
+
+        points:
+            0.25
+
+    };
+}
+
+
+/* =========================================================
+ * GÉNÉRER 5 QUESTIONS UNIQUES
+ * ========================================================= */
+
+function generateBibleQuizQuestions(language) {
+
+    const pool =
+        getBibleVersePool(language);
+
+    if (pool.length < 1) {
+
+        throw new Error(
+            `Aucun verset disponible en ${
+                language
+            }.`
+        );
+    }
+
+    const history =
+        getBibleQuizHistory();
+
+    const usedIds =
+        new Set(history);
+
+    /*
+     * On essaie d'abord de choisir des versets
+     * qui n'ont jamais été utilisés.
+     */
+    let available =
+        pool.filter(
+            verse =>
+                !usedIds.has(verse.id)
+        );
+
+    /*
+     * Si la petite Bible actuelle est épuisée,
+     * on recommence à utiliser les anciens versets.
+     *
+     * Cela garantit que le quiz reste disponible
+     * 24h/24 et 7j/7.
+     */
+    if (available.length < BIBLE_QUIZ_QUESTIONS_PER_GAME) {
+
+        available =
+            shuffleArray(pool);
+    } else {
+
+        available =
+            shuffleArray(available);
+    }
+
+    const questions = [];
+
+    for (
+        const verse of available
+    ) {
+
+        if (
+            questions.length >=
+            BIBLE_QUIZ_QUESTIONS_PER_GAME
+        ) {
+            break;
+        }
+
+        const question =
+            createBibleQuestion(
+                verse,
+                pool,
+                language
+            );
+
+        if (!question) {
+            continue;
+        }
+
+        questions.push(question);
+
+    }
+
+    if (
+        questions.length <
+        BIBLE_QUIZ_QUESTIONS_PER_GAME
+    ) {
+
+        throw new Error(
+            'Pas assez de données bibliques pour générer ' +
+            '5 questions. Ajoutez davantage de livres ' +
+            'dans bible_content.js.'
+        );
+    }
+
+    /*
+     * Enregistrer les passages utilisés.
+     */
+    saveBibleQuizHistory([
+        ...history,
+        ...questions.map(
+            question =>
+                question.sourceId
+        )
+    ]);
+
+    return questions;
+}
+
+
+/* =========================================================
+ * CHANGER LA LANGUE
+ * ========================================================= */
+
+function changeBibleQuizLanguage(language) {
+
+    if (
+        !['fr', 'mg', 'en'].includes(language)
+    ) {
+        language = 'fr';
+    }
+
+    bibleQuizState.language =
+        language;
+
+    /*
+     * Si le quiz est déjà ouvert,
+     * on le reconstruit immédiatement.
+     */
+    try {
+
+        startBibleQuiz();
+
+    } catch (error) {
+
+        console.error(
+            'Erreur changement langue :',
+            error
+        );
+
+    }
+}
+
+
+/* =========================================================
+ * DÉMARRER LE QUIZ BIBLIQUE
+ * ========================================================= */
+function startBibleQuiz() {
+
+    if (!currentUsername) {
+
+        showToast(
+            "Veuillez vous connecter pour participer.",
+            "error"
+        );
+
+        return;
+    }
+
+    try {
+
+        const language =
+            document.getElementById(
+                'quizLanguage'
+            )?.value ||
+            bibleQuizState.language ||
+            'fr';
+
+        bibleQuizState = {
+
+            language,
+
+            questions:
+                generateBibleQuizQuestions(
+                    language
+                ),
+
+            currentIndex: 0,
+
+            correctCount: 0,
+
+            totalPoints: 0,
+
+            answering: false
+
+        };
+
+        renderBibleQuizQuestion();
+
+        const modal =
+            document.getElementById(
+                'quizModal'
+            );
+
+        if (modal) {
+
+            modal.classList.add(
+                'show'
+            );
+        }
+
+        if (
+            typeof feather !== 'undefined'
+        ) {
+
+            feather.replace();
+        }
+
+    } catch (error) {
+
+        console.error(
+            '❌ Erreur démarrage quiz :',
+            error
+        );
+
+        showToast(
+            error.message ||
+            "Impossible de démarrer le quiz biblique.",
+            "error"
+        );
+    }
+}
+
+
+/* =========================================================
+ * AFFICHER LA QUESTION
+ * ========================================================= */
+
+function renderBibleQuizQuestion() {
+
+    const question =
+        bibleQuizState.questions[
+            bibleQuizState.currentIndex
+        ];
+
+    if (!question) {
+        return;
+    }
+
+    const total =
+        bibleQuizState.questions.length;
+
+    const current =
+        bibleQuizState.currentIndex + 1;
+
+    setText(
+        'quizQuestionText',
+        question.question
+    );
+
+    setText(
+        'quizStepLabel',
+        `Question ${current}/${total}`
+    );
+
+    setText(
+        'quizPointsLabel',
+        `⭐ ${bibleQuizState.totalPoints.toFixed(2)} pt`
+    );
+
+    const progress =
+        document.getElementById(
+            'quizProgressFill'
+        );
+
+    if (progress) {
+
+        progress.style.width =
+            `${(current / total) * 100}%`;
+    }
+
+    const list =
+        document.getElementById(
+            'quizOptionsList'
+        );
+
+    if (!list) {
+        return;
+    }
+
+    list.innerHTML = '';
+
+    question.options.forEach(
+        (option, index) => {
+
+            const button =
+                document.createElement(
+                    'button'
+                );
+
+            button.type = 'button';
+
+            button.className =
+                'poll-option-btn quiz-option-btn';
+
+            button.textContent =
+                option;
+
+            button.addEventListener(
+                'click',
+                () =>
+                    submitBibleQuizAnswer(
+                        index
+                    )
+            );
+
+            list.appendChild(
+                button
+            );
+
+        }
+    );
+}
+
+/* =========================================================
+ * RÉPONDRE AU QUIZ BIBLIQUE
+ * ========================================================= */
+
+async function submitBibleQuizAnswer(index) {
+
+    if (
+        bibleQuizState.answering
+    ) {
+        return;
+    }
+
+    const question =
+        bibleQuizState.questions[
+            bibleQuizState.currentIndex
+        ];
+
+    if (!question) {
+        return;
+    }
+
+    bibleQuizState.answering =
+        true;
+
+    const buttons =
+        document.querySelectorAll(
+            '#quizOptionsList .quiz-option-btn'
+        );
+
+    buttons.forEach(
+        (button, i) => {
+
+            button.disabled = true;
+
+            if (i === index) {
+
+                button.classList.add(
+                    'selected'
+                );
+            }
+
+        }
+    );
+
+    const isCorrect =
+        index === question.correctIndex;
+
+    if (!isCorrect) {
+
+        showToast(
+            bibleQuizState.language === 'mg'
+                ? "❌ Diso ny valiny. Avereno indray!"
+                : bibleQuizState.language === 'en'
+                    ? "❌ Wrong answer. Try again!"
+                    : "❌ Mauvaise réponse. Recommencez !",
+            "error"
+        );
+
+        setTimeout(() => {
+
+            bibleQuizState.questions = [];
+
+            bibleQuizState.currentIndex = 0;
+
+            bibleQuizState.correctCount = 0;
+
+            bibleQuizState.totalPoints = 0;
+
+            bibleQuizState.answering = false;
+
+            closeModal(
+                'quizModal'
+            );
+
+        }, 1000);
+
+        return;
+    }
+
+    /*
+     * Bonne réponse
+     */
+    bibleQuizState.correctCount++;
+
+    bibleQuizState.totalPoints +=
+        question.points;
+
+    showToast(
+        bibleQuizState.language === 'mg'
+            ? "✅ Marina! Tsara ny valiny."
+            : bibleQuizState.language === 'en'
+                ? "✅ Correct answer!"
+                : "✅ Bonne réponse !",
+        "success"
+    );
+
+    /*
+     * Les 5 questions sont terminées.
+     */
+    if (
+        bibleQuizState.currentIndex >=
+        bibleQuizState.questions.length - 1
+    ) {
+
+        await completeBibleQuiz();
+
+        return;
+    }
+
+    /*
+     * Question suivante
+     */
+    setTimeout(() => {
+
+        bibleQuizState.currentIndex++;
+
+        bibleQuizState.answering =
+            false;
+
+        renderBibleQuizQuestion();
+
+    }, 650);
+}
+
+/* =========================================================
+ * FIN DU QUIZ
+ * ========================================================= */
+
+async function completeBibleQuiz() {
+
+    const total =
+        bibleQuizState.totalPoints;
+
+    const correct =
+        bibleQuizState.correctCount;
+
+    /*
+     * Pour le moment, affichage local.
+     *
+     * L'étape suivante consiste à connecter cette
+     * validation au serveur afin que les points soient
+     * attribués de manière sécurisée.
+     */
+
+    showToast(
+        bibleQuizState.language === 'mg'
+            ? `🎉 Vita! ${correct}/5 valiny marina. +${total.toFixed(2)} isa!`
+            : bibleQuizState.language === 'en'
+                ? `🎉 Completed! ${correct}/5 correct answers. +${total.toFixed(2)} points!`
+                : `🎉 Bravo ! ${correct}/5 bonnes réponses. +${total.toFixed(2)} points !`,
+        "success"
+    );
+
+    /*
+     * Affichage du résultat
+     */
+    const resultBox =
+        document.getElementById(
+            'quizResultBox'
+        );
+
+    if (resultBox) {
+
+        resultBox.style.display =
+            'block';
+
+        resultBox.innerHTML = `
+            <div style="text-align:center;">
+                <div style="font-size:2.5rem;">🏆</div>
+
+                <strong>
+                    ${correct}/5
+                </strong>
+
+                <div>
+                    +${total.toFixed(2)} points
+                </div>
+            </div>
+        `;
+    }
+
+    bibleQuizState.answering =
+        false;
+
+    setTimeout(() => {
+
+        closeModal(
+            'quizModal'
+        );
+
+        if (resultBox) {
+
+            resultBox.style.display =
+                'none';
+        }
+
+    }, 1800);
+}
+
 /* ---------- SONDAGE QUOTIDIEN DYNAMIQUE ---------- */
 let currentPoll = null; // Stocke le sondage actuel
 
@@ -3346,330 +4443,6 @@ async function submitPollAnswer(index) {
     }
 }
 
-async function submitPollAnswer(index) {
-
-    // ==========================================
-    // 1. Vérifications
-    // ==========================================
-    if (!currentUsername) {
-        showToast("Veuillez vous connecter pour participer.", "error");
-        return;
-    }
-
-    if (!currentPoll) {
-        showToast("Le sondage n'est pas disponible.", "error");
-        return;
-    }
-
-    if (
-        !Array.isArray(currentPoll.options) ||
-        !currentPoll.options[index]
-    ) {
-        showToast("Réponse invalide.", "error");
-        return;
-    }
-
-    // Empêche un double-clic
-    const buttons = document.querySelectorAll(
-        '#pollOptionsList .poll-option-btn'
-    );
-
-    buttons.forEach((btn, i) => {
-        btn.disabled = true;
-
-        if (i === index) {
-            btn.classList.add('selected');
-        }
-    });
-
-    const selectedAnswer = currentPoll.options[index];
-
-    console.log("📊 Réponse au sondage :", {
-        username: currentUsername,
-        poll_id: currentPoll.id,
-        answer: selectedAnswer
-    });
-
-    // ==========================================
-    // 2. Envoi au véritable endpoint du sondage
-    // ==========================================
-    try {
-
-        const token = localStorage.getItem('token');
-
-        const response = await fetch(
-            `${API_BASE_URL}/api/poll/answer`,
-            {
-                method: 'POST',
-
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-
-                    ...(token
-                        ? {
-                            'Authorization': `Bearer ${token}`
-                        }
-                        : {})
-                },
-
-                body: JSON.stringify({
-                    username: currentUsername,
-                    poll_id: currentPoll.id,
-                    answer: selectedAnswer
-                })
-            }
-        );
-
-        // ==========================================
-        // 3. Vérification de la réponse HTTP
-        // ==========================================
-        const contentType =
-            response.headers.get('content-type') || '';
-
-        let result = null;
-
-        if (contentType.includes('application/json')) {
-            result = await response.json();
-        } else {
-            const text = await response.text();
-
-            console.error(
-                "❌ Réponse non JSON du serveur :",
-                text
-            );
-
-            throw new Error(
-                `Le serveur a retourné une réponse invalide (HTTP ${response.status}).`
-            );
-        }
-
-        console.log(
-            "📊 Réponse /api/poll/answer :",
-            result
-        );
-
-        // ==========================================
-        // 4. Erreur HTTP
-        // ==========================================
-        if (!response.ok) {
-
-            throw new Error(
-                result?.message ||
-                `Erreur HTTP ${response.status}`
-            );
-        }
-
-        // ==========================================
-        // 5. Réponse déjà enregistrée
-        // ==========================================
-        if (result.already_answered) {
-
-            markActionDoneToday('poll');
-            updateEarnCardsState();
-
-            showToast(
-                "Vous avez déjà répondu à ce sondage aujourd'hui.",
-                "info"
-            );
-
-            setTimeout(() => {
-                closeModal('pollModal');
-            }, 1000);
-
-            return;
-        }
-
-        // ==========================================
-        // 6. Succès
-        // ==========================================
-        if (result.success) {
-
-            const pointsAdded =
-                parseFloat(result.points_added || 0);
-
-            // Mise à jour avec le vrai solde retourné
-            if (typeof result.new_balance !== 'undefined') {
-
-                userPoints.total =
-                    parseFloat(result.new_balance);
-
-            } else {
-
-                userPoints.total =
-                    parseFloat(userPoints.total || 0)
-                    + pointsAdded;
-            }
-
-            // Sauvegarde de l'état local
-            markActionDoneToday('poll');
-
-            // Rafraîchissement interface
-            renderUserStats();
-            updateEarnCardsState();
-
-            showToast(
-                `🎉 ${result.message || `Vous avez gagné ${pointsAdded} point(s) !`}`,
-                "success"
-            );
-
-            console.log(
-                `✅ Sondage terminé : +${pointsAdded} point(s)`
-            );
-
-        } else {
-
-            throw new Error(
-                result.message ||
-                "Impossible d'enregistrer votre réponse."
-            );
-        }
-
-    } catch (error) {
-
-        console.error(
-            "❌ Erreur lors de l'envoi du sondage :",
-            error
-        );
-
-        // Réactive les boutons en cas d'erreur
-        buttons.forEach(btn => {
-            btn.disabled = false;
-        });
-
-        showToast(
-            error.message ||
-            "Impossible d'enregistrer votre réponse.",
-            "error"
-        );
-
-        return;
-    }
-
-    // ==========================================
-    // 7. Fermer le sondage
-    // ==========================================
-    setTimeout(() => {
-        closeModal('pollModal');
-    }, 1000);
-}
-
-/* ---------- QUIZ BIBLIQUE DYNAMIQUE ---------- */
-let quizState = { questions: [], step: 0, correctCount: 0 };
-
-async function startBibleQuiz() {
-    if (!currentUsername) { showToast("Veuillez vous connecter pour participer.", "error"); return; }
-    if (isActionDoneToday('quiz')) { showToast("Vous avez déjà fait le quiz aujourd'hui. Revenez demain !", "info"); return; }
-
-    try {
-        const response = await fetch(BIBLE_QUIZ_API_URL); // Utilisation de l'API
-        const data = await response.json();
-        if (data.success && Array.isArray(data.quiz) && data.quiz.length > 0) {
-            quizState = { questions: data.quiz, step: 0, correctCount: 0 };
-        } else {
-            console.warn("API de quiz non disponible ou vide, utilisation des questions par défaut.");
-            // Sélectionne 3 questions aléatoires parmi les questions par défaut
-            const pickedDefaults = [];
-            const availableIndices = Array.from({ length: defaultQuizzes.length }, (_, i) => i);
-            for (let i = 0; i < 3 && availableIndices.length > 0; i++) {
-                const randomIndex = Math.floor(Math.random() * availableIndices.length);
-                pickedDefaults.push(defaultQuizzes[availableIndices.splice(randomIndex, 1)[0]]);
-            }
-            quizState = { questions: pickedDefaults, step: 0, correctCount: 0 };
-        }
-    } catch (error) {
-        console.error("Erreur lors de la récupération du quiz biblique :", error);
-        // Sélectionne 3 questions aléatoires parmi les questions par défaut en cas d'erreur réseau
-        const pickedDefaults = [];
-        const availableIndices = Array.from({ length: defaultQuizzes.length }, (_, i) => i);
-        for (let i = 0; i < 3 && availableIndices.length > 0; i++) {
-            const randomIndex = Math.floor(Math.random() * availableIndices.length);
-            pickedDefaults.push(defaultQuizzes[availableIndices.splice(randomIndex, 1)[0]]);
-        }
-        quizState = { questions: pickedDefaults, step: 0, correctCount: 0 };
-    }
-
-    if (quizState.questions.length === 0) {
-        showToast("Impossible de charger le quiz pour le moment.", "error");
-        return;
-    }
-
-    document.getElementById('quizResultBox').style.display = 'none';
-    document.getElementById('quizQuestionText').style.display = '';
-    document.getElementById('quizOptionsList').style.display = '';
-    document.getElementById('quizStepLabel').style.display = '';
-
-    renderQuizStep();
-    document.getElementById('quizModal').classList.add('show');
-}
-
-function renderQuizStep() {
-    const { questions, step } = quizState;
-    const q = questions[step];
-
-    setText('quizStepLabel', `Question ${step + 1}/${questions.length}`);
-    setText('quizQuestionText', q.question); // 'question' au lieu de 'q'
-
-    const progressFill = document.getElementById('quizProgressFill');
-    if (progressFill) progressFill.style.width = `${((step + 1) / questions.length) * 100}%`; // Barre de progression incluant l'étape actuelle
-
-    const list = document.getElementById('quizOptionsList');
-    list.innerHTML = q.options.map((opt, i) => `
-        <button class="poll-option-btn" onclick="answerQuizStep(${i})">${opt}</button>
-    `).join('');
-}
-
-function answerQuizStep(index) {
-    const { questions, step } = quizState;
-    const q = questions[step];
-    const buttons = document.querySelectorAll('#quizOptionsList .poll-option-btn');
-
-    buttons.forEach((btn, i) => {
-        btn.disabled = true;
-        if (i === q.correct) btn.classList.add('correct');
-        else if (i === index) btn.classList.add('wrong');
-    });
-
-    if (index === q.correct) quizState.correctCount++;
-
-    setTimeout(() => {
-        if (step + 1 < questions.length) {
-            quizState.step++;
-            renderQuizStep();
-        } else {
-            finishQuiz();
-        }
-    }, 800);
-}
-
-async function finishQuiz() {
-    const { questions, correctCount } = quizState;
-    const progressFill = document.getElementById('quizProgressFill');
-    if (progressFill) progressFill.style.width = '100%';
-
-    const earned = Math.round((correctCount / questions.length) * 10);
-
-    document.getElementById('quizStepLabel').style.display = 'none';
-    document.getElementById('quizQuestionText').style.display = 'none';
-    document.getElementById('quizOptionsList').style.display = 'none';
-
-    const resultBox = document.getElementById('quizResultBox');
-    resultBox.style.display = 'block';
-    resultBox.innerHTML = `
-        <span class="quiz-result-emoji">${correctCount === questions.length ? '🏆' : correctCount > 0 ? '✨' : '📖'}</span>
-        <div class="quiz-result-title">${correctCount}/${questions.length} bonnes réponses</div>
-        <div class="quiz-result-desc">Tu as gagné ${earned} points aujourd'hui. Reviens demain pour un nouveau quiz !</div>
-        <button class="loyalty-action-btn" style="width:100%;" onclick="closeModal('quizModal')">Fermer</button>
-    `;
-
-    if (earned > 0) {
-        await awardPoints(earned, "Quiz biblique quotidien");
-    } else {
-        showToast("Quiz terminé. Retente ta chance demain !", "info");
-    }
-    markActionDoneToday('quiz');
-    updateEarnCardsState();
-}
 
 /* ---------- VIDÉO BONUS (vraie vidéo YouTube définie par l'admin) ---------- */
 let ytPlayer = null;              // Instance du lecteur YouTube IFrame API
@@ -3896,7 +4669,7 @@ function updateEarnCardsState() {
 
     const configs = [
         { action: 'poll', cardId: 'earn-card-poll', bonusId: 'earn-bonus-poll', doneLabel: '✓ Fait', done: isActionDoneToday('poll') },
-        { action: 'quiz', cardId: 'earn-card-quiz', bonusId: 'earn-bonus-quiz', doneLabel: '✓ Fait', done: isActionDoneToday('quiz') },
+        { action: 'quiz', cardId: 'earn-card-quiz', bonusId: 'earn-bonus-quiz', doneLabel: '✓ Fait', done: false },
         { action: 'share', cardId: 'earn-card-share', bonusId: 'earn-bonus-share', doneLabel: '✓ Fait', done: isActionDoneToday('share') }
     ];
 
