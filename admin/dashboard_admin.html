@@ -12,27 +12,129 @@
 
 <body>
 <!-- MENU BAS ADMIN -->
-<nav class="bottom-bar">
-    <a href="../index.html" class="bottom-item">
-        <span class="bottom-item-icon">🏠</span>
-        <span>Accueil</span>
+<nav class="mobile-admin-nav">
+
+    <a href="dashboard_admin.html"
+       class="mobile-admin-item active">
+        <i class="fa-solid fa-chart-line"></i>
+        <span>Dashboard</span>
     </a>
 
-    <a href="#" class="bottom-item">
-        <span class="bottom-item-icon">💬</span>
-        <span>Chat</span>
+    <a href="gestion_utilisateurs.html"
+       class="mobile-admin-item">
+        <i class="fa-solid fa-users"></i>
+        <span>Utilisateurs</span>
     </a>
 
-    <a href="#" class="bottom-item">
-        <span class="bottom-item-icon">📖</span>
+    <a href="gestion_articles.html"
+       class="mobile-admin-item">
+        <i class="fa-solid fa-newspaper"></i>
         <span>Articles</span>
     </a>
 
-    <a href="dashboard_admin.html" class="bottom-item active">
-        <span class="bottom-item-icon">⚙️</span>
-        <span>Admin</span>
-    </a>
+    <button
+        type="button"
+        class="mobile-admin-item mobile-menu-trigger"
+        onclick="toggleMobileAdminMenu()"
+    >
+        <i class="fa-solid fa-bars"></i>
+        <span>Menu</span>
+    </button>
+
 </nav>
+<div
+    id="mobileAdminMenu"
+    class="mobile-admin-menu"
+    onclick="closeMobileAdminMenuOutside(event)"
+>
+    <div
+        class="mobile-admin-menu-card"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="mobile-admin-menu-header">
+
+            <div>
+                <strong>Administration</strong>
+                <span>Gestion de votre espace</span>
+            </div>
+
+            <button
+                type="button"
+                class="mobile-admin-menu-close"
+                onclick="toggleMobileAdminMenu()"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+        </div>
+
+
+        <div class="mobile-admin-menu-grid">
+
+            <a
+                href="dashboard_admin.html"
+                class="mobile-admin-menu-item active"
+            >
+                <span class="mobile-menu-icon dashboard">
+                    <i class="fa-solid fa-chart-line"></i>
+                </span>
+
+                <span>
+                    <strong>Tableau de bord</strong>
+                    <small>Vue générale</small>
+                </span>
+            </a>
+
+
+            <a
+                href="gestion_utilisateurs.html"
+                class="mobile-admin-menu-item"
+            >
+                <span class="mobile-menu-icon users">
+                    <i class="fa-solid fa-users"></i>
+                </span>
+
+                <span>
+                    <strong>Utilisateurs</strong>
+                    <small>Gérer les membres</small>
+                </span>
+            </a>
+
+
+            <a
+                href="gestion_articles.html"
+                class="mobile-admin-menu-item"
+            >
+                <span class="mobile-menu-icon articles">
+                    <i class="fa-solid fa-newspaper"></i>
+                </span>
+
+                <span>
+                    <strong>Articles</strong>
+                    <small>Publier et modifier</small>
+                </span>
+            </a>
+
+
+            <a
+                href="#"
+                class="mobile-admin-menu-item"
+            >
+                <span class="mobile-menu-icon chat">
+                    <i class="fa-solid fa-comments"></i>
+                </span>
+
+                <span>
+                    <strong>Chat</strong>
+                    <small>Messages</small>
+                </span>
+            </a>
+
+        </div>
+
+    </div>
+</div>
 
     <!-- Conteneurs pour les Partials -->
     <div id="sidebar-placeholder"></div>
