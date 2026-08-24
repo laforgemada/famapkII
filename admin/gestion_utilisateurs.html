@@ -2382,6 +2382,178 @@
     }
 
 }
+
+/* =========================================================
+   CORRECTION TABLEAU UTILISATEURS
+========================================================= */
+
+.users-table-card {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.users-table {
+    width: 100%;
+    min-width: 1100px;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+
+/* Largeurs fixes des colonnes */
+
+.users-table th:nth-child(1),
+.users-table td:nth-child(1) {
+    width: 190px;
+}
+
+.users-table th:nth-child(2),
+.users-table td:nth-child(2) {
+    width: 180px;
+}
+
+.users-table th:nth-child(3),
+.users-table td:nth-child(3) {
+    width: 125px;
+}
+
+.users-table th:nth-child(4),
+.users-table td:nth-child(4) {
+    width: 120px;
+}
+
+.users-table th:nth-child(5),
+.users-table td:nth-child(5) {
+    width: 90px;
+}
+
+.users-table th:nth-child(6),
+.users-table td:nth-child(6) {
+    width: 80px;
+}
+
+.users-table th:nth-child(7),
+.users-table td:nth-child(7) {
+    width: 130px;
+}
+
+.users-table th:nth-child(8),
+.users-table td:nth-child(8) {
+    width: 100px;
+}
+
+.users-table th:nth-child(9),
+.users-table td:nth-child(9) {
+    width: 90px;
+}
+
+
+/* Empêche les cellules de faire agrandir le tableau */
+
+.users-table td,
+.users-table th {
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+
+/* Texte utilisateur */
+
+.users-table .user-name,
+.users-table .user-username,
+.users-table .user-email {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* Email */
+
+.users-table .user-email {
+    display: block;
+}
+
+
+/* Rôles */
+
+.users-table td:nth-child(4) {
+    white-space: normal;
+}
+
+
+/* Actions */
+
+.users-table td:last-child {
+    white-space: nowrap;
+}
+
+
+/* Les boutons ne doivent jamais provoquer
+   un agrandissement de la colonne */
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+}
+
+.user-action-btn {
+    flex: 0 0 36px;
+}
+
+
+/* Avatar */
+
+.user-avatar {
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+}
+
+
+/* Cellule utilisateur */
+
+.user-cell {
+    min-width: 0;
+    width: 100%;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .users-table-card {
+        border-radius: 16px;
+    }
+
+    .users-table-header {
+        padding: 15px;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
+    .users-table {
+        min-width: 1050px;
+    }
+
+}
     </style>
 </head>
 
