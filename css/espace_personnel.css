@@ -6591,3 +6591,56 @@ body.dark-theme .skel-trophy {
         rgba(255, 255, 255, 0.05);
 }
 
+/* =========================================================
+   PHOTO DE PROFIL GOOGLE
+   ========================================================= */
+
+/* L'avatar devient un conteneur pour la photo */
+.profile-avatar.has-profile-photo {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+}
+
+/* Photo Google */
+.profile-avatar .profile-avatar-image {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+    object-position: center;
+
+    border-radius: inherit;
+}
+
+/* Petite pastille verte "en ligne" */
+.profile-avatar.has-profile-photo::after {
+    content: "";
+
+    position: absolute;
+
+    right: -2px;
+    bottom: -2px;
+
+    width: 10px;
+    height: 10px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    border: 2px solid #ffffff;
+
+    z-index: 5;
+}
+
+/* Effet léger au survol */
+.profile-avatar.has-profile-photo:hover .profile-avatar-image {
+    transform: scale(1.05);
+}
+
+.profile-avatar .profile-avatar-image {
+    transition: transform 0.25s ease;
+}

@@ -2824,119 +2824,12 @@ async function loadUserProfilePhoto() {
         }
     }
 		}
-		
-		/**
- * =========================================================
- * CHARGEMENT DU PROFIL UTILISATEUR
- * =========================================================
- *
- * Récupère les informations du compte depuis Symfony.
- * La photo Google enregistrée en base est ensuite affichée
- * dans l'avatar du header.
- */
-async function loadCurrentUserProfile() {
-
-    const token = localStorage.getItem('token');
-
-    // Pas de token = utilisateur invité
-    if (!token) {
-        renderProfileAvatar(
-            localStorage.getItem('user_name') || 'Invité',
-            null
-        );
-        return;
-    }
-
-    try {
-
-        const response = await fetch(
-            `${API_BASE_URL}/api/mobile/user/me`,
-            {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
-                }
-            }
-        );
-
-        if (!response.ok) {
-
-            console.warn(
-                'Profil utilisateur : HTTP ' + response.status
-            );
-
-            return;
-        }
-
-        const data = await response.json();
-
-        if (
-            data.status !== 'success' ||
-            !data.userData
-        ) {
-
-            console.warn(
-                'Réponse profil utilisateur invalide :',
-                data
-            );
-
-            return;
-        }
-
-        const user = data.userData;
-
-        // =====================================================
-        // NOM UTILISATEUR
-        // =====================================================
-
-        if (user.username) {
-
-            currentUsername = user.username;
-
-            localStorage.setItem(
-                'user_name',
-                user.username
-            );
-        }
-
-        // =====================================================
-        // PHOTO GOOGLE
-        // =====================================================
-
-        const photoUrl = user.photo || null;
-
-        // =====================================================
-        // AFFICHER L'AVATAR
-        // =====================================================
-
-        renderProfileAvatar(
-            currentUsername || 'Invité',
-            photoUrl
-        );
-
-        console.log(
-            '🖼️ Profil chargé :',
-            {
-                username: currentUsername,
-                photo: photoUrl
-            }
-        );
-
-    } catch (error) {
-
-        console.error(
-            'Erreur chargement profil utilisateur :',
-            error
-        );
-
-    }
-}
 
 		document.addEventListener("DOMContentLoaded", async () => {
-		feather.replace();
+			feather.replace();
+			
 
-		currentUsername = localStorage.getItem('user_name');
+			currentUsername = localStorage.getItem('user_name');
 
 		// Affichage immédiat depuis le cache
 		const cachedPhoto = localStorage.getItem('user_photo');
