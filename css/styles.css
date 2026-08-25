@@ -756,28 +756,30 @@ body{
     box-shadow:0 6px 18px rgba(15,23,42,0.06);
 }
 
-.nearby-church-result-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:10px;
+.nearby-church-result-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
 }
 
-.nearby-church-result-title{
-    margin:0;
-    color:var(--text-main);
-    font-size:0.9rem;
-    font-weight:900;
+.nearby-church-result-title {
+    margin: 0;
+    flex: 1 1 220px;
+    min-width: 0;
+    line-height: 1.4;
+    word-break: break-word;
 }
 
-.nearby-church-distance{
-    flex:0 0 auto;
-    padding:5px 9px;
-    border-radius:999px;
-    background:rgba(22,163,74,0.10);
-    color:var(--primary);
-    font-size:0.68rem;
-    font-weight:900;
+.nearby-church-distance {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    margin-left: auto;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: .78rem;
+    font-weight: 700;
 }
 
 .nearby-church-meta{
@@ -1333,3 +1335,688 @@ html[data-theme="dark"] .nav-item.active i{
 
 html[data-theme="dark"] .btn-user{ background:rgba(34,197,94,0.14); }
 html[data-theme="dark"] .btn-dashboard{ background:rgba(124,58,237,0.18); }
+
+
+/* =========================================================
+   ÉGLISES PROCHES — CARTES MODERNES
+========================================================= */
+
+.nearby-church-results {
+    display: grid;
+    gap: 16px;
+    margin-top: 18px;
+}
+
+
+.nearby-church-result {
+    position: relative;
+    display: flex;
+    gap: 16px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: 20px;
+    box-shadow:
+        0 8px 25px rgba(15, 23, 42, 0.06),
+        0 2px 6px rgba(15, 23, 42, 0.03);
+    overflow: hidden;
+    animation: nearbyChurchAppear .45s ease both;
+    animation-delay: calc(var(--church-index) * 90ms);
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+}
+
+
+.nearby-church-result::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(
+        180deg,
+        #16a34a,
+        #22c55e
+    );
+}
+
+
+.nearby-church-result:hover {
+    transform: translateY(-3px);
+    border-color: rgba(34, 197, 94, .25);
+    box-shadow:
+        0 14px 35px rgba(15, 23, 42, 0.10),
+        0 4px 10px rgba(22, 163, 74, 0.08);
+}
+
+
+/* =========================================================
+   ICÔNE ÉGLISE
+========================================================= */
+
+.nearby-church-icon {
+    position: relative;
+    flex: 0 0 58px;
+}
+
+
+.nearby-church-icon-inner {
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 17px;
+    background: linear-gradient(
+        145deg,
+        #dcfce7,
+        #bbf7d0
+    );
+    color: #15803d;
+    box-shadow:
+        inset 0 1px 1px rgba(255,255,255,.8),
+        0 5px 12px rgba(22,163,74,.12);
+}
+
+
+.nearby-church-icon-inner svg {
+    width: 28px;
+    height: 28px;
+    stroke-width: 2.2;
+}
+
+
+/* =========================================================
+   BADGE PLUS PROCHE
+========================================================= */
+
+.nearby-church-nearest {
+    position: absolute;
+
+    /* Décalage pour éviter complètement l'icône */
+    top: 52px;
+    left: 78px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    padding: 5px 10px;
+
+    border-radius: 999px;
+
+    background: #ecfdf5;
+    color: #15803d;
+
+    border: 1px solid #bbf7d0;
+
+    font-size: 0.72rem;
+    font-weight: 800;
+
+    white-space: nowrap;
+
+    box-shadow: 0 3px 8px rgba(22, 163, 74, 0.10);
+
+    z-index: 5;
+}
+
+.nearby-church-nearest svg {
+    width: 13px;
+    height: 13px;
+    stroke-width: 2.5;
+}
+
+.nearby-church-nearest svg {
+    width: 11px;
+    height: 11px;
+    stroke-width: 2.5;
+}
+
+
+/* =========================================================
+   CONTENU
+========================================================= */
+
+.nearby-church-content {
+    flex: 1;
+    min-width: 0;
+}
+
+
+.nearby-church-result-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+
+.nearby-church-title-wrap {
+    min-width: 0;
+}
+
+
+.nearby-church-result-title {
+    margin: 0;
+    color: #0f172a;
+    font-size: 1.05rem;
+    font-weight: 800;
+    line-height: 1.35;
+}
+
+
+.nearby-church-location {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    color: #64748b;
+    font-size: .82rem;
+    line-height: 1.4;
+}
+
+
+.nearby-church-location svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    color: #16a34a;
+}
+
+
+/* =========================================================
+   DISTANCE
+========================================================= */
+
+.nearby-church-distance {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 10px;
+    border-radius: 11px;
+    background: #f0fdf4;
+    color: #15803d;
+    font-size: .78rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+
+.nearby-church-distance svg {
+    width: 14px;
+    height: 14px;
+}
+
+
+/* =========================================================
+   CONTACT
+========================================================= */
+
+.nearby-church-contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px 16px;
+    margin-top: 12px;
+}
+
+
+.nearby-church-contact-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #64748b;
+    font-size: .8rem;
+}
+
+
+.nearby-church-contact-item svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    color: #94a3b8;
+}
+
+
+/* =========================================================
+   ACTION
+========================================================= */
+
+.nearby-church-actions {
+    margin-top: 14px;
+}
+
+
+.nearby-church-route {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 38px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 11px;
+    background: #0f172a;
+    color: #fff;
+    font-size: .78rem;
+    font-weight: 750;
+    cursor: pointer;
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.nearby-church-route:hover {
+    background: #15803d;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(22,163,74,.18);
+}
+
+
+.nearby-church-route:active {
+    transform: scale(.97);
+}
+
+
+.nearby-church-route svg {
+    width: 15px;
+    height: 15px;
+}
+
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+@keyframes nearbyChurchAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================================
+   MODE SOMBRE
+========================================================= */
+
+[data-theme="dark"] .nearby-church-result {
+    background: rgba(15, 23, 42, .92);
+    border-color: rgba(71, 85, 105, .45);
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.18);
+}
+
+
+[data-theme="dark"] .nearby-church-result-title {
+    color: #f8fafc;
+}
+
+
+[data-theme="dark"] .nearby-church-location,
+[data-theme="dark"] .nearby-church-contact-item {
+    color: #94a3b8;
+}
+
+
+[data-theme="dark"] .nearby-church-route {
+    background: #1e293b;
+}
+
+
+[data-theme="dark"] .nearby-church-route:hover {
+    background: #15803d;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .nearby-church-result {
+        padding: 15px;
+        gap: 12px;
+        border-radius: 17px;
+    }
+
+    .nearby-church-icon,
+    .nearby-church-icon-inner {
+        width: 48px;
+        height: 48px;
+    }
+
+    .nearby-church-icon-inner svg {
+        width: 23px;
+        height: 23px;
+    }
+
+    .nearby-church-nearest {
+        left: 27px;
+        font-size: .56rem;
+    }
+
+    .nearby-church-result-header {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .nearby-church-distance {
+        align-self: flex-start;
+    }
+
+    .nearby-church-result-title {
+        font-size: .96rem;
+    }
+
+    .nearby-church-contact {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .nearby-church-route {
+        width: 100%;
+    }
+}
+
+
+
+@media (max-width: 600px) {
+
+    .nearby-church-result-header {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .nearby-church-result-title {
+        width: 100%;
+    }
+
+    .nearby-church-distance {
+        margin-left: 0;
+        align-self: flex-start;
+    }
+}
+
+.nearby-church-result {
+    position: relative;
+}
+
+.nearby-church-nearest {
+    position: absolute;
+    top: 62px;
+    left: 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    padding: 4px 8px;
+
+    border-radius: 999px;
+
+    background: #ecfdf5;
+    color: #15803d;
+
+    border: 1px solid #bbf7d0;
+
+    font-size: 0.65rem;
+    font-weight: 800;
+
+    white-space: nowrap;
+
+    z-index: 5;
+}
+
+.nearby-church-nearest svg {
+    width: 11px;
+    height: 11px;
+}
+
+/* =========================================================
+   CARTE ÉGLISES PROCHES
+========================================================= */
+
+.nearby-church-map {
+    width: 100%;
+    height: 360px;
+
+    margin: 20px 0;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(148, 163, 184, .25);
+
+    box-shadow:
+        0 10px 30px rgba(15, 23, 42, .10);
+
+    background: #e2e8f0;
+
+    position: relative;
+}
+
+.nearby-church-map .leaflet-control-zoom {
+    border: none;
+    box-shadow: 0 4px 15px rgba(15, 23, 42, .15);
+}
+
+.nearby-church-map .leaflet-control-zoom a {
+    border: none;
+}
+
+.nearby-church-map .leaflet-popup-content-wrapper {
+    border-radius: 14px;
+}
+
+.nearby-church-map .leaflet-popup-content {
+    margin: 14px;
+}
+
+.nearby-map-popup {
+    min-width: 190px;
+}
+
+.nearby-map-popup-title {
+    margin: 0 0 7px;
+
+    font-size: 1rem;
+    font-weight: 800;
+
+    color: #0f172a;
+}
+
+.nearby-map-popup-distance {
+    display: inline-flex;
+
+    padding: 4px 8px;
+
+    border-radius: 999px;
+
+    background: #ecfdf5;
+    color: #15803d;
+
+    font-size: .72rem;
+    font-weight: 800;
+}
+
+.nearby-map-popup-address {
+    margin-top: 8px;
+
+    color: #64748b;
+
+    font-size: .82rem;
+
+    line-height: 1.5;
+}
+
+.nearby-map-popup-route {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    margin-top: 10px;
+
+    padding: 8px 12px;
+
+    border-radius: 9px;
+
+    background: #15803d;
+    color: white;
+
+    text-decoration: none;
+
+    font-size: .8rem;
+    font-weight: 700;
+}
+
+.nearby-map-popup-route:hover {
+    background: #166534;
+    color: white;
+}
+
+
+/* POSITION UTILISATEUR */
+
+.nearby-user-marker {
+    width: 22px;
+    height: 22px;
+
+    border-radius: 50%;
+
+    background: #2563eb;
+
+    border: 4px solid white;
+
+    box-shadow:
+        0 0 0 5px rgba(37, 99, 235, .20),
+        0 4px 12px rgba(15, 23, 42, .25);
+}
+
+
+/* MARQUEUR ÉGLISE */
+
+.nearby-church-marker {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50% 50% 50% 0;
+
+    transform: rotate(-45deg);
+
+    background: #16a34a;
+
+    border: 3px solid white;
+
+    box-shadow:
+        0 5px 14px rgba(22, 163, 74, .35);
+}
+
+.nearby-church-marker span {
+    transform: rotate(45deg);
+
+    color: white;
+
+    font-size: 15px;
+}
+
+@media (max-width: 600px) {
+
+    .nearby-church-map {
+        height: 300px;
+        border-radius: 16px;
+        margin: 16px 0;
+    }
+}
+
+/* =========================================================
+   MARQUEUR DE LA POSITION UTILISATEUR
+========================================================= */
+
+.nearby-user-marker {
+    width: 18px;
+    height: 18px;
+    background: #2563eb;
+    border: 3px solid #ffffff;
+    border-radius: 50%;
+    box-shadow:
+        0 0 0 6px rgba(37, 99, 235, 0.20),
+        0 0 0 12px rgba(37, 99, 235, 0.10);
+    position: relative;
+    animation: nearbyUserPulse 2s infinite;
+}
+
+.nearby-user-marker::after {
+    content: '';
+    position: absolute;
+    inset: -9px;
+    border: 2px solid rgba(37, 99, 235, 0.35);
+    border-radius: 50%;
+    animation: nearbyUserRipple 2s infinite;
+}
+
+@keyframes nearbyUserPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
+}
+
+@keyframes nearbyUserRipple {
+
+    0% {
+        transform: scale(0.6);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1.4);
+        opacity: 0;
+    }
+}
+
+.nearby-church-marker-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+}
+
+.nearby-church-marker-distance {
+    background: #ffffff;
+    color: #15803d;
+    padding: 3px 7px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,.18);
+    border: 1px solid #dcfce7;
+}

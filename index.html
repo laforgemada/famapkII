@@ -25,6 +25,10 @@
 
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <link rel="icon" type="image/png" href="/famapkII/logo/logo.png">
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
 
 <script src="https://unpkg.com/feather-icons"></script>
@@ -291,11 +295,11 @@
                 </label>
 
                 <select id="nearby-radius-select">
-                    <option value="5">5 km</option>
-                    <option value="10">10 km</option>
-                    <option value="25">25 km</option>
-                    <option value="50" selected>50 km</option>
-                    <option value="100">100 km</option>
+                    <option value="5" selected>5 km</option>
+					<option value="10">10 km</option>
+					<option value="25">25 km</option>
+					<option value="50">50 km</option>
+					<option value="100">100 km</option>
                 </select>
             </div>
 
@@ -311,11 +315,14 @@
                 Activez votre position pour rechercher les églises proches.
             </span>
         </div>
+		
+		<div id="nearby-church-map" class="nearby-church-map"></div>
 
         <div
             id="nearby-church-results"
             class="nearby-church-results"
         ></div>
+		
 
     </div>
 
@@ -399,6 +406,10 @@
     });
 </script>
 
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
 <script>
 /* =========================================================
    ÉGLISES PROCHES — GÉOLOCALISATION
@@ -410,6 +421,13 @@
     const radiusSelect = document.getElementById('nearby-radius-select');
     const statusBox = document.getElementById('nearby-church-status');
     const resultsBox = document.getElementById('nearby-church-results');
+	
+	const mapBox = document.getElementById('nearby-church-map');
+
+	if (!mapBox) {
+		console.warn('[Églises proches] Carte introuvable.');
+		return;
+	}
 
     if (!locationButton || !radiusSelect || !statusBox || !resultsBox) {
         console.warn('[Églises proches] Éléments HTML introuvables.');
@@ -417,12 +435,266 @@
     }
 
     const API_BASE_URL = 'https://apokalypsy.com';
+	
+	/* =========================================================
+	   CARTE LEAFLET
+	========================================================= */
+
+	let nearbyMap = null;
+	let userMarker = null;
+	let churchMarkers = [];
+
+	function initNearbyMap() {
+
+		if (nearbyMap) {
+			return;
+		}
+
+		nearbyMap = L.map('nearby-church-map', {
+			zoomControl: true,
+			scrollWheelZoom: false
+		}).setView(
+			[-18.8792, 47.5079],
+			12
+		);
+
+		L.tileLayer(
+			'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+			{
+				maxZoom: 19,
+				attribution:
+					'&copy; OpenStreetMap contributors'
+			}
+		).addTo(nearbyMap);
+	}
+	initNearbyMap();
+	
+	function updateUserMarker(latitude, longitude) {
+
+    if (!nearbyMap) {
+        return;
+    }
+
+    const userIcon = L.divIcon({
+        className: '',
+        html: `
+            <div class="nearby-user-marker"></div>
+        `,
+        iconSize: [22, 22],
+        iconAnchor: [11, 11]
+    });
+
+    if (userMarker) {
+
+        userMarker.setLatLng([
+            latitude,
+            longitude
+        ]);
+
+    } else {
+
+        userMarker = L.marker(
+            [latitude, longitude],
+            {
+                icon: userIcon,
+                zIndexOffset: 1000
+            }
+        )
+        .addTo(nearbyMap)
+        .bindPopup(`
+            <div class="nearby-map-popup">
+                <strong>Votre position</strong>
+            </div>
+        `);
+    }
+}
+
+function updateChurchMarkers(eglises) {
+
+    if (!nearbyMap) {
+        return;
+    }
+
+    /* Supprimer les anciens marqueurs */
+
+    churchMarkers.forEach(marker => {
+
+        nearbyMap.removeLayer(marker);
+
+    });
+
+    churchMarkers = [];
+
+    if (!Array.isArray(eglises)) {
+        return;
+    }
+
+    eglises.forEach((eglise, index) => {
+
+        const latitude = Number(
+            eglise.latitude
+        );
+
+        const longitude = Number(
+            eglise.longitude
+        );
+
+        if (
+            !Number.isFinite(latitude) ||
+            !Number.isFinite(longitude)
+        ) {
+            return;
+        }
+
+        const distance = formatDistance(
+		eglise.distance
+			);
+
+			const churchIcon = L.divIcon({
+
+				className: '',
+
+				html: `
+					<div class="nearby-church-marker-wrapper">
+
+						<div class="nearby-church-marker">
+							<span>⛪</span>
+						</div>
+
+						${
+							distance
+								? `
+									<div class="nearby-church-marker-distance">
+										${distance}
+									</div>
+								  `
+								: ''
+						}
+
+					</div>
+				`,
+
+				iconSize: [80, 58],
+
+				iconAnchor: [40, 34],
+
+				popupAnchor: [0, -38]
+			});
+
+        
+
+        const title = escapeHtml(
+            eglise.titre ||
+            'Église Apokalypsy'
+        );
+
+        const address = escapeHtml(
+            eglise.adresse ||
+            ''
+        );
+
+        const mapsUrl =
+            'https://www.google.com/maps/dir/?api=1' +
+            '&destination=' +
+            encodeURIComponent(
+                latitude + ',' + longitude
+            );
+
+        let popup = `
+            <div class="nearby-map-popup">
+
+                <h4 class="nearby-map-popup-title">
+                    ${title}
+                </h4>
+        `;
+
+        if (distance) {
+
+            popup += `
+                <span class="nearby-map-popup-distance">
+                    ${distance}
+                </span>
+            `;
+        }
+
+        if (address) {
+
+            popup += `
+                <div class="nearby-map-popup-address">
+                    📍 ${address}
+                </div>
+            `;
+        }
+
+        popup += `
+                <a
+                    href="${mapsUrl}"
+                    target="_blank"
+                    rel="noopener"
+                    class="nearby-map-popup-route"
+                >
+                    🧭 Voir l'itinéraire
+                </a>
+
+            </div>
+        `;
+
+        const marker = L.marker(
+            [latitude, longitude],
+            {
+                icon: churchIcon
+            }
+        )
+        .addTo(nearbyMap)
+        .bindPopup(popup);
+
+                churchMarkers.push(marker);
+    });
+
+    /* =====================================================
+       AJUSTER AUTOMATIQUEMENT LA CARTE
+    ===================================================== */
+
+    if (churchMarkers.length > 0) {
+
+        const bounds = L.featureGroup(
+            churchMarkers
+        ).getBounds();
+
+        nearbyMap.fitBounds(
+            bounds,
+            {
+                padding: [40, 40],
+                maxZoom: 15
+            }
+        );
+    }
+}
 
     function updateIcons() {
         if (typeof feather !== 'undefined') {
             feather.replace();
         }
     }
+	
+	function focusChurchOnMap(index) {
+
+    if (!nearbyMap || !churchMarkers[index]) {
+        return;
+    }
+
+    const marker = churchMarkers[index];
+
+    nearbyMap.setView(
+        marker.getLatLng(),
+        16,
+        {
+            animate: true
+        }
+    );
+
+    marker.openPopup();
+}
 
     function setStatus(message, icon = 'info') {
         statusBox.innerHTML = `
@@ -475,114 +747,247 @@
 
     function displayChurches(eglises) {
 
-        if (!Array.isArray(eglises) || eglises.length === 0) {
-            showEmptyResult();
-            return;
+    if (!Array.isArray(eglises) || eglises.length === 0) {
+        showEmptyResult();
+        return;
+    }
+
+    /* =====================================================
+       TRI : PLUS PROCHE → PLUS ÉLOIGNÉE
+    ===================================================== */
+
+    const sortedChurches = [...eglises].sort((a, b) => {
+
+        const distanceA = Number(a.distance);
+        const distanceB = Number(b.distance);
+
+        if (!Number.isFinite(distanceA)) return 1;
+        if (!Number.isFinite(distanceB)) return -1;
+
+        return distanceA - distanceB;
+    });
+
+
+    resultsBox.innerHTML = sortedChurches.map((eglise, index) => {
+
+        const titre = escapeHtml(
+            eglise.titre || 'Église Apokalypsy'
+        );
+
+        const regional = escapeHtml(
+            eglise.regional || ''
+        );
+
+        const distrika = escapeHtml(
+            eglise.distrika || ''
+        );
+
+        const paroisse = escapeHtml(
+            eglise.paroisse || ''
+        );
+
+        const adresse = escapeHtml(
+            eglise.adresse || ''
+        );
+
+        const telephone = escapeHtml(
+            eglise.telephone || ''
+        );
+
+        const distance = formatDistance(
+            eglise.distance
+        );
+
+        const latitude = Number(eglise.latitude);
+        const longitude = Number(eglise.longitude);
+
+
+        /* =================================================
+           INFORMATIONS DE LOCALISATION
+        ================================================= */
+
+        let locationInfo = '';
+
+        if (regional || distrika || paroisse) {
+
+            const parts = [];
+
+            if (regional) {
+                parts.push(regional);
+            }
+
+            if (distrika) {
+                parts.push(distrika);
+            }
+
+            if (paroisse) {
+                parts.push(paroisse);
+            }
+
+            locationInfo = `
+                <div class="nearby-church-location">
+                    <i data-feather="map-pin"></i>
+                    <span>${parts.join(' • ')}</span>
+                </div>
+            `;
         }
 
-        resultsBox.innerHTML = eglises.map(eglise => {
 
-            const titre = escapeHtml(
-                eglise.titre || 'Église Apokalypsy'
-            );
+        /* =================================================
+           ADRESSE / TÉLÉPHONE
+        ================================================= */
 
-            const adresse = escapeHtml(
-                eglise.adresse || ''
-            );
+        let contactInfo = '';
 
-            const telephone = escapeHtml(
-                eglise.telephone || ''
-            );
+        if (adresse) {
 
-            const distance = formatDistance(
-                eglise.distance
-            );
+            contactInfo += `
+                <div class="nearby-church-contact-item">
+                    <i data-feather="navigation"></i>
+                    <span>${adresse}</span>
+                </div>
+            `;
+        }
 
-            const latitude = Number(eglise.latitude);
-            const longitude = Number(eglise.longitude);
+        if (telephone) {
 
-            let meta = '';
+            contactInfo += `
+                <div class="nearby-church-contact-item">
+                    <i data-feather="phone"></i>
+                    <span>${telephone}</span>
+                </div>
+            `;
+        }
 
-            if (adresse) {
-                meta += `
-                    <span>
-                        <i data-feather="map-pin"></i>
-                        ${adresse}
-                    </span>
-                `;
-            }
 
-            if (telephone) {
-                meta += `
-                    <span>
-                        <i data-feather="phone"></i>
-                        ${telephone}
-                    </span>
-                `;
-            }
+        /* =================================================
+           BOUTON ITINÉRAIRE
+        ================================================= */
 
-            let routeButton = '';
+        let routeButton = '';
 
-            if (
-                Number.isFinite(latitude) &&
-                Number.isFinite(longitude)
-            ) {
+        if (
+            Number.isFinite(latitude) &&
+            Number.isFinite(longitude)
+        ) {
 
-                const mapsUrl =
-                    'https://www.google.com/maps/dir/?api=1' +
-                    '&destination=' +
-                    encodeURIComponent(
-                        latitude + ',' + longitude
-                    );
+            const mapsUrl =
+                'https://www.google.com/maps/dir/?api=1' +
+                '&destination=' +
+                encodeURIComponent(
+                    latitude + ',' + longitude
+                );
 
-                routeButton = `
-                    <button
-                        type="button"
-                        class="nearby-church-route"
-                        onclick="window.open('${mapsUrl}', '_blank')"
-                    >
-                        <i data-feather="navigation"></i>
-                        Voir l'itinéraire
-                    </button>
-                `;
-            }
+            routeButton = `
+                <button
+                    type="button"
+                    class="nearby-church-route"
+                    onclick="window.open('${mapsUrl}', '_blank')"
+                >
+                    <i data-feather="navigation"></i>
+                    <span>Voir l'itinéraire</span>
+                </button>
+            `;
+        }
 
-            return `
-                <article class="nearby-church-result">
+
+        /* =================================================
+           BADGE DISTANCE
+        ================================================= */
+
+        const distanceBadge = distance
+            ? `
+                <div class="nearby-church-distance">
+                    <i data-feather="map-pin"></i>
+                    <span>${distance}</span>
+                </div>
+            `
+            : '';
+
+
+        /* =================================================
+           CARTE
+        ================================================= */
+
+       return `
+			<article
+				class="nearby-church-result"
+				style="--church-index:${index};"
+				onclick="focusChurchOnMap(${index})"
+			>
+
+                <div class="nearby-church-icon">
+    <div class="nearby-church-icon-inner">
+        <i data-feather="home"></i>
+    </div>
+</div>
+
+${
+    index === 0
+        ? `
+            <span class="nearby-church-nearest">
+                <i data-feather="navigation"></i>
+                Plus proche
+            </span>
+          `
+        : ''
+}
+</div>
+
+
+			
+
+
+                <div class="nearby-church-content">
 
                     <div class="nearby-church-result-header">
 
-                        <h4 class="nearby-church-result-title">
-                            ${titre}
-                        </h4>
+                        <div class="nearby-church-title-wrap">
 
-                        ${
-                            distance
-                                ? `<span class="nearby-church-distance">
-                                      ${distance}
-                                   </span>`
-                                : ''
-                        }
+                            <h4 class="nearby-church-result-title">
+                                ${titre}
+                            </h4>
+
+                            ${locationInfo}
+
+                        </div>
+
+                        ${distanceBadge}
 
                     </div>
 
+
                     ${
-                        meta
-                            ? `<div class="nearby-church-meta">
-                                   ${meta}
-                               </div>`
+                        contactInfo
+                            ? `
+                                <div class="nearby-church-contact">
+                                    ${contactInfo}
+                                </div>
+                              `
                             : ''
                     }
 
-                    ${routeButton}
 
-                </article>
-            `;
+                    ${
+                        routeButton
+                            ? `
+                                <div class="nearby-church-actions">
+                                    ${routeButton}
+                                </div>
+                              `
+                            : ''
+                    }
 
-        }).join('');
+                </div>
 
-        updateIcons();
-    }
+            </article>
+        `;
+
+    }).join('');
+
+
+    updateIcons();
+}
 
     async function searchNearbyChurches(latitude, longitude) {
 
@@ -632,8 +1037,52 @@
                     'La recherche des églises a échoué.'
                 );
             }
+			
+			updateUserMarker(
+				latitude,
+				longitude
+			);
+
+			updateChurchMarkers(
+				data.eglises
+			);
+			
+			if (
+    Array.isArray(data.eglises) &&
+    data.eglises.length > 0
+) {
+
+    const points = [
+        [latitude, longitude]
+    ];
+
+    data.eglises.forEach(eglise => {
+
+        const lat = Number(eglise.latitude);
+        const lng = Number(eglise.longitude);
+
+        if (
+            Number.isFinite(lat) &&
+            Number.isFinite(lng)
+        ) {
+            points.push([lat, lng]);
+        }
+    });
+
+    const bounds = L.latLngBounds(points);
+
+    nearbyMap.fitBounds(
+        bounds,
+        {
+            padding: [40, 40],
+            maxZoom: 15
+        }
+    );
+}
 
             displayChurches(data.eglises);
+			
+			
 
             if (Array.isArray(data.eglises) && data.eglises.length > 0) {
 
