@@ -2591,276 +2591,43 @@ document.addEventListener('keydown', (event) => {
  * Génère et affiche les initiales de l'utilisateur dans l'avatar du header.
  * Si l'utilisateur n'est pas connecté, affiche des points d'interrogation.
  */
-/**
- * =========================================================
- * AVATAR DU PROFIL
- * =========================================================
- *
- * Affiche la photo Google si elle existe.
- * Sinon, affiche les initiales.
- * Si aucun utilisateur n'est connecté : ??
- */
-/**
- * Affiche la photo Google si elle existe.
- * Sinon, affiche les initiales de l'utilisateur.
- */
-function renderProfileAvatar(username, photoUrl = null) {
+function renderProfileAvatar(username) {
     const avatarElement = document.getElementById('profile-avatar-initials');
-
     if (!avatarElement) return;
 
-    // =========================================================
-    // PHOTO DE PROFIL
-    // =========================================================
-
-    if (photoUrl && typeof photoUrl === 'string' && photoUrl.trim() !== '') {
-
-        avatarElement.innerHTML = '';
-
-        const img = document.createElement('img');
-
-        img.src = photoUrl;
-        img.alt = username || 'Photo de profil';
-
-        img.className = 'profile-avatar-image';
-
-        img.onerror = function () {
-            // Si Google refuse l'image ou si l'URL est expirée,
-            // on revient automatiquement aux initiales.
-            this.remove();
-
-            renderProfileAvatar(username, null);
-        };
-
-        avatarElement.appendChild(img);
-
-        avatarElement.classList.add('has-profile-photo');
-
-        return;
-    }
-
-    // =========================================================
-    // AUCUNE PHOTO → INITIALES
-    // =========================================================
-
-    avatarElement.classList.remove('has-profile-photo');
-
     if (username && username !== 'Invité') {
-
-        const parts = username.trim().split(/\s+/);
-
-        let initials = '??';
-
+        const parts = username.trim().split(" ");
+        let initials = "??";
         if (parts.length > 1) {
-
-            initials = (
-                parts[0].charAt(0) +
-                parts[1].charAt(0)
-            ).toUpperCase();
-
+            initials = (parts[0][0] + parts[1][0]).toUpperCase();
         } else if (username.length >= 2) {
-
-            initials = username
-                .substring(0, 2)
-                .toUpperCase();
-
+            initials = username.substring(0, 2).toUpperCase();
         } else if (username.length === 1) {
-
             initials = username.toUpperCase();
         }
-
         avatarElement.innerText = initials;
-
     } else {
-
-        avatarElement.innerText = '??';
+        avatarElement.innerText = "??"; // Mode invité
     }
 }
 
 
-/**
- * =========================================================
- * RÉCUPÉRATION DU PROFIL DEPUIS LE BACKEND
- * =========================================================
- *
- * Récupère :
- * - username
- * - nom
- * - prénom
- * - email
- * - photo Google
- *
- * La photo est ensuite utilisée par l'avatar.
- */
-async function loadUserProfilePhoto() {
+document.addEventListener("DOMContentLoaded", async () => {
+    feather.replace();
+	
 
-    const token = localStorage.getItem('token');
+    currentUsername = localStorage.getItem('user_name');
+	if (currentUsername) {
+		await updateLoginStreak();
+	}
+    setActiveBottomNav();
 
-    if (!token) {
-        return;
+    const welcomeTitle = document.getElementById('welcome-user-title');
+    if (welcomeTitle) {
+        welcomeTitle.innerText = `Bonjour ${currentUsername || 'Invité'} 🙏`;
     }
 
-    try {
-
-        const response = await fetch(
-            `${API_BASE_URL}/api/mobile/user/me`,
-            {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
-                }
-            }
-        );
-
-        if (!response.ok) {
-
-            console.warn(
-                `Impossible de récupérer le profil : HTTP ${response.status}`
-            );
-
-            return;
-        }
-
-        const data = await response.json();
-
-        if (
-            !data ||
-            data.status !== 'success' ||
-            !data.userData
-        ) {
-
-            console.warn(
-                'Réponse profil utilisateur invalide :',
-                data
-            );
-
-            return;
-        }
-
-        const userData = data.userData;
-
-        // =================================================
-        // Synchronisation du nom
-        // =================================================
-
-        if (userData.username) {
-
-            currentUsername = userData.username;
-
-            localStorage.setItem(
-                'user_name',
-                userData.username
-            );
-        }
-
-        // =================================================
-        // Sauvegarde de la photo localement
-        // =================================================
-
-        if (userData.photo) {
-
-            localStorage.setItem(
-                'user_photo',
-                userData.photo
-            );
-
-        } else {
-
-            localStorage.removeItem('user_photo');
-        }
-
-        // =================================================
-        // Affichage de l'avatar
-        // =================================================
-
-        renderProfileAvatar(
-            currentUsername,
-            userData.photo || null
-        );
-
-        // =================================================
-        // Mise à jour du message de bienvenue
-        // =================================================
-
-        const welcomeTitle =
-            document.getElementById('welcome-user-title');
-
-        if (welcomeTitle) {
-
-            welcomeTitle.innerText =
-                `Bonjour ${currentUsername || 'Invité'} 🙏`;
-        }
-
-        console.log(
-            '✅ Profil utilisateur chargé :',
-            {
-                username: currentUsername,
-                photo: userData.photo
-            }
-        );
-
-    } catch (error) {
-
-        console.warn(
-            'Impossible de récupérer le profil utilisateur :',
-            error
-        );
-
-        // =================================================
-        // FALLBACK : utiliser éventuellement la photo déjà
-        // présente dans le localStorage
-        // =================================================
-
-        const cachedPhoto =
-            localStorage.getItem('user_photo');
-
-        if (currentUsername) {
-
-            renderProfileAvatar(
-                currentUsername,
-                cachedPhoto || null
-            );
-        }
-    }
-		}
-
-		document.addEventListener("DOMContentLoaded", async () => {
-			feather.replace();
-			
-
-			currentUsername = localStorage.getItem('user_name');
-
-		// Affichage immédiat depuis le cache
-		const cachedPhoto = localStorage.getItem('user_photo');
-
-		renderProfileAvatar(
-			currentUsername,
-			cachedPhoto || null
-		);
-
-		if (currentUsername) {
-			await updateLoginStreak();
-		}
-
-		setActiveBottomNav();
-
-		const welcomeTitle =
-			document.getElementById('welcome-user-title');
-
-		if (welcomeTitle) {
-			welcomeTitle.innerText =
-				`Bonjour ${currentUsername || 'Invité'} 🙏`;
-		}
-
-		// =========================================================
-		// Récupération de la photo fraîche depuis le serveur
-		// =========================================================
-
-		if (currentUsername) {
-
-			loadUserProfilePhoto();
-		}
+    renderProfileAvatar(currentUsername); // Appel de la fonction pour l'avatar
 
     // Récupère la vidéo bonus définie par l'admin (visible même en mode invité,
     // mais les points ne sont attribués qu'aux utilisateurs connectés)
