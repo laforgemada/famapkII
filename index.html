@@ -248,6 +248,79 @@
     <div style="color: var(--text-muted); font-weight: 700; font-size: 0.9rem;">Chargement du podium...</div>
 </div>
 
+<!-- ÉGLISES PROCHES -->
+<section class="nearby-churches" id="nearby-churches">
+
+    <div class="section-label nearby-section-title">
+        <span class="nearby-title-icon">
+            <i data-feather="map-pin"></i>
+        </span>
+        <span>Églises proches</span>
+    </div>
+
+    <div class="nearby-church-card">
+
+        <div class="nearby-church-header">
+            <div class="nearby-church-icon">
+                <i data-feather="navigation"></i>
+            </div>
+
+            <div class="nearby-church-intro">
+                <h3>Trouvez une église près de vous</h3>
+                <p>
+                    Découvrez les églises Apokalypsy situées à proximité
+                    de votre position.
+                </p>
+            </div>
+        </div>
+
+        <div class="nearby-church-actions">
+
+            <button
+                type="button"
+                id="nearby-location-btn"
+                class="nearby-location-btn"
+            >
+                <i data-feather="map-pin"></i>
+                <span>Utiliser ma position</span>
+            </button>
+
+            <div class="nearby-radius">
+                <label for="nearby-radius-select">
+                    Rayon de recherche
+                </label>
+
+                <select id="nearby-radius-select">
+                    <option value="5">5 km</option>
+                    <option value="10">10 km</option>
+                    <option value="25">25 km</option>
+                    <option value="50" selected>50 km</option>
+                    <option value="100">100 km</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div
+            id="nearby-church-status"
+            class="nearby-church-status"
+            aria-live="polite"
+        >
+            <i data-feather="info"></i>
+            <span>
+                Activez votre position pour rechercher les églises proches.
+            </span>
+        </div>
+
+        <div
+            id="nearby-church-results"
+            class="nearby-church-results"
+        ></div>
+
+    </div>
+
+</section>
+
 <div class="section-label" id="label-fampianarana">📚 Enseignements</div>
 
 <div class="category-scroll" id="cat-list"></div>
@@ -324,6 +397,392 @@
     document.addEventListener('DOMContentLoaded', () => {
         if (window.feather) feather.replace();
     });
+</script>
+
+<script>
+/* =========================================================
+   ÉGLISES PROCHES — GÉOLOCALISATION
+========================================================= */
+
+(function initNearbyChurches() {
+
+    const locationButton = document.getElementById('nearby-location-btn');
+    const radiusSelect = document.getElementById('nearby-radius-select');
+    const statusBox = document.getElementById('nearby-church-status');
+    const resultsBox = document.getElementById('nearby-church-results');
+
+    if (!locationButton || !radiusSelect || !statusBox || !resultsBox) {
+        console.warn('[Églises proches] Éléments HTML introuvables.');
+        return;
+    }
+
+    const API_BASE_URL = 'https://apokalypsy.com';
+
+    function updateIcons() {
+        if (typeof feather !== 'undefined') {
+            feather.replace();
+        }
+    }
+
+    function setStatus(message, icon = 'info') {
+        statusBox.innerHTML = `
+            <i data-feather="${icon}"></i>
+            <span>${message}</span>
+        `;
+
+        updateIcons();
+    }
+
+    function escapeHtml(value) {
+        if (value === null || value === undefined) {
+            return '';
+        }
+
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    function formatDistance(distance) {
+        const value = Number(distance);
+
+        if (!Number.isFinite(value)) {
+            return '';
+        }
+
+        if (value < 1) {
+            return Math.round(value * 1000) + ' m';
+        }
+
+        return value.toFixed(1) + ' km';
+    }
+
+    function showEmptyResult() {
+        resultsBox.innerHTML = `
+            <div class="nearby-church-empty">
+                <i data-feather="map-pin"></i>
+                <div>
+                    Aucune église n'a été trouvée dans ce rayon.
+                </div>
+            </div>
+        `;
+
+        updateIcons();
+    }
+
+    function displayChurches(eglises) {
+
+        if (!Array.isArray(eglises) || eglises.length === 0) {
+            showEmptyResult();
+            return;
+        }
+
+        resultsBox.innerHTML = eglises.map(eglise => {
+
+            const titre = escapeHtml(
+                eglise.titre || 'Église Apokalypsy'
+            );
+
+            const adresse = escapeHtml(
+                eglise.adresse || ''
+            );
+
+            const telephone = escapeHtml(
+                eglise.telephone || ''
+            );
+
+            const distance = formatDistance(
+                eglise.distance
+            );
+
+            const latitude = Number(eglise.latitude);
+            const longitude = Number(eglise.longitude);
+
+            let meta = '';
+
+            if (adresse) {
+                meta += `
+                    <span>
+                        <i data-feather="map-pin"></i>
+                        ${adresse}
+                    </span>
+                `;
+            }
+
+            if (telephone) {
+                meta += `
+                    <span>
+                        <i data-feather="phone"></i>
+                        ${telephone}
+                    </span>
+                `;
+            }
+
+            let routeButton = '';
+
+            if (
+                Number.isFinite(latitude) &&
+                Number.isFinite(longitude)
+            ) {
+
+                const mapsUrl =
+                    'https://www.google.com/maps/dir/?api=1' +
+                    '&destination=' +
+                    encodeURIComponent(
+                        latitude + ',' + longitude
+                    );
+
+                routeButton = `
+                    <button
+                        type="button"
+                        class="nearby-church-route"
+                        onclick="window.open('${mapsUrl}', '_blank')"
+                    >
+                        <i data-feather="navigation"></i>
+                        Voir l'itinéraire
+                    </button>
+                `;
+            }
+
+            return `
+                <article class="nearby-church-result">
+
+                    <div class="nearby-church-result-header">
+
+                        <h4 class="nearby-church-result-title">
+                            ${titre}
+                        </h4>
+
+                        ${
+                            distance
+                                ? `<span class="nearby-church-distance">
+                                      ${distance}
+                                   </span>`
+                                : ''
+                        }
+
+                    </div>
+
+                    ${
+                        meta
+                            ? `<div class="nearby-church-meta">
+                                   ${meta}
+                               </div>`
+                            : ''
+                    }
+
+                    ${routeButton}
+
+                </article>
+            `;
+
+        }).join('');
+
+        updateIcons();
+    }
+
+    async function searchNearbyChurches(latitude, longitude) {
+
+        const radius = Number(radiusSelect.value) || 50;
+
+        setStatus(
+            'Recherche des églises proches de votre position...',
+            'loader'
+        );
+
+        try {
+
+            const url =
+                API_BASE_URL +
+                '/api/eglises/nearby' +
+                '?latitude=' +
+                encodeURIComponent(latitude) +
+                '&longitude=' +
+                encodeURIComponent(longitude) +
+                '&radius=' +
+                encodeURIComponent(radius);
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                },
+                cache: 'no-store'
+            });
+
+            if (!response.ok) {
+                throw new Error(
+                    'Erreur HTTP ' + response.status
+                );
+            }
+
+            const data = await response.json();
+
+            console.log(
+                '[Églises proches] Réponse API :',
+                data
+            );
+
+            if (!data.success) {
+                throw new Error(
+                    data.error ||
+                    'La recherche des églises a échoué.'
+                );
+            }
+
+            displayChurches(data.eglises);
+
+            if (Array.isArray(data.eglises) && data.eglises.length > 0) {
+
+                setStatus(
+                    data.count +
+                    (
+                        data.count > 1
+                            ? ' églises trouvées à proximité.'
+                            : ' église trouvée à proximité.'
+                    ),
+                    'check-circle'
+                );
+
+            } else {
+
+                setStatus(
+                    'Aucune église trouvée dans un rayon de ' +
+                    radius +
+                    ' km.',
+                    'info'
+                );
+            }
+
+        } catch (error) {
+
+            console.error(
+                '[Églises proches] Erreur :',
+                error
+            );
+
+            resultsBox.innerHTML = '';
+
+            setStatus(
+                'Impossible de récupérer les églises pour le moment. Veuillez réessayer.',
+                'alert-circle'
+            );
+        }
+    }
+
+    function requestUserLocation() {
+
+        if (!navigator.geolocation) {
+
+            setStatus(
+                'La géolocalisation n’est pas disponible sur cet appareil.',
+                'alert-circle'
+            );
+
+            return;
+        }
+
+        locationButton.disabled = true;
+
+        locationButton.innerHTML = `
+            <i data-feather="loader"></i>
+            <span>Localisation en cours...</span>
+        `;
+
+        updateIcons();
+
+        setStatus(
+            'Obtention de votre position...',
+            'navigation'
+        );
+
+        navigator.geolocation.getCurrentPosition(
+
+            function(position) {
+
+                const latitude =
+                    position.coords.latitude;
+
+                const longitude =
+                    position.coords.longitude;
+
+                console.log(
+                    '[Églises proches] Position :',
+                    latitude,
+                    longitude
+                );
+
+                searchNearbyChurches(
+                    latitude,
+                    longitude
+                ).finally(() => {
+
+                    locationButton.disabled = false;
+
+                    locationButton.innerHTML = `
+                        <i data-feather="map-pin"></i>
+                        <span>Actualiser ma position</span>
+                    `;
+
+                    updateIcons();
+                });
+            },
+
+            function(error) {
+
+                console.warn(
+                    '[Églises proches] Géolocalisation refusée/échouée :',
+                    error
+                );
+
+                locationButton.disabled = false;
+
+                locationButton.innerHTML = `
+                    <i data-feather="map-pin"></i>
+                    <span>Utiliser ma position</span>
+                `;
+
+                updateIcons();
+
+                let message =
+                    'Impossible d’obtenir votre position.';
+
+                if (error.code === 1) {
+                    message =
+                        'L’accès à votre position a été refusé. Autorisez la géolocalisation pour rechercher les églises proches.';
+                } else if (error.code === 2) {
+                    message =
+                        'Votre position n’a pas pu être déterminée.';
+                } else if (error.code === 3) {
+                    message =
+                        'La recherche de votre position a pris trop de temps.';
+                }
+
+                setStatus(
+                    message,
+                    'alert-circle'
+                );
+            },
+
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 300000
+            }
+        );
+    }
+
+    locationButton.addEventListener(
+        'click',
+        requestUserLocation
+    );
+
+    updateIcons();
+
+})();
 </script>
 
 <script src="js/include.js"></script>

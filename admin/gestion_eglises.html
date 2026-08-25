@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gestion des églises - APOKALYPSY</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #0f172a;
+        }
+
+        .page {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.08);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .description {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: 700;
+            font-size: .9rem;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #dbe2ea;
+            border-radius: 12px;
+            font-size: .95rem;
+            font-family: inherit;
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22,163,74,.12);
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .coordinates {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 20px;
+        }
+
+        .coordinates h3 {
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+
+        .coordinates p {
+            color: #64748b;
+            font-size: .85rem;
+            margin-top: 0;
+        }
+
+        .actions {
+            margin-top: 25px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        button {
+            border: none;
+            border-radius: 12px;
+            padding: 13px 22px;
+            background: #16a34a;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: .95rem;
+        }
+
+        button:hover {
+            background: #15803d;
+        }
+
+        #status {
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 700px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .page {
+                margin: 15px auto;
+                padding: 10px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="card">
+
+        <h1>
+            <i class="fa-solid fa-church"></i>
+            Gestion des églises
+        </h1>
+
+        <p class="description">
+            Ajouter une église afin qu'elle puisse être proposée aux membres
+            selon leur position géographique.
+        </p>
+
+        <form id="egliseForm">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="regional">Régional</label>
+                    <input
+                        type="text"
+                        id="regional"
+                        name="regional"
+                        placeholder="Ex : Analamanga"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="distrika">Distrika</label>
+                    <input
+                        type="text"
+                        id="distrika"
+                        name="distrika"
+                        placeholder="Ex : Antananarivo"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="paroisse">Paroisse</label>
+                    <input
+                        type="text"
+                        id="paroisse"
+                        name="paroisse"
+                        placeholder="Ex : FAM Antananarivo"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="titre">Nom de l'église</label>
+                    <input
+                        type="text"
+                        id="titre"
+                        name="titre"
+                        placeholder="Ex : Eglise Apokalypsy Antananarivo"
+                        required>
+                </div>
+
+                <div class="form-group full">
+                    <label for="description">Description</label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        placeholder="Description de l'église..."></textarea>
+                </div>
+
+                <div class="form-group full">
+                    <label for="adresse">Adresse</label>
+                    <input
+                        type="text"
+                        id="adresse"
+                        name="adresse"
+                        placeholder="Adresse complète de l'église">
+                </div>
+
+                <div class="form-group">
+                    <label for="telephone">Téléphone</label>
+                    <input
+                        type="text"
+                        id="telephone"
+                        name="telephone"
+                        placeholder="Ex : 034 00 000 00">
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Image</label>
+                    <input
+                        type="text"
+                        id="image"
+                        name="image"
+                        placeholder="URL de l'image">
+                </div>
+
+            </div>
+
+            <div class="coordinates">
+
+                <h3>
+                    <i class="fa-solid fa-location-dot"></i>
+                    Localisation
+                </h3>
+
+                <p>
+                    Ces coordonnées permettent de calculer les églises
+                    proches des utilisateurs.
+                </p>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="latitude">Latitude</label>
+                        <input
+                            type="number"
+                            id="latitude"
+                            name="latitude"
+                            step="0.0000001"
+                            placeholder="Ex : -18.8792"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="longitude">Longitude</label>
+                        <input
+                            type="number"
+                            id="longitude"
+                            name="longitude"
+                            step="0.0000001"
+                            placeholder="Ex : 47.5079"
+                            required>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="actions">
+
+				<button type="submit" id="submitEgliseBtn">
+					<i class="fa-solid fa-plus"></i>
+					Ajouter l'église
+				</button>
+
+				<button
+					type="button"
+					id="cancelEditBtn"
+					style="display:none; background:#64748b;"
+				>
+					<i class="fa-solid fa-xmark"></i>
+					Annuler
+				</button>
+
+			</div>
+
+			<input
+				type="hidden"
+				id="editEgliseId"
+				value=""
+			>
+			
+			
+
+            <div id="status"></div>
+			
+		
+			<hr style="margin:35px 0; border:0; border-top:1px solid #e2e8f0;">
+
+			<div class="church-list-section">
+
+				<div style="display:flex; justify-content:space-between; align-items:center; gap:15px; margin-bottom:20px; flex-wrap:wrap;">
+					<div>
+						<h2 style="margin:0;">
+							<i class="fa-solid fa-list"></i>
+							Églises enregistrées
+						</h2>
+
+						<p style="margin:6px 0 0; color:#64748b; font-size:.9rem;">
+							Liste des églises disponibles pour les membres.
+						</p>
+					</div>
+
+					<button
+						type="button"
+						id="refreshChurchesBtn"
+						style="background:#0f172a;">
+						<i class="fa-solid fa-rotate"></i>
+						Actualiser
+					</button>
+				</div>
+
+				<div id="churchesLoading"
+					 style="text-align:center; padding:30px; color:#64748b;">
+					<i class="fa-solid fa-spinner fa-spin"></i>
+					Chargement des églises...
+				</div>
+
+				<div id="churchesEmpty"
+					 style="display:none; text-align:center; padding:30px; color:#64748b;">
+					<i class="fa-solid fa-church"
+					   style="font-size:2rem; margin-bottom:10px;"></i>
+
+					<p>Aucune église enregistrée pour le moment.</p>
+				</div>
+
+				<div id="churchesList"
+					 style="display:grid; gap:15px;">
+				</div>
+
+			</div>
+
+
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+
+
+document.addEventListener('DOMContentLoaded', function () {
+
+const API_BASE_URL = 'https://apokalypsy.com';
+
+
+const egliseForm = document.getElementById('egliseForm');
+const submitEgliseBtn = document.getElementById('submitEgliseBtn');
+const cancelEditBtn = document.getElementById('cancelEditBtn');
+const editEgliseId = document.getElementById('editEgliseId');
+const status = document.getElementById('status');
+
+
+function resetEgliseForm() {
+
+    egliseForm.reset();
+
+    editEgliseId.value = '';
+
+    submitEgliseBtn.innerHTML = `
+        <i class="fa-solid fa-plus"></i>
+        Ajouter l'église
+    `;
+
+    cancelEditBtn.style.display = 'none';
+
+    status.textContent = '';
+}
+
+
+function editChurch(eglise) {
+
+    editEgliseId.value = eglise.id;
+
+    document.getElementById('regional').value = eglise.regional || '';
+    document.getElementById('distrika').value = eglise.distrika || '';
+    document.getElementById('paroisse').value = eglise.paroisse || '';
+    document.getElementById('titre').value = eglise.titre || '';
+    document.getElementById('description').value = eglise.description || '';
+    document.getElementById('adresse').value = eglise.adresse || '';
+    document.getElementById('telephone').value = eglise.telephone || '';
+    document.getElementById('image').value = eglise.image || '';
+    document.getElementById('latitude').value = eglise.latitude || '';
+    document.getElementById('longitude').value = eglise.longitude || '';
+
+    submitEgliseBtn.innerHTML = `
+        <i class="fa-solid fa-pen-to-square"></i>
+        Enregistrer les modifications
+    `;
+
+    cancelEditBtn.style.display = 'inline-flex';
+
+    status.textContent =
+        `Modification de l'église « ${eglise.titre || ''} »`;
+
+    status.style.color = '#2563eb';
+
+    egliseForm.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+}
+
+
+cancelEditBtn.addEventListener('click', function () {
+    resetEgliseForm();
+});
+
+/* =========================================================
+   AJOUT D'UNE ÉGLISE
+   POST /api/eglises
+========================================================= */
+
+document.getElementById('egliseForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const status = document.getElementById('status');
+    const button = this.querySelector('button[type="submit"]');
+
+    /* =====================================================
+       RÉCUPÉRATION DU TOKEN
+    ===================================================== */
+
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        status.textContent = '✕ Votre session a expiré. Veuillez vous reconnecter.';
+        status.style.color = '#dc2626';
+        return;
+    }
+
+    /* =====================================================
+       DONNÉES DU FORMULAIRE
+    ===================================================== */
+
+    const data = {
+        regional: document.getElementById('regional').value.trim(),
+        distrika: document.getElementById('distrika').value.trim(),
+        paroisse: document.getElementById('paroisse').value.trim(),
+        titre: document.getElementById('titre').value.trim(),
+        description: document.getElementById('description').value.trim() || null,
+        adresse: document.getElementById('adresse').value.trim() || null,
+        telephone: document.getElementById('telephone').value.trim() || null,
+        image: document.getElementById('image').value.trim() || null,
+        latitude: document.getElementById('latitude').value,
+        longitude: document.getElementById('longitude').value
+    };
+
+    /* =====================================================
+       ÉTAT DU BOUTON
+    ===================================================== */
+
+    status.textContent = 'Enregistrement en cours...';
+    status.style.color = '#64748b';
+
+    button.disabled = true;
+
+    try {
+
+        /* =================================================
+           APPEL API AUTHENTIFIÉ
+        ================================================= */
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/eglises`,
+            {
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+
+                body: JSON.stringify(data)
+            }
+        );
+
+        /* =================================================
+           LECTURE DE LA RÉPONSE
+        ================================================= */
+
+        let result = null;
+
+        try {
+            result = await response.json();
+        } catch (jsonError) {
+            throw new Error(
+                'Le serveur a retourné une réponse invalide.'
+            );
+        }
+
+        /* =================================================
+           SESSION EXPIRÉE / TOKEN INVALIDE
+        ================================================= */
+
+        if (response.status === 401) {
+
+            localStorage.removeItem('token');
+
+            throw new Error(
+                'Votre session a expiré. Veuillez vous reconnecter.'
+            );
+        }
+
+        /* =================================================
+           ACCÈS REFUSÉ
+        ================================================= */
+
+        if (response.status === 403) {
+
+            throw new Error(
+                'Vous n’avez pas les droits nécessaires pour ajouter une église.'
+            );
+        }
+
+        /* =================================================
+           AUTRE ERREUR HTTP
+        ================================================= */
+
+        if (!response.ok || !result.success) {
+
+            throw new Error(
+                result.error ||
+                'Impossible d’ajouter l’église.'
+            );
+        }
+
+        /* =================================================
+           SUCCÈS
+        ================================================= */
+
+        status.textContent = '✓ Église ajoutée avec succès !';
+        status.style.color = '#16a34a';
+
+        this.reset();
+
+        console.log(
+            'Église enregistrée :',
+            result
+        );
+
+        /* =================================================
+           ACTUALISER LA LISTE
+        ================================================= */
+
+        if (typeof loadChurches === 'function') {
+            await loadChurches();
+        }
+
+    } catch (error) {
+
+        console.error(
+            'Erreur ajout église :',
+            error
+        );
+
+        status.textContent =
+            '✕ ' + (
+                error.message ||
+                'Une erreur est survenue.'
+            );
+
+        status.style.color = '#dc2626';
+
+    } finally {
+
+        button.disabled = false;
+    }
+});
+
+
+function editChurch(eglise) {
+
+    editEgliseId.value = eglise.id;
+
+    document.getElementById('regional').value =
+        eglise.regional || '';
+
+    document.getElementById('distrika').value =
+        eglise.distrika || '';
+
+    document.getElementById('paroisse').value =
+        eglise.paroisse || '';
+
+    document.getElementById('titre').value =
+        eglise.titre || '';
+
+    document.getElementById('description').value =
+        eglise.description || '';
+
+    document.getElementById('adresse').value =
+        eglise.adresse || '';
+
+    document.getElementById('telephone').value =
+        eglise.telephone || '';
+
+    document.getElementById('image').value =
+        eglise.image || '';
+
+    document.getElementById('latitude').value =
+        eglise.latitude || '';
+
+    document.getElementById('longitude').value =
+        eglise.longitude || '';
+
+    submitEgliseBtn.innerHTML = `
+        <i class="fa-solid fa-pen-to-square"></i>
+        Enregistrer les modifications
+    `;
+
+    cancelEditBtn.style.display = 'inline-flex';
+
+    status.textContent =
+        `Modification de l'église « ${eglise.titre || ''} »`;
+
+    status.style.color = '#2563eb';
+
+    egliseForm.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+}
+
+cancelEditBtn.addEventListener('click', function () {
+    resetEgliseForm();
+});
+
+async function loadChurches() {
+
+    const loading = document.getElementById('churchesLoading');
+    const empty = document.getElementById('churchesEmpty');
+    const list = document.getElementById('churchesList');
+
+    if (!loading || !empty || !list) {
+        console.error(
+            'Éléments churchesLoading / churchesEmpty / churchesList introuvables.'
+        );
+        return;
+    }
+
+    /* =====================================================
+       RÉCUPÉRATION DU TOKEN
+    ===================================================== */
+
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        loading.style.display = 'none';
+
+        list.innerHTML = `
+            <div style="
+                padding:20px;
+                border-radius:14px;
+                background:#fef2f2;
+                color:#b91c1c;
+                font-weight:600;
+            ">
+                <i class="fa-solid fa-lock"></i>
+                Votre session a expiré. Veuillez vous reconnecter.
+            </div>
+        `;
+
+        return;
+    }
+
+    loading.style.display = 'block';
+    empty.style.display = 'none';
+    list.innerHTML = '';
+
+    try {
+
+        console.log(
+            '[Gestion églises] Chargement depuis :',
+            `${API_BASE_URL}/api/eglises`
+        );
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/eglises`,
+            {
+                method: 'GET',
+
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+
+                cache: 'no-store'
+            }
+        );
+
+        console.log(
+            '[Gestion églises] HTTP :',
+            response.status
+        );
+
+        /* =================================================
+           TOKEN INVALIDE / EXPIRÉ
+        ================================================= */
+
+        if (response.status === 401) {
+
+            localStorage.removeItem('token');
+
+            throw new Error(
+                'Votre session a expiré. Veuillez vous reconnecter.'
+            );
+        }
+
+        /* =================================================
+           ACCÈS REFUSÉ
+        ================================================= */
+
+        if (response.status === 403) {
+            throw new Error(
+                'Vous n’avez pas les droits nécessaires pour consulter les églises.'
+            );
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                'Erreur HTTP ' + response.status
+            );
+        }
+
+        /* =================================================
+           LECTURE JSON
+        ================================================= */
+
+        const data = await response.json();
+
+        console.log(
+            '[Gestion églises] Réponse API :',
+            data
+        );
+
+        if (!data.success) {
+            throw new Error(
+                data.error ||
+                'Impossible de charger les églises.'
+            );
+        }
+
+        loading.style.display = 'none';
+
+        /* =================================================
+           AUCUNE ÉGLISE
+        ================================================= */
+
+        if (
+            !Array.isArray(data.eglises) ||
+            data.eglises.length === 0
+        ) {
+
+            empty.style.display = 'block';
+
+            return;
+        }
+
+        /* =================================================
+           AFFICHAGE DES ÉGLISES
+        ================================================= */
+
+        data.eglises.forEach(eglise => {
+
+            const card = document.createElement('div');
+
+            card.style.cssText = `
+                background:#fff;
+                border:1px solid #e2e8f0;
+                border-radius:16px;
+                padding:18px;
+                box-shadow:0 5px 15px rgba(15,23,42,.05);
+            `;
+			
+			
+
+            card.innerHTML = `
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:flex-start;
+                    gap:15px;
+                    flex-wrap:wrap;
+                ">
+
+                    <div style="
+                        flex:1;
+                        min-width:220px;
+                    ">
+
+                        <h3 style="
+                            margin:0 0 8px;
+                            color:#0f172a;
+                        ">
+
+                            <i
+                                class="fa-solid fa-church"
+                                style="color:#16a34a;"
+                            ></i>
+
+                            ${escapeHtml(
+                                eglise.titre ||
+                                'Église sans nom'
+                            )}
+
+                        </h3>
+
+                        <div style="
+                            color:#64748b;
+                            font-size:.9rem;
+                            line-height:1.7;
+                        ">
+
+                            <div>
+                                <strong>Régional :</strong>
+                                ${escapeHtml(
+                                    eglise.regional || '-'
+                                )}
+                            </div>
+
+                            <div>
+                                <strong>Distrika :</strong>
+                                ${escapeHtml(
+                                    eglise.distrika || '-'
+                                )}
+                            </div>
+
+                            <div>
+                                <strong>Paroisse :</strong>
+                                ${escapeHtml(
+                                    eglise.paroisse || '-'
+                                )}
+                            </div>
+
+                            <div>
+                                <strong>Adresse :</strong>
+                                ${escapeHtml(
+                                    eglise.adresse || '-'
+                                )}
+                            </div>
+
+                            <div>
+                                <strong>Téléphone :</strong>
+                                ${escapeHtml(
+                                    eglise.telephone || '-'
+                                )}
+                            </div>
+
+                            <div>
+                                <strong>GPS :</strong>
+                                ${escapeHtml(
+                                    eglise.latitude || '-'
+                                )}
+                                ,
+                                ${escapeHtml(
+                                    eglise.longitude || '-'
+                                )}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div style="
+                        display:flex;
+                        flex-direction:column;
+                        align-items:flex-end;
+                        gap:10px;
+                    ">
+
+                        <div style="
+                            background:#f0fdf4;
+                            color:#15803d;
+                            padding:8px 12px;
+                            border-radius:10px;
+                            font-size:.8rem;
+                            font-weight:700;
+                        ">
+                            ID #${escapeHtml(eglise.id)}
+                        </div>
+						
+						<button
+							type="button"
+							class="edit-church-btn"
+							data-id="${escapeHtml(eglise.id)}"
+							style="
+								border:none;
+								border-radius:10px;
+								padding:9px 14px;
+								background:#dbeafe;
+								color:#1d4ed8;
+								font-weight:700;
+								cursor:pointer;
+								display:flex;
+								align-items:center;
+								gap:7px;
+							"
+						>
+							<i class="fa-solid fa-pen-to-square"></i>
+							Modifier
+						</button>
+
+                        <button
+                            type="button"
+                            class="delete-church-btn"
+                            data-id="${escapeHtml(eglise.id)}"
+                            style="
+                                border:none;
+                                border-radius:10px;
+                                padding:9px 14px;
+                                background:#fee2e2;
+                                color:#b91c1c;
+                                font-weight:700;
+                                cursor:pointer;
+                                display:flex;
+                                align-items:center;
+                                gap:7px;
+                            "
+                        >
+                            <i class="fa-solid fa-trash"></i>
+                            Supprimer
+                        </button>
+						
+						
+
+                    </div>
+
+                </div>
+            `;
+			
+			const editButton = card.querySelector('.edit-church-btn');
+
+			editButton.addEventListener('click', function () {
+
+				const id = this.dataset.id;
+
+				const eglise = data.eglises.find(
+					item => String(item.id) === String(id)
+				);
+
+				if (!eglise) {
+					alert('Église introuvable.');
+					return;
+				}
+
+				editChurch(eglise);
+			});
+
+            /* =================================================
+               BOUTON SUPPRIMER
+            ================================================= */
+
+            const deleteButton = card.querySelector(
+                '.delete-church-btn'
+            );
+
+            deleteButton.addEventListener(
+                'click',
+                async function () {
+
+                    const id = this.dataset.id;
+
+                    const confirmed = confirm(
+                        'Voulez-vous vraiment supprimer cette église ?\n\n' +
+                        'Cette action est définitive.'
+                    );
+
+                    if (!confirmed) {
+                        return;
+                    }
+
+                    /* =========================================
+                       TOKEN
+                    ========================================= */
+
+                    const currentToken =
+                        localStorage.getItem('token');
+
+                    if (!currentToken) {
+
+                        alert(
+                            'Votre session a expiré. Veuillez vous reconnecter.'
+                        );
+
+                        return;
+                    }
+
+                    this.disabled = true;
+
+                    this.innerHTML = `
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        Suppression...
+                    `;
+
+                    try {
+
+                        const response = await fetch(
+                            `${API_BASE_URL}/api/eglises/${encodeURIComponent(id)}`,
+                            {
+                                method: 'DELETE',
+
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Authorization': `Bearer ${currentToken}`
+                                }
+                            }
+                        );
+
+                        /* =====================================
+                           TOKEN INVALIDE
+                        ===================================== */
+
+                        if (response.status === 401) {
+
+                            localStorage.removeItem('token');
+
+                            throw new Error(
+                                'Votre session a expiré. Veuillez vous reconnecter.'
+                            );
+                        }
+
+                        if (response.status === 403) {
+
+                            throw new Error(
+                                'Vous n’avez pas les droits nécessaires pour supprimer cette église.'
+                            );
+                        }
+
+                        let result = null;
+
+                        try {
+                            result = await response.json();
+                        } catch (jsonError) {
+                            throw new Error(
+                                'Réponse invalide du serveur.'
+                            );
+                        }
+
+                        console.log(
+                            '[Gestion églises] Suppression :',
+                            result
+                        );
+
+                        if (
+                            !response.ok ||
+                            !result.success
+                        ) {
+
+                            throw new Error(
+                                result.error ||
+                                'Impossible de supprimer cette église.'
+                            );
+                        }
+
+                        /* =====================================
+                           SUCCÈS
+                        ===================================== */
+
+                        await loadChurches();
+
+                    } catch (error) {
+
+                        console.error(
+                            '[Gestion églises] Erreur suppression :',
+                            error
+                        );
+
+                        alert(
+                            'Erreur : ' +
+                            error.message
+                        );
+
+                        this.disabled = false;
+
+                        this.innerHTML = `
+                            <i class="fa-solid fa-trash"></i>
+                            Supprimer
+                        `;
+                    }
+                }
+            );
+
+            list.appendChild(card);
+        });
+
+    } catch (error) {
+
+        console.error(
+            '[Gestion églises] Erreur chargement :',
+            error
+        );
+
+        loading.style.display = 'none';
+
+        list.innerHTML = `
+            <div style="
+                padding:20px;
+                border-radius:14px;
+                background:#fef2f2;
+                color:#b91c1c;
+            ">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                ${escapeHtml(error.message)}
+            </div>
+        `;
+    }
+}
+
+
+/* =========================================================
+   PROTECTION CONTRE LE HTML / JAVASCRIPT INJECTÉ
+========================================================= */
+
+function escapeHtml(value) {
+
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+
+/* =========================================================
+   BOUTON ACTUALISER
+========================================================= */
+
+const refreshButton = document.getElementById(
+    'refreshChurchesBtn'
+);
+
+if (refreshButton) {
+
+    refreshButton.addEventListener(
+        'click',
+        loadChurches
+    );
+}
+
+
+/* =========================================================
+   CHARGEMENT INITIAL
+========================================================= */
+
+if (document.readyState === 'loading') {
+
+    document.addEventListener(
+        'DOMContentLoaded',
+        loadChurches
+    );
+
+} else {
+
+    loadChurches();
+}
+}); 
+</script>
+
+
+
+</body>
+</html>
+
