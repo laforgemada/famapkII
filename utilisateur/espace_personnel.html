@@ -5394,7 +5394,7 @@ async function updateLoginStreak() {
             data.alreadyLoggedToday
         ) {
 
-            const streak = Number(data.streak || 0);
+            const streak = Number(data.dailyLoginStreak || data.streak || 0);
 
             /*
              * Badge principal :
