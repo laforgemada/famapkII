@@ -187,16 +187,7 @@
             font-size: 0.9rem;
         }
 
-        #cancelForgotPassword {
-            background: #f1f1f1;
-            color: #555;
-        }
-
-        #sendForgotPassword {
-            background: #6c5ce7;
-            color: #ffffff;
-        }
-
+        
         #forgotPasswordMessage {
             margin-top: 15px;
             font-size: 0.88rem;
@@ -334,36 +325,6 @@
 
         <div id="error-msg"></div>
 		
-		<div id="forgotPasswordModal" style="display:none;">
-    <div class="forgot-password-box">
-        <h3>Mot de passe oublié ?</h3>
-
-        <p>
-            Entrez votre adresse email pour recevoir un lien
-            permettant de réinitialiser votre mot de passe.
-        </p>
-
-        <input
-            type="email"
-            id="forgotPasswordEmail"
-            placeholder="Votre adresse email"
-            autocomplete="email"
-        >
-
-        <div class="forgot-password-actions">
-            <button type="button" id="cancelForgotPassword">
-                Annuler
-            </button>
-
-            <button type="button" id="sendForgotPassword">
-                Envoyer le lien
-            </button>
-        </div>
-
-        <div id="forgotPasswordMessage"></div>
-    </div>
-</div>
-
         <form id="loginForm">
             <input type="text" id="identifier" placeholder="Email ou Pseudo" required>
             <input type="password" id="password" placeholder="Mot de passe" required>
@@ -418,10 +379,141 @@
             Pas encore membre ? <a href="#" class="disabled-link">Inscription (En maintenance)</a>
         </div>
 
-        <a href="/famapkII/" class="back-home">â† Retour Ã  l'accueil</a>
+        <a href="/famapkII/" class="back-home">Retour à  l'accueil</a>
     </div>
 
     <script>
+// =====================================================
+// MOT DE PASSE OUBLIÉ — OUVERTURE / FERMETURE
+// =====================================================
+
+const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+const forgotPasswordModal = document.getElementById('forgotPasswordModal');
+const closeForgotPasswordBtn = document.getElementById('closeForgotPasswordBtn');
+
+// Ouvrir la fenêtre
+forgotPasswordLink.addEventListener('click', function(e) {
+    e.preventDefault();
+
+    forgotPasswordModal.style.display = 'flex';
+
+    const emailInput = document.getElementById('forgotPasswordEmail');
+
+    if (emailInput) {
+        emailInput.value = '';
+        emailInput.focus();
+    }
+
+    const message = document.getElementById('forgotPasswordMessage');
+
+    if (message) {
+        message.textContent = '';
+    }
+});
+
+// =====================================================
+// MOT DE PASSE OUBLIÉ — ENVOI DE LA DEMANDE
+// =====================================================
+
+const sendResetEmailBtn = document.getElementById('sendResetEmailBtn');
+const forgotPasswordEmail = document.getElementById('forgotPasswordEmail');
+const forgotPasswordMessage = document.getElementById('forgotPasswordMessage');
+
+sendResetEmailBtn.addEventListener('click', async function() {
+
+    const email = forgotPasswordEmail.value.trim();
+
+    // Vérification simple de l'adresse
+    if (!email) {
+        forgotPasswordMessage.textContent =
+            "Veuillez saisir votre adresse email.";
+        forgotPasswordMessage.style.color = "#dc2626";
+        return;
+    }
+
+    if (!forgotPasswordEmail.checkValidity()) {
+        forgotPasswordMessage.textContent =
+            "Veuillez saisir une adresse email valide.";
+        forgotPasswordMessage.style.color = "#dc2626";
+        return;
+    }
+
+    // Désactiver le bouton pendant l'envoi
+    sendResetEmailBtn.disabled = true;
+    sendResetEmailBtn.textContent = "ENVOI EN COURS...";
+
+    forgotPasswordMessage.textContent = "";
+    
+    try {
+
+        const response = await fetch(
+            'https://apokalypsy.com/api/password/forgot',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        /*
+         * Le backend retourne volontairement toujours
+         * le même message, que l'email existe ou non.
+         */
+        if (response.ok && data.success) {
+
+            forgotPasswordMessage.textContent =
+                "Si cette adresse email existe, un lien de réinitialisation a été envoyé.";
+
+            forgotPasswordMessage.style.color = "#16a34a";
+
+            forgotPasswordEmail.value = "";
+
+        } else {
+
+            forgotPasswordMessage.textContent =
+                "Une erreur est survenue. Veuillez réessayer.";
+
+            forgotPasswordMessage.style.color = "#dc2626";
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Erreur réinitialisation mot de passe :",
+            error
+        );
+
+        forgotPasswordMessage.textContent =
+            "Impossible de contacter le serveur. Veuillez réessayer.";
+
+        forgotPasswordMessage.style.color = "#dc2626";
+
+    } finally {
+
+        sendResetEmailBtn.disabled = false;
+        sendResetEmailBtn.textContent = "ENVOYER LE LIEN";
+    }
+
+});
+
+// Fermer la fenêtre
+closeForgotPasswordBtn.addEventListener('click', function() {
+    forgotPasswordModal.style.display = 'none';
+});
+
+// Fermer en cliquant sur l'arrière-plan
+forgotPasswordModal.addEventListener('click', function(e) {
+    if (e.target === forgotPasswordModal) {
+        forgotPasswordModal.style.display = 'none';
+    }
+});
+
 // Connexion avec Google
 function handleSocialLogin(provider) {
 
