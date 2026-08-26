@@ -3976,13 +3976,90 @@ function getBibleVersePool(language) {
 
 function createBibleQuestion(verse, pool, language) {
 
+    /*
+     * =====================================================
+     * CONSTRUIRE UN PASSAGE PLUS RICHE
+     * =====================================================
+     *
+     * On récupère les versets du même livre et du même
+     * chapitre afin de présenter un véritable passage.
+     */
+
+    const chapterVerses = pool
+        .filter(item =>
+            item.bookNumber === verse.bookNumber &&
+            item.chapter === verse.chapter
+        )
+        .sort((a, b) => a.verse - b.verse);
+
+    /*
+     * On commence par le verset sélectionné.
+     * Puis on ajoute les versets voisins disponibles.
+     *
+     * Maximum : 3 versets dans le passage.
+     */
+
+    const selectedIndex = chapterVerses.findIndex(
+        item => item.id === verse.id
+    );
+
+    let passageVerses = [];
+
+    if (selectedIndex >= 0) {
+
+        /*
+         * Priorité :
+         * - verset précédent
+         * - verset sélectionné
+         * - verset suivant
+         */
+
+        const startIndex = Math.max(
+            0,
+            Math.min(
+                selectedIndex - 1,
+                chapterVerses.length - 3
+            )
+        );
+
+        passageVerses = chapterVerses.slice(
+            startIndex,
+            startIndex + Math.min(3, chapterVerses.length)
+        );
+
+    } else {
+
+        passageVerses = [verse];
+
+    }
+
+    /*
+     * Sécurité : si le chapitre ne contient qu'un seul
+     * élément, on utilise simplement celui-ci.
+     */
+
+    if (!passageVerses.length) {
+        passageVerses = [verse];
+    }
+
+    const passageText = passageVerses
+        .map(item => item.text.trim())
+        .filter(Boolean)
+        .join(' ');
+
+
+    /*
+     * =====================================================
+     * LIVRES INCORRECTS
+     * =====================================================
+     */
+
     const otherBooks = [
         ...new Set(
             pool
                 .map(item => item.book)
-                .filter(
-                    book =>
-                        book !== verse.book
+                .filter(book =>
+                    book !== verse.book
                 )
         )
     ];
@@ -4002,9 +4079,14 @@ function createBibleQuestion(verse, pool, language) {
         ]);
 
     const correctIndex =
-        options.indexOf(
-            verse.book
-        );
+        options.indexOf(verse.book);
+
+
+    /*
+     * =====================================================
+     * QUESTIONS MULTILINGUES
+     * =====================================================
+     */
 
     const questions = {
 
@@ -4012,24 +4094,31 @@ function createBibleQuestion(verse, pool, language) {
             text:
                 `Dans quel livre de la Bible ` +
                 `trouve-t-on ce passage ?\n\n` +
-                `« ${verse.text} »`
+                `📖 « ${passageText} »`
         },
 
         mg: {
             text:
                 `Ao amin'ny boky inona ao amin'ny Baiboly ` +
-                `no ahitana ity andininy ity ?\n\n` +
-                `« ${verse.text} »`
+                `no ahitana ity andalan-teny ity ?\n\n` +
+                `📖 « ${passageText} »`
         },
 
         en: {
             text:
                 `In which book of the Bible ` +
                 `can this passage be found?\n\n` +
-                `“${verse.text}”`
+                `📖 “${passageText}”`
         }
 
     };
+
+
+    /*
+     * =====================================================
+     * RETOUR DE LA QUESTION
+     * =====================================================
+     */
 
     return {
 
@@ -4053,9 +4142,36 @@ function createBibleQuestion(verse, pool, language) {
             verse.book,
 
         chapter:
-            verse.chapter,
+		verse.chapter,
 
-        verse:
+		verse:
+			verse.verse,
+
+		/*
+		 * Référence complète du passage affiché
+		 */
+		passageStartVerse:
+		passageVerses[0]?.verse ||
+		verse.verse,
+
+		passageEndVerse:
+			passageVerses[passageVerses.length - 1]?.verse ||
+			verse.verse,
+
+		passageReference:
+			passageVerses.length > 1
+				? `${verse.book} ${verse.chapter}:${passageVerses[0]?.verse}-${passageVerses[passageVerses.length - 1]?.verse}`
+				: `${verse.book} ${verse.chapter}:${verse.verse}`,
+
+        /*
+         * Référence du passage affiché.
+         */
+        passageStartVerse:
+            passageVerses[0]?.verse ||
+            verse.verse,
+
+        passageEndVerse:
+            passageVerses[passageVerses.length - 1]?.verse ||
             verse.verse,
 
         sourceId:
