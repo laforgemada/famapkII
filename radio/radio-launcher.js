@@ -25,7 +25,7 @@
     const RADIO_WINDOW_NAME = 'radioFanambarana';
 
     const RADIO_URL =
-        '/radio/radio.html';
+        '/famapkII/radio/radio.html';
 
     let radioWindow = null;
 
