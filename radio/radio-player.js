@@ -32,7 +32,7 @@
      * Flux Radio Fanambarana
      */
     const RADIO_STREAM =
-        'http://serveur.wanastream.com:21300/;?type=http';
+    'https://apokalypsy.com/radio/stream';
 
     /*
      * Synchronisation serveur :
