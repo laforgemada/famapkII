@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Radio Fanambarana</title>
+</head>
+<body>
+
+<h1>📻 Radio Fanambarana 98.4 FM</h1>
+
+<button id="play">▶ Écouter</button>
+<button id="pause">⏸ Pause</button>
+
+<audio
+    id="radio"
+    preload="none"
+    crossorigin="anonymous"
+    src="http://serveur.wanastream.com:21300/">
+</audio>
+
+<script>
+const radio = document.getElementById('radio');
+
+document.getElementById('play').onclick = () => {
+    radio.play()
+        .then(() => console.log('📻 Radio démarrée'))
+        .catch(error => console.error('Erreur lecture :', error));
+};
+
+document.getElementById('pause').onclick = () => {
+    radio.pause();
+};
+</script>
+
+</body>
+</html>
