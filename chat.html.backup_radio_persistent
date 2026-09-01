@@ -207,8 +207,5 @@
     fetchMessages();
     setInterval(fetchMessages, 30000); // Réduit la fréquence de rafraîchissement pour économiser les ressources serveur.
 </script>
-
-<script src="radio/radio-launcher.js"></script>
-
 </body>
 </html>

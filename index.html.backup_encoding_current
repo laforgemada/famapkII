@@ -1,4 +1,4 @@
-?<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -13,7 +13,7 @@
 <title>Apokalypsy | Experience</title>
 
 <script>
-    // Appliqué immédiatement (avant le CSS/rendu) pour éviter le flash de thème clair
+    // AppliquÃ© immÃ©diatement (avant le CSS/rendu) pour Ã©viter le flash de thÃ¨me clair
     (function() {
         try {
             const saved = localStorage.getItem('theme');
@@ -40,8 +40,8 @@
 <style>
     /* =========================
     MODE SOMBRE
-    (mêmes variables que bible.html / espace_personnel.html,
-    pour rester cohérent quelle que soit la page)
+    (mÃªmes variables que bible.html / espace_personnel.html,
+    pour rester cohÃ©rent quelle que soit la page)
     ========================= */
     html[data-theme="dark"] {
         --bg:#0a0a0d;
@@ -62,8 +62,8 @@
     }
 
     /* =========================
-    CONTR�"LES FLOTTANTS (thème + points)
-    Autonomes : ne dépendent pas du header injecté par js/include.js
+    CONTRÃ”LES FLOTTANTS (thÃ¨me + points)
+    Autonomes : ne dÃ©pendent pas du header injectÃ© par js/include.js
     ========================= */
     #floating-controls {
         position: fixed;
@@ -246,7 +246,7 @@
     </div>
 </section>
 
-<div class="section-label" id="label-mavitrika">�Y�? Membres actifs</div>
+<div class="section-label" id="label-mavitrika">ðŸ† Membres actifs</div>
 
 <div class="podium-box" id="leaderboard-podium">
     <div style="color: var(--text-muted); font-weight: 700; font-size: 0.9rem;">Chargement du podium...</div>
@@ -256,193 +256,135 @@
      RADIO FANAMBARANA
 ========================= -->
 
-<!-- =========================
-     RADIO FANAMBARANA
-========================= -->
-
 <section class="radio-fanambarana-section" id="radio-fanambarana">
 
-    <div class="section-label radio-section-title">
+<div class="section-label radio-section-title">
+    <span class="radio-title-icon">
+        <i data-feather="radio"></i>
+    </span>
+    <span>Radio Fanambarana</span>
+</div>
 
-        <span class="radio-title-icon">
+<div class="radio-fanambarana-card">
+
+    <!-- En-tÃªte -->
+    <div class="radio-header">
+
+        <div class="radio-logo">
             <i data-feather="radio"></i>
-        </span>
+        </div>
 
-        <span>Radio Fanambarana</span>
+        <div class="radio-info">
+            <h2>Radio Fanambarana</h2>
+            <p>98.4 FM â€¢ La radio de la Parole</p>
+        </div>
+
+        <div class="radio-live">
+            <span class="radio-live-dot"></span>
+            <span>EN DIRECT</span>
+        </div>
 
     </div>
 
+    <!-- Lecteur -->
+    <div class="radio-player">
 
-    <div class="radio-fanambarana-card">
+        <div class="radio-player-visual">
 
-        <!-- En-tête -->
-
-        <div class="radio-header">
-
-            <div class="radio-logo">
-                <i data-feather="radio"></i>
+            <div class="radio-pulse">
+                <i data-feather="volume-2"></i>
             </div>
 
-
-            <div class="radio-info">
-
-                <h2>
-                    Radio Fanambarana
-                </h2>
-
-                <p>
-                    98.4 FM • La radio de la Parole
-                </p>
-
-            </div>
-
-
-            <div class="radio-live">
-
-                <span class="radio-live-dot"></span>
-
-                <span>
-                    EN DIRECT
-                </span>
-
+            <div class="radio-wave">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
 
         </div>
 
+        <div class="radio-current-track">
+            <span class="radio-track-label">Ã€ L'ANTENNE</span>
 
-        <!-- Lecteur -->
+            <strong id="radio-track-title">
+                Radio Fanambarana
+            </strong>
 
-        <div class="radio-player">
-
-            <div class="radio-player-visual">
-
-                <div class="radio-pulse">
-                    <i data-feather="volume-2"></i>
-                </div>
-
-
-                <div class="radio-wave">
-
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-
-                </div>
-
-            </div>
-
-
-            <div class="radio-current-track">
-
-                <span class="radio-track-label">
-                    À L'ANTENNE
-                </span>
-
-
-                <strong id="radio-track-title">
-                    Radio Fanambarana
-                </strong>
-
-
-                <span id="radio-track-artist">
-                    Écoutez la radio en direct
-                </span>
-
-            </div>
-
-
-            <!--
-                 IMPORTANT :
-                 Ce bouton ouvre la fenêtre Radio.
-                 La lecture est gérée par radio-player.js.
-            -->
-
-            <button
-				type="button"
-				class="radio-play-btn"
-				id="radio-play-btn"
-				aria-label="Ouvrir Radio Fanambarana"
-				onclick="window.RadioLauncher && window.RadioLauncher.open()"
-			>
-				<i data-feather="play"></i>
-			</button>
-
+            <span id="radio-track-artist">
+                Ã‰coutez la radio en direct
+            </span>
         </div>
 
+        <button
+            type="button"
+            class="radio-play-btn"
+            id="radio-play-btn"
+            aria-label="Ã‰couter Radio Fanambarana"
+        >
+            <i data-feather="play" id="radio-play-icon"></i>
+        </button>
 
-        <!-- Zone récompense -->
+    </div>
 
-        <div class="radio-reward-box">
+    <!-- Zone rÃ©compense -->
+    <div class="radio-reward-box">
 
-            <div class="radio-reward-header">
-
-                <div>
-
-                    <strong>
-                        🎧 Temps d'écoute
-                    </strong>
-
-                    <span id="radio-listening-time">
-                        00:00:00
-                    </span>
-
-                </div>
-
-
-                <div>
-
-                    <strong>
-                        ⭐ Récompense
-                    </strong>
-
-                    <span id="radio-next-reward">
-                        30 min → +3 points
-                    </span>
-
-                </div>
-
+        <div class="radio-reward-header">
+            <div>
+                <strong>ðŸŽ§ Temps d'Ã©coute</strong>
+                <span id="radio-listening-time">
+                    00:00:00
+                </span>
             </div>
 
-
-            <div class="radio-progress-container">
-
-                <div
-                    class="radio-progress-bar"
-                    id="radio-progress-bar"
-                ></div>
-
+            <div>
+                <strong>â­ RÃ©compense</strong>
+                <span id="radio-next-reward">
+                    30 min â†’ +3 points
+                </span>
             </div>
+        </div>
 
+        <div class="radio-progress-container">
 
             <div
-                class="radio-reward-message"
-                id="radio-reward-message"
-            >
-                Écoutez Radio Fanambarana pendant
-                <strong>30 minutes</strong>
-                pour gagner
-                <strong>+3 points</strong>.
-            </div>
+                class="radio-progress-bar"
+                id="radio-progress-bar"
+            ></div>
 
         </div>
 
+        <div class="radio-reward-message" id="radio-reward-message">
+            Ã‰coutez Radio Fanambarana pendant 30 minutes
+            pour gagner <strong>+3 points</strong>.
+        </div>
+
     </div>
+
+    <!-- Audio -->
+    <audio
+        id="radio-audio"
+        preload="none"
+    ></audio>
+
+</div>
+
 
 </section>
 
 
-<!-- �?GLISES PROCHES -->
+<!-- Ã‰GLISES PROCHES -->
 <section class="nearby-churches" id="nearby-churches">
 
     <div class="section-label nearby-section-title">
         <span class="nearby-title-icon">
             <i data-feather="map-pin"></i>
         </span>
-        <span>�?glises proches</span>
+        <span>Ã‰glises proches</span>
     </div>
 
     <div class="nearby-church-card">
@@ -453,9 +395,9 @@
             </div>
 
             <div class="nearby-church-intro">
-                <h3>Trouvez une église près de vous</h3>
+                <h3>Trouvez une Ã©glise prÃ¨s de vous</h3>
                 <p>
-                    Découvrez les églises Apokalypsy situées à proximité
+                    DÃ©couvrez les Ã©glises Apokalypsy situÃ©es Ã  proximitÃ©
                     de votre position.
                 </p>
             </div>
@@ -495,7 +437,7 @@
         >
             <i data-feather="info"></i>
             <span>
-                Activez votre position pour rechercher les églises proches.
+                Activez votre position pour rechercher les Ã©glises proches.
             </span>
         </div>
 		
@@ -511,7 +453,7 @@
 
 </section>
 
-<div class="section-label" id="label-fampianarana">�Y"s Enseignements</div>
+<div class="section-label" id="label-fampianarana">ðŸ“š Enseignements</div>
 
 <div class="category-scroll" id="cat-list"></div>
 
@@ -520,7 +462,7 @@
         <div class="premium-mini-badge">
             <i data-feather="star"></i> <span id="premium-zone-text">Zone Premium</span>
         </div>
-        <div class="premium-title" id="premium-banner-title">�?vénements & Récompenses</div>
+        <div class="premium-title" id="premium-banner-title">Ã‰vÃ©nements & RÃ©compenses</div>
         <div class="premium-text" id="premium-banner-text">Suivez votre progression, gagnez des badges et recevez des bonus quotidiens.</div>
     </div>
     <div class="premium-right">
@@ -539,7 +481,7 @@
         <i data-feather="award"></i>
         <span id="points-fab-value">0</span>
     </div>
-    <button id="theme-fab" aria-label="Changer de thème (clair/sombre)" onclick="toggleTheme()">
+    <button id="theme-fab" aria-label="Changer de thÃ¨me (clair/sombre)" onclick="toggleTheme()">
         <i data-feather="moon" class="feather-moon"></i>
         <i data-feather="sun" class="feather-sun"></i>
     </button>
@@ -560,7 +502,7 @@
 </div>
 
 <script>
-    // Mode sombre : identique à bible.html / espace_personnel.html
+    // Mode sombre : identique Ã  bible.html / espace_personnel.html
     function toggleTheme() {
         const html = document.documentElement;
         const current = html.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
@@ -570,7 +512,7 @@
     }
 
     // Points : affiche la valeur mise en cache par bible.html / espace_personnel.html
-    // (la clé localStorage "cachedPointsTotal" est partagée entre les pages)
+    // (la clÃ© localStorage "cachedPointsTotal" est partagÃ©e entre les pages)
     (function initPointsFab() {
         try {
             const username = localStorage.getItem('user_name');
@@ -595,7 +537,7 @@
 
 <script>
 /* =========================================================
-   �?GLISES PROCHES �?" G�?OLOCALISATION
+   Ã‰GLISES PROCHES â€” GÃ‰OLOCALISATION
 ========================================================= */
 
 (function initNearbyChurches() {
@@ -608,12 +550,12 @@
 	const mapBox = document.getElementById('nearby-church-map');
 
 	if (!mapBox) {
-		console.warn('[�?glises proches] Carte introuvable.');
+		console.warn('[Ã‰glises proches] Carte introuvable.');
 		return;
 	}
 
     if (!locationButton || !radiusSelect || !statusBox || !resultsBox) {
-        console.warn('[�?glises proches] �?léments HTML introuvables.');
+        console.warn('[Ã‰glises proches] Ã‰lÃ©ments HTML introuvables.');
         return;
     }
 
@@ -741,7 +683,7 @@ function updateChurchMarkers(eglises) {
 					<div class="nearby-church-marker-wrapper">
 
 						<div class="nearby-church-marker">
-							<span>�>�</span>
+							<span>â›ª</span>
 						</div>
 
 						${
@@ -768,7 +710,7 @@ function updateChurchMarkers(eglises) {
 
         const title = escapeHtml(
             eglise.titre ||
-            '�?glise Apokalypsy'
+            'Ã‰glise Apokalypsy'
         );
 
         const address = escapeHtml(
@@ -804,7 +746,7 @@ function updateChurchMarkers(eglises) {
 
             popup += `
                 <div class="nearby-map-popup-address">
-                    �Y"� ${address}
+                    ðŸ“ ${address}
                 </div>
             `;
         }
@@ -816,7 +758,7 @@ function updateChurchMarkers(eglises) {
                     rel="noopener"
                     class="nearby-map-popup-route"
                 >
-                    �Y�� Voir l'itinéraire
+                    ðŸ§­ Voir l'itinÃ©raire
                 </a>
 
             </div>
@@ -920,7 +862,7 @@ function updateChurchMarkers(eglises) {
             <div class="nearby-church-empty">
                 <i data-feather="map-pin"></i>
                 <div>
-                    Aucune église n'a été trouvée dans ce rayon.
+                    Aucune Ã©glise n'a Ã©tÃ© trouvÃ©e dans ce rayon.
                 </div>
             </div>
         `;
@@ -936,7 +878,7 @@ function updateChurchMarkers(eglises) {
     }
 
     /* =====================================================
-       TRI : PLUS PROCHE �?' PLUS �?LOIGN�?E
+       TRI : PLUS PROCHE â†’ PLUS Ã‰LOIGNÃ‰E
     ===================================================== */
 
     const sortedChurches = [...eglises].sort((a, b) => {
@@ -954,7 +896,7 @@ function updateChurchMarkers(eglises) {
     resultsBox.innerHTML = sortedChurches.map((eglise, index) => {
 
         const titre = escapeHtml(
-            eglise.titre || '�?glise Apokalypsy'
+            eglise.titre || 'Ã‰glise Apokalypsy'
         );
 
         const regional = escapeHtml(
@@ -1010,14 +952,14 @@ function updateChurchMarkers(eglises) {
             locationInfo = `
                 <div class="nearby-church-location">
                     <i data-feather="map-pin"></i>
-                    <span>${parts.join(' �?� ')}</span>
+                    <span>${parts.join(' â€¢ ')}</span>
                 </div>
             `;
         }
 
 
         /* =================================================
-           ADRESSE / T�?L�?PHONE
+           ADRESSE / TÃ‰LÃ‰PHONE
         ================================================= */
 
         let contactInfo = '';
@@ -1044,7 +986,7 @@ function updateChurchMarkers(eglises) {
 
 
         /* =================================================
-           BOUTON ITIN�?RAIRE
+           BOUTON ITINÃ‰RAIRE
         ================================================= */
 
         let routeButton = '';
@@ -1068,7 +1010,7 @@ function updateChurchMarkers(eglises) {
                     onclick="window.open('${mapsUrl}', '_blank')"
                 >
                     <i data-feather="navigation"></i>
-                    <span>Voir l'itinéraire</span>
+                    <span>Voir l'itinÃ©raire</span>
                 </button>
             `;
         }
@@ -1177,7 +1119,7 @@ ${
         const radius = Number(radiusSelect.value) || 50;
 
         setStatus(
-            'Recherche des églises proches de votre position...',
+            'Recherche des Ã©glises proches de votre position...',
             'loader'
         );
 
@@ -1210,14 +1152,14 @@ ${
             const data = await response.json();
 
             console.log(
-                '[�?glises proches] Réponse API :',
+                '[Ã‰glises proches] RÃ©ponse API :',
                 data
             );
 
             if (!data.success) {
                 throw new Error(
                     data.error ||
-                    'La recherche des églises a échoué.'
+                    'La recherche des Ã©glises a Ã©chouÃ©.'
                 );
             }
 			
@@ -1273,8 +1215,8 @@ ${
                     data.count +
                     (
                         data.count > 1
-                            ? ' églises trouvées à proximité.'
-                            : ' église trouvée à proximité.'
+                            ? ' Ã©glises trouvÃ©es Ã  proximitÃ©.'
+                            : ' Ã©glise trouvÃ©e Ã  proximitÃ©.'
                     ),
                     'check-circle'
                 );
@@ -1282,7 +1224,7 @@ ${
             } else {
 
                 setStatus(
-                    'Aucune église trouvée dans un rayon de ' +
+                    'Aucune Ã©glise trouvÃ©e dans un rayon de ' +
                     radius +
                     ' km.',
                     'info'
@@ -1292,14 +1234,14 @@ ${
         } catch (error) {
 
             console.error(
-                '[�?glises proches] Erreur :',
+                '[Ã‰glises proches] Erreur :',
                 error
             );
 
             resultsBox.innerHTML = '';
 
             setStatus(
-                'Impossible de récupérer les églises pour le moment. Veuillez réessayer.',
+                'Impossible de rÃ©cupÃ©rer les Ã©glises pour le moment. Veuillez rÃ©essayer.',
                 'alert-circle'
             );
         }
@@ -1310,7 +1252,7 @@ ${
         if (!navigator.geolocation) {
 
             setStatus(
-                'La géolocalisation n�?Test pas disponible sur cet appareil.',
+                'La gÃ©olocalisation nâ€™est pas disponible sur cet appareil.',
                 'alert-circle'
             );
 
@@ -1342,7 +1284,7 @@ ${
                     position.coords.longitude;
 
                 console.log(
-                    '[�?glises proches] Position :',
+                    '[Ã‰glises proches] Position :',
                     latitude,
                     longitude
                 );
@@ -1366,7 +1308,7 @@ ${
             function(error) {
 
                 console.warn(
-                    '[�?glises proches] Géolocalisation refusée/échouée :',
+                    '[Ã‰glises proches] GÃ©olocalisation refusÃ©e/Ã©chouÃ©e :',
                     error
                 );
 
@@ -1380,14 +1322,14 @@ ${
                 updateIcons();
 
                 let message =
-                    'Impossible d�?Tobtenir votre position.';
+                    'Impossible dâ€™obtenir votre position.';
 
                 if (error.code === 1) {
                     message =
-                        'L�?Taccès à votre position a été refusé. Autorisez la géolocalisation pour rechercher les églises proches.';
+                        'Lâ€™accÃ¨s Ã  votre position a Ã©tÃ© refusÃ©. Autorisez la gÃ©olocalisation pour rechercher les Ã©glises proches.';
                 } else if (error.code === 2) {
                     message =
-                        'Votre position n�?Ta pas pu être déterminée.';
+                        'Votre position nâ€™a pas pu Ãªtre dÃ©terminÃ©e.';
                 } else if (error.code === 3) {
                     message =
                         'La recherche de votre position a pris trop de temps.';

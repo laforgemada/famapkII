@@ -1,0 +1,1610 @@
+/*
+ * ============================================================
+ * RADIO FANAMBARANA — LECTEUR GLOBAL
+ * ============================================================
+ *
+ * Lecteur ouvert dans une fenêtre séparée.
+ *
+ * Fonctionnalités :
+ *   - lecture continue
+ *   - reprise après actualisation
+ *   - volume mémorisé
+ *   - temps d'écoute serveur
+ *   - +3 points toutes les 30 minutes
+ *   - fonctionnement invité
+ *   - synchronisation utilisateurs connectés
+ *   - compteur local fluide
+ *   - protection contre les doubles comptages
+ *
+ * Backend :
+ *   https://apokalypsy.com
+ * ============================================================
+ */
+
+(function () {
+
+    'use strict';
+
+
+    /* =========================================================
+       CONFIGURATION
+    ========================================================= */
+
+    const API_BASE_URL =
+        'https://apokalypsy.com';
+
+    const RADIO_STREAM =
+        'http://serveur.wanastream.com:21300/;?type=http';
+
+    /*
+     * Synchronisation serveur toutes les 60 secondes.
+     */
+    const SYNC_INTERVAL =
+        60 * 1000;
+
+    /*
+     * Une récompense tous les 30 minutes.
+     */
+    const REWARD_INTERVAL =
+        30 * 60;
+
+
+    /* =========================================================
+       STOCKAGE LOCAL
+    ========================================================= */
+
+    const STORAGE = {
+
+        playing:
+            'radioFanambaranaPlaying',
+
+        volume:
+            'radioFanambaranaVolume',
+
+        closed:
+            'radioFanambaranaClosed'
+
+    };
+
+
+    /* =========================================================
+       ELEMENTS
+    ========================================================= */
+
+    let audio = null;
+
+    let playButton = null;
+
+    let timeElement = null;
+
+    let listeningTimeElement = null;
+
+    let nextRewardElement = null;
+
+    let progressBar = null;
+
+    let rewardMessageElement = null;
+
+    let volumeElement = null;
+
+    let closeButton = null;
+
+
+    /* =========================================================
+       ETAT
+    ========================================================= */
+
+    /*
+     * Temps total connu côté serveur.
+     */
+    let accumulatedSeconds = 0;
+
+    /*
+     * Temps local qui n'a pas encore été envoyé
+     * au serveur.
+     *
+     * Exemple :
+     *
+     * serveur = 1200
+     * écoute locale = 25 secondes
+     *
+     * total affiché = 1225
+     * pending = 25
+     */
+    let pendingSeconds = 0;
+
+    /*
+     * Etat réel du lecteur.
+     */
+    let isPlaying = false;
+
+    /*
+     * Point de départ du prochain calcul.
+     */
+    let lastTick = null;
+
+    /*
+     * Timer d'affichage local.
+     */
+    let clockTimer = null;
+
+    /*
+     * Timer de synchronisation serveur.
+     */
+    let syncTimer = null;
+
+    /*
+     * Empêche deux synchronisations simultanées.
+     */
+    let isSyncing = false;
+
+
+    /* =========================================================
+       IDENTIFICATION
+    ========================================================= */
+
+    function getToken() {
+
+        return localStorage.getItem('token');
+
+    }
+
+
+    function getUsername() {
+
+        return localStorage.getItem('user_name');
+
+    }
+
+
+    function isAuthenticated() {
+
+        return !!getToken() &&
+               !!getUsername();
+
+    }
+
+
+    /* =========================================================
+       FORMAT TEMPS
+    ========================================================= */
+
+    function formatTime(totalSeconds) {
+
+        totalSeconds =
+            Math.max(
+                0,
+                Math.floor(totalSeconds)
+            );
+
+
+        const hours =
+            Math.floor(
+                totalSeconds / 3600
+            );
+
+
+        const minutes =
+            Math.floor(
+                (totalSeconds % 3600) / 60
+            );
+
+
+        const seconds =
+            totalSeconds % 60;
+
+
+        return [
+
+            String(hours).padStart(2, '0'),
+
+            String(minutes).padStart(2, '0'),
+
+            String(seconds).padStart(2, '0')
+
+        ].join(':');
+
+    }
+
+
+    /* =========================================================
+       TEMPS AFFICHÉ
+    ========================================================= */
+
+    function getDisplayedSeconds() {
+
+        return (
+            accumulatedSeconds +
+            pendingSeconds
+        );
+
+    }
+
+
+    /* =========================================================
+       RECHERCHE DES ELEMENTS
+    ========================================================= */
+
+    function findElements() {
+
+        audio =
+            document.getElementById(
+                'radio-global-audio'
+            );
+
+
+        playButton =
+            document.getElementById(
+                'radio-global-play'
+            );
+
+
+        timeElement =
+            document.getElementById(
+                'radio-global-time'
+            );
+
+
+        listeningTimeElement =
+            document.getElementById(
+                'radio-listening-time'
+            );
+
+
+        nextRewardElement =
+            document.getElementById(
+                'radio-next-reward'
+            );
+
+
+        progressBar =
+            document.getElementById(
+                'radio-progress-bar'
+            );
+
+
+        rewardMessageElement =
+            document.getElementById(
+                'radio-reward-message'
+            );
+
+
+        volumeElement =
+            document.getElementById(
+                'radio-global-volume'
+            );
+
+
+        closeButton =
+            document.getElementById(
+                'radio-global-close'
+            );
+
+
+        if (!audio || !playButton) {
+
+            console.error(
+                '[Radio] Elements principaux introuvables.'
+            );
+
+            return false;
+
+        }
+
+
+        return true;
+
+    }
+
+
+    /* =========================================================
+       AFFICHAGE
+    ========================================================= */
+
+    function updateUI() {
+
+        const totalSeconds =
+            getDisplayedSeconds();
+
+
+        const time =
+            formatTime(
+                totalSeconds
+            );
+
+
+        /*
+         * Temps principal.
+         */
+
+        if (timeElement) {
+
+            timeElement.textContent =
+                time;
+
+        }
+
+
+        /*
+         * Temps d'écoute.
+         */
+
+        if (listeningTimeElement) {
+
+            listeningTimeElement.textContent =
+                time;
+
+        }
+
+
+        /*
+         * Bouton.
+         */
+
+        if (playButton) {
+
+            playButton.textContent =
+                isPlaying
+                    ? '❚❚'
+                    : '▶';
+
+
+            playButton.setAttribute(
+                'aria-label',
+                isPlaying
+                    ? 'Mettre la radio en pause'
+                    : 'Écouter Radio Fanambarana'
+            );
+
+        }
+
+
+        /*
+         * Progression vers le prochain palier.
+         */
+
+        const secondsIntoRewardPeriod =
+            totalSeconds %
+            REWARD_INTERVAL;
+
+
+        const progress =
+            (
+                secondsIntoRewardPeriod /
+                REWARD_INTERVAL
+            ) * 100;
+
+
+        if (progressBar) {
+
+            progressBar.style.width =
+                `${Math.min(100, progress)}%`;
+
+        }
+
+
+        /*
+         * Prochaine récompense.
+         */
+
+        const completedRewards =
+            Math.floor(
+                totalSeconds /
+                REWARD_INTERVAL
+            );
+
+
+        const nextRewardMinutes =
+            (completedRewards + 1) * 30;
+
+
+        if (nextRewardElement) {
+
+            nextRewardElement.textContent =
+                `${nextRewardMinutes} min → +3 points`;
+
+        }
+
+
+        /*
+         * Message.
+         */
+
+        if (rewardMessageElement) {
+
+            const remainingSeconds =
+                REWARD_INTERVAL -
+                secondsIntoRewardPeriod;
+
+
+            const remainingMinutes =
+                Math.ceil(
+                    remainingSeconds / 60
+                );
+
+
+            if (remainingMinutes >= 30) {
+
+                rewardMessageElement.innerHTML =
+                    'Écoutez Radio Fanambarana pendant ' +
+                    '<strong>30 minutes</strong> ' +
+                    'pour gagner ' +
+                    '<strong>+3 points</strong>.';
+
+            } else {
+
+                rewardMessageElement.innerHTML =
+                    `Encore <strong>${remainingMinutes} ` +
+                    `minute${remainingMinutes > 1 ? 's' : ''}</strong> ` +
+                    `pour gagner <strong>+3 points</strong>.`;
+
+            }
+
+        }
+
+    }
+
+
+    /* =========================================================
+       COMPTEUR LOCAL
+    ========================================================= */
+
+    function tick() {
+
+        if (!isPlaying || !lastTick) {
+
+            return;
+
+        }
+
+
+        const now =
+            Date.now();
+
+
+        const elapsed =
+            Math.floor(
+                (now - lastTick) / 1000
+            );
+
+
+        if (elapsed <= 0) {
+
+            return;
+
+        }
+
+
+        /*
+         * Le temps est ajouté uniquement à pendingSeconds.
+         *
+         * Il ne sera ajouté à accumulatedSeconds
+         * qu'après confirmation du serveur.
+         */
+
+        pendingSeconds +=
+            elapsed;
+
+
+        lastTick =
+            now;
+
+
+        updateUI();
+
+    }
+
+
+    /* =========================================================
+       SYNCHRONISATION SERVEUR
+    ========================================================= */
+
+    async function syncListeningTime() {
+
+        /*
+         * On calcule d'abord le dernier morceau
+         * de temps avant l'envoi.
+         */
+
+        tick();
+
+
+        /*
+         * Invité :
+         * le compteur fonctionne localement mais rien
+         * n'est envoyé au serveur.
+         */
+
+        if (!isAuthenticated()) {
+
+            console.log(
+                '[Radio] Invité : temps conservé uniquement localement.'
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * Une synchronisation est déjà en cours.
+         */
+
+        if (isSyncing) {
+
+            return;
+
+        }
+
+
+        /*
+         * Rien à envoyer.
+         */
+
+        if (pendingSeconds <= 0) {
+
+            return;
+
+        }
+
+
+        /*
+         * Pour éviter une requête trop importante,
+         * on envoie maximum 120 secondes.
+         */
+
+        const secondsToSend =
+            Math.min(
+                pendingSeconds,
+                120
+            );
+
+
+        /*
+         * On réserve immédiatement les secondes envoyées.
+         *
+         * Si la requête échoue, elles seront remises
+         * dans pendingSeconds.
+         */
+
+        pendingSeconds -=
+            secondsToSend;
+
+
+        isSyncing = true;
+
+
+        try {
+
+            const token =
+                getToken();
+
+
+            if (!token) {
+
+                pendingSeconds +=
+                    secondsToSend;
+
+                return;
+
+            }
+
+
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/api/radio/listen`,
+                    {
+
+                        method: 'POST',
+
+                        headers: {
+
+                            'Content-Type':
+                                'application/json',
+
+                            'Authorization':
+                                `Bearer ${token}`
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                seconds:
+                                    secondsToSend
+
+                            })
+
+                    }
+                );
+
+
+            let data = null;
+
+
+            try {
+
+                data =
+                    await response.json();
+
+            } catch (jsonError) {
+
+                console.warn(
+                    '[Radio] Réponse serveur non JSON.'
+                );
+
+            }
+
+
+            console.log(
+                '[Radio] Synchronisation serveur :',
+                data
+            );
+
+
+            /*
+             * Erreur HTTP.
+             */
+
+            if (!response.ok) {
+
+                console.warn(
+                    '[Radio] Erreur serveur :',
+                    data
+                );
+
+
+                /*
+                 * On ne perd pas les secondes.
+                 */
+
+                pendingSeconds +=
+                    secondsToSend;
+
+
+                /*
+                 * Si le token est expiré,
+                 * on ne force pas une nouvelle tentative.
+                 */
+
+                if (
+                    response.status === 401
+                ) {
+
+                    console.warn(
+                        '[Radio] Token invalide ou expiré.'
+                    );
+
+                }
+
+
+                updateUI();
+
+                return;
+
+            }
+
+
+            /*
+             * Le serveur renvoie le temps total.
+             */
+
+            if (
+                data &&
+                typeof data.radioListenSeconds ===
+                'number'
+            ) {
+
+                accumulatedSeconds =
+                    Math.max(
+                        0,
+                        Math.floor(
+                            data.radioListenSeconds
+                        )
+                    );
+
+            } else {
+
+                /*
+                 * Si le backend ne renvoie pas le total,
+                 * on ajoute simplement ce qui vient d'être accepté.
+                 */
+
+                accumulatedSeconds +=
+                    secondsToSend;
+
+            }
+
+
+            /*
+             * Affichage immédiatement mis à jour.
+             */
+
+            updateUI();
+
+
+            /*
+             * Récompense.
+             */
+
+            if (
+                data &&
+                data.pointsEarned &&
+                Number(data.pointsEarned) > 0
+            ) {
+
+                showReward(
+                    Number(
+                        data.pointsEarned
+                    )
+                );
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                '[Radio] Erreur réseau :',
+                error
+            );
+
+
+            /*
+             * La requête n'a pas pu atteindre le serveur.
+             * On remet les secondes dans la file locale.
+             */
+
+            pendingSeconds +=
+                secondsToSend;
+
+
+            updateUI();
+
+        } finally {
+
+            isSyncing =
+                false;
+
+        }
+
+    }
+
+
+    /* =========================================================
+       RECOMPENSE
+    ========================================================= */
+
+    function showReward(points) {
+
+        if (!rewardMessageElement) {
+
+            return;
+
+        }
+
+
+        rewardMessageElement.innerHTML =
+            `🎉 <strong>Félicitations !</strong> ` +
+            `Vous avez gagné ` +
+            `<strong>+${points} points</strong> ` +
+            `grâce à votre écoute de Radio Fanambarana.`;
+
+
+        setTimeout(
+            () => {
+
+                updateUI();
+
+            },
+            5000
+        );
+
+    }
+
+
+    /* =========================================================
+       DEMARRER LA RADIO
+    ========================================================= */
+
+    async function startRadio() {
+
+        if (!audio) {
+
+            return;
+
+        }
+
+
+        try {
+
+            /*
+             * Définition du flux.
+             */
+
+            if (!audio.src) {
+
+                audio.src =
+                    RADIO_STREAM;
+
+                audio.load();
+
+            }
+
+
+            /*
+             * Lecture.
+             */
+
+            await audio.play();
+
+
+            isPlaying =
+                true;
+
+
+            lastTick =
+                Date.now();
+
+
+            /*
+             * Sauvegarde de l'état.
+             */
+
+            localStorage.setItem(
+                STORAGE.playing,
+                '1'
+            );
+
+
+            localStorage.removeItem(
+                STORAGE.closed
+            );
+
+
+            /*
+             * Timers.
+             */
+
+            startClock();
+
+            startSyncTimer();
+
+
+            updateUI();
+
+
+            console.log(
+                '[Radio] Lecture démarrée.'
+            );
+
+        } catch (error) {
+
+            console.error(
+                '[Radio] Impossible de démarrer :',
+                error
+            );
+
+
+            isPlaying =
+                false;
+
+
+            lastTick =
+                null;
+
+
+            updateUI();
+
+        }
+
+    }
+
+
+    /* =========================================================
+       ARRET
+    ========================================================= */
+
+    async function stopRadio() {
+
+        /*
+         * Récupère les dernières secondes.
+         */
+
+        tick();
+
+
+        /*
+         * Envoie tout ce qui est en attente.
+         */
+
+        await syncAllPending();
+
+
+        /*
+         * Arrêt audio.
+         */
+
+        if (audio) {
+
+            audio.pause();
+
+        }
+
+
+        isPlaying =
+            false;
+
+
+        lastTick =
+            null;
+
+
+        stopSyncTimer();
+
+
+        localStorage.setItem(
+            STORAGE.playing,
+            '0'
+        );
+
+
+        updateUI();
+
+
+        console.log(
+            '[Radio] Lecture arrêtée.'
+        );
+
+    }
+
+
+    /* =========================================================
+       SYNCHRONISER TOUT LE TEMPS EN ATTENTE
+    ========================================================= */
+
+    async function syncAllPending() {
+
+        /*
+         * Met à jour une dernière fois le compteur.
+         */
+
+        tick();
+
+
+        if (!isAuthenticated()) {
+
+            return;
+
+        }
+
+
+        /*
+         * Tant qu'il reste du temps à envoyer,
+         * on effectue des requêtes de maximum 120 secondes.
+         */
+
+        let safetyCounter =
+            0;
+
+
+        while (
+            pendingSeconds > 0 &&
+            safetyCounter < 20
+        ) {
+
+            const before =
+                pendingSeconds;
+
+
+            await syncListeningTime();
+
+
+            safetyCounter++;
+
+
+            /*
+             * Protection contre une boucle infinie.
+             */
+
+            if (
+                pendingSeconds >= before
+            ) {
+
+                break;
+
+            }
+
+        }
+
+    }
+
+
+    /* =========================================================
+       FERMETURE DU LECTEUR
+    ========================================================= */
+
+    async function closePlayer() {
+
+        /*
+         * Synchronisation avant fermeture.
+         */
+
+        await stopRadio();
+
+
+        localStorage.setItem(
+            STORAGE.closed,
+            '1'
+        );
+
+
+        document.body.classList.add(
+            'radio-player-closed'
+        );
+
+
+        console.log(
+            '[Radio] Lecteur fermé.'
+        );
+
+    }
+
+
+    /* =========================================================
+       OUVERTURE
+    ========================================================= */
+
+    function openPlayer() {
+
+        document.body.classList.remove(
+            'radio-player-closed'
+        );
+
+
+        localStorage.removeItem(
+            STORAGE.closed
+        );
+
+
+        updateUI();
+
+    }
+
+
+    /* =========================================================
+       TIMER SERVEUR
+    ========================================================= */
+
+    function startSyncTimer() {
+
+        stopSyncTimer();
+
+
+        syncTimer =
+            setInterval(
+                () => {
+
+                    if (isPlaying) {
+
+                        syncListeningTime();
+
+                    }
+
+                },
+                SYNC_INTERVAL
+            );
+
+    }
+
+
+    function stopSyncTimer() {
+
+        if (syncTimer) {
+
+            clearInterval(
+                syncTimer
+            );
+
+            syncTimer =
+                null;
+
+        }
+
+    }
+
+
+    /* =========================================================
+       TIMER LOCAL
+    ========================================================= */
+
+    function startClock() {
+
+        if (clockTimer) {
+
+            clearInterval(
+                clockTimer
+            );
+
+        }
+
+
+        clockTimer =
+            setInterval(
+                () => {
+
+                    if (isPlaying) {
+
+                        tick();
+
+                    }
+
+                },
+                1000
+            );
+
+    }
+
+
+    function stopClock() {
+
+        if (clockTimer) {
+
+            clearInterval(
+                clockTimer
+            );
+
+            clockTimer =
+                null;
+
+        }
+
+    }
+
+
+    /* =========================================================
+       EVENEMENTS
+    ========================================================= */
+
+    function bindEvents() {
+
+        /*
+         * PLAY / PAUSE
+         */
+
+        if (playButton) {
+
+            playButton.addEventListener(
+                'click',
+                async () => {
+
+                    if (isPlaying) {
+
+                        await stopRadio();
+
+                    } else {
+
+                        openPlayer();
+
+                        await startRadio();
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /*
+         * FERMETURE
+         */
+
+        if (closeButton) {
+
+            closeButton.addEventListener(
+                'click',
+                closePlayer
+            );
+
+        }
+
+
+        /*
+         * VOLUME
+         */
+
+        if (volumeElement) {
+
+            const savedVolume =
+                parseFloat(
+                    localStorage.getItem(
+                        STORAGE.volume
+                    )
+                );
+
+
+            if (
+                !Number.isNaN(
+                    savedVolume
+                )
+            ) {
+
+                volumeElement.value =
+                    String(
+                        Math.max(
+                            0,
+                            Math.min(
+                                1,
+                                savedVolume
+                            )
+                        )
+                    );
+
+            }
+
+
+            const initialVolume =
+                parseFloat(
+                    volumeElement.value
+                );
+
+
+            if (audio) {
+
+                audio.volume =
+                    Number.isNaN(
+                        initialVolume
+                    )
+                        ? 1
+                        : initialVolume;
+
+            }
+
+
+            volumeElement.addEventListener(
+                'input',
+                () => {
+
+                    const value =
+                        parseFloat(
+                            volumeElement.value
+                        );
+
+
+                    if (audio) {
+
+                        audio.volume =
+                            value;
+
+                    }
+
+
+                    localStorage.setItem(
+                        STORAGE.volume,
+                        String(value)
+                    );
+
+                }
+            );
+
+        }
+
+
+        /*
+         * EVENEMENT PLAY DU NAVIGATEUR
+         */
+
+        if (audio) {
+
+            audio.addEventListener(
+                'play',
+                () => {
+
+                    if (!isPlaying) {
+
+                        isPlaying =
+                            true;
+
+                        lastTick =
+                            Date.now();
+
+                        startClock();
+
+                        startSyncTimer();
+
+                    }
+
+
+                    updateUI();
+
+                }
+            );
+
+
+            /*
+             * PAUSE.
+             */
+
+            audio.addEventListener(
+                'pause',
+                () => {
+
+                    /*
+                     * On récupère le temps avant
+                     * de modifier l'état.
+                     */
+
+                    if (isPlaying) {
+
+                        tick();
+
+                    }
+
+
+                    isPlaying =
+                        false;
+
+
+                    lastTick =
+                        null;
+
+
+                    stopSyncTimer();
+
+
+                    localStorage.setItem(
+                        STORAGE.playing,
+                        '0'
+                    );
+
+
+                    updateUI();
+
+                }
+            );
+
+
+            /*
+             * Erreur audio.
+             */
+
+            audio.addEventListener(
+                'error',
+                event => {
+
+                    console.error(
+                        '[Radio] Erreur audio :',
+                        event
+                    );
+
+                }
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       RESTAURATION
+    ========================================================= */
+
+    function restoreState() {
+
+        /*
+         * Volume.
+         */
+
+        const savedVolume =
+            parseFloat(
+                localStorage.getItem(
+                    STORAGE.volume
+                )
+            );
+
+
+        if (
+            audio &&
+            !Number.isNaN(
+                savedVolume
+            )
+        ) {
+
+            audio.volume =
+                Math.max(
+                    0,
+                    Math.min(
+                        1,
+                        savedVolume
+                    )
+                );
+
+        } else if (audio) {
+
+            audio.volume =
+                1;
+
+        }
+
+
+        if (
+            volumeElement &&
+            audio
+        ) {
+
+            volumeElement.value =
+                String(
+                    audio.volume
+                );
+
+        }
+
+
+        /*
+         * Lecteur fermé volontairement.
+         */
+
+        if (
+            localStorage.getItem(
+                STORAGE.closed
+            ) === '1'
+        ) {
+
+            document.body.classList.add(
+                'radio-player-closed'
+            );
+
+
+            updateUI();
+
+
+            return;
+
+        }
+
+
+        /*
+         * Etat précédent.
+         */
+
+        const shouldResume =
+            localStorage.getItem(
+                STORAGE.playing
+            ) === '1';
+
+
+        updateUI();
+
+
+        /*
+         * Tentative de reprise.
+         */
+
+        if (shouldResume) {
+
+            setTimeout(
+                () => {
+
+                    startRadio();
+
+                },
+                300
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       AVANT FERMETURE
+    ========================================================= */
+
+    window.addEventListener(
+        'beforeunload',
+        () => {
+
+            /*
+             * On ne peut pas garantir un fetch async
+             * pendant beforeunload.
+             *
+             * Le timer de 60 secondes limite donc
+             * la quantité potentiellement non synchronisée.
+             */
+
+            if (isPlaying) {
+
+                tick();
+
+                console.log(
+                    '[Radio] Fermeture pendant la lecture. ' +
+                    pendingSeconds +
+                    ' seconde(s) en attente.'
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =========================================================
+       INITIALISATION
+    ========================================================= */
+
+    function init() {
+
+        if (!findElements()) {
+
+            return;
+
+        }
+
+
+        bindEvents();
+
+        restoreState();
+
+        startClock();
+
+        updateUI();
+
+
+        console.log(
+            '[Radio] Lecteur Fanambarana initialisé.'
+        );
+
+        console.log(
+            '[Radio] Utilisateur :',
+            getUsername() || 'invité'
+        );
+
+    }
+
+
+    /* =========================================================
+       API PUBLIQUE
+    ========================================================= */
+
+    window.RadioFanambarana = {
+
+        play:
+            startRadio,
+
+        pause:
+            stopRadio,
+
+        close:
+            closePlayer,
+
+        open:
+            openPlayer,
+
+        sync:
+            syncListeningTime
+
+    };
+
+
+    /* =========================================================
+       DOM READY
+    ========================================================= */
+
+    if (
+        document.readyState ===
+        'loading'
+    ) {
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            init
+        );
+
+    } else {
+
+        init();
+
+    }
+
+
+})();

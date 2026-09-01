@@ -1,0 +1,441 @@
+/* ============================================================
+   RADIO FANAMBARANA — LECTEUR GLOBAL
+   ============================================================ */
+
+#radio-global-player {
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+
+    z-index: 2147483000;
+
+    max-width: 900px;
+    margin: 0 auto;
+
+    font-family:
+        "Plus Jakarta Sans",
+        Arial,
+        sans-serif;
+
+    background:
+        rgba(18, 20, 28, 0.96);
+
+    color: #fff;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.12);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.35);
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
+
+    overflow: visible;
+
+    transition:
+        transform 0.25s ease,
+        opacity 0.25s ease;
+}
+
+
+/* ============================================================
+   LECTEUR MASQUÉ
+   ============================================================ */
+
+#radio-global-player.radio-global-hidden {
+    opacity: 0;
+    transform: translateY(130px);
+    pointer-events: none;
+}
+
+
+/* ============================================================
+   CONTENU PRINCIPAL
+   ============================================================ */
+
+.radio-global-main {
+    min-height: 68px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding:
+        10px 14px;
+}
+
+
+/* ============================================================
+   INFORMATIONS
+   ============================================================ */
+
+.radio-global-info {
+    min-width: 0;
+
+    flex: 1;
+}
+
+
+.radio-global-live {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+
+    opacity: 0.8;
+
+    margin-bottom: 2px;
+}
+
+
+.radio-global-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #ff334b;
+
+    box-shadow:
+        0 0 0 4px rgba(255, 51, 75, 0.12);
+
+    animation:
+        radioLivePulse 1.5s infinite;
+}
+
+
+@keyframes radioLivePulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.45;
+        transform: scale(0.75);
+    }
+
+}
+
+
+.radio-global-title {
+    font-size: 14px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.radio-global-subtitle {
+    font-size: 10px;
+
+    opacity: 0.55;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* ============================================================
+   BOUTON PLAY / PAUSE
+   ============================================================ */
+
+.radio-global-button {
+    flex:
+        0 0 44px;
+
+    width: 44px;
+    height: 44px;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.12);
+
+    color: #fff;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease;
+}
+
+
+.radio-global-button:hover {
+    transform: scale(1.07);
+
+    background:
+        rgba(255, 255, 255, 0.2);
+}
+
+
+.radio-global-button:active {
+    transform: scale(0.94);
+}
+
+
+/* ============================================================
+   CHRONOMÈTRE
+   ============================================================ */
+
+.radio-global-time {
+    min-width: 66px;
+
+    text-align: center;
+
+    font-family:
+        monospace;
+
+    font-size: 11px;
+
+    opacity: 0.65;
+}
+
+
+/* ============================================================
+   VOLUME
+   ============================================================ */
+
+.radio-global-volume {
+    width: 80px;
+
+    cursor: pointer;
+
+    accent-color: currentColor;
+}
+
+
+/* ============================================================
+   FERMETURE
+   ============================================================ */
+
+.radio-global-close {
+    flex:
+        0 0 32px;
+
+    width: 32px;
+    height: 32px;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    background:
+        transparent;
+
+    color: rgba(255, 255, 255, 0.6);
+
+    cursor: pointer;
+
+    font-size: 23px;
+
+    line-height: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
+}
+
+
+.radio-global-close:hover {
+    background:
+        rgba(255, 255, 255, 0.1);
+
+    color: #fff;
+}
+
+
+/* ============================================================
+   NOTIFICATION DE RÉCOMPENSE
+   ============================================================ */
+
+.radio-global-reward {
+    position: absolute;
+
+    left: 50%;
+
+    bottom: calc(100% + 10px);
+
+    transform: translateX(-50%);
+
+    width: max-content;
+
+    max-width: calc(100vw - 40px);
+
+    padding:
+        10px 16px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(18, 20, 28, 0.97);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.12);
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.3);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    animation:
+        radioRewardIn 0.3s ease;
+}
+
+
+@keyframes radioRewardIn {
+
+    from {
+        opacity: 0;
+        transform:
+            translateX(-50%)
+            translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateX(-50%)
+            translateY(0);
+    }
+
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    #radio-global-player {
+
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+
+        border-radius: 15px;
+
+    }
+
+
+    .radio-global-main {
+
+        min-height: 58px;
+
+        gap: 9px;
+
+        padding:
+            8px 9px;
+
+    }
+
+
+    .radio-global-button {
+
+        width: 40px;
+        height: 40px;
+
+        flex-basis: 40px;
+
+    }
+
+
+    .radio-global-title {
+
+        font-size: 12px;
+
+    }
+
+
+    .radio-global-subtitle {
+
+        font-size: 9px;
+
+    }
+
+
+    .radio-global-time {
+
+        display: none;
+
+    }
+
+
+    .radio-global-volume {
+
+        width: 55px;
+
+    }
+
+
+    .radio-global-close {
+
+        width: 28px;
+        height: 28px;
+
+        flex-basis: 28px;
+
+        font-size: 21px;
+
+    }
+
+}
+
+
+/* ============================================================
+   TRÈS PETITS ÉCRANS
+   ============================================================ */
+
+@media (max-width: 380px) {
+
+    .radio-global-volume {
+        display: none;
+    }
+
+}

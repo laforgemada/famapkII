@@ -1,0 +1,74 @@
+(function () {
+
+    'use strict';
+
+    const RADIO_WINDOW_NAME = 'radioFanambarana';
+
+    let radioWindow = null;
+
+
+    function openRadio() {
+
+        /*
+         * Si la fenêtre existe déjà et n'est pas fermée,
+         * on la réutilise.
+         */
+        if (
+            radioWindow &&
+            !radioWindow.closed
+        ) {
+
+            radioWindow.focus();
+
+            return radioWindow;
+        }
+
+
+        /*
+         * Vérification par nom de fenêtre.
+         *
+         * Cela permet de récupérer la fenêtre Radio
+         * même après une navigation sur le site.
+         */
+        radioWindow = window.open(
+            '/radio/radio.html',
+            RADIO_WINDOW_NAME,
+            [
+                'width=420',
+                'height=110',
+                'resizable=yes',
+                'scrollbars=no',
+                'menubar=no',
+                'toolbar=no',
+                'location=no',
+                'status=no'
+            ].join(',')
+        );
+
+
+        if (!radioWindow) {
+
+            console.warn(
+                '[Radio] Le navigateur a bloqué la fenêtre.'
+            );
+
+            return null;
+        }
+
+
+        return radioWindow;
+
+    }
+
+
+    /*
+     * API publique
+     */
+    window.RadioLauncher = {
+
+        open: openRadio
+
+    };
+
+
+})();

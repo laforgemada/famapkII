@@ -1,0 +1,281 @@
+﻿    if (!audio || !playBtn) {
+        console.warn('[Radio Fanambarana] Ã‰lÃ©ments introuvables.');
+        return;
+    }
+
+    /* =========================================================
+       CONFIGURATION
+    ========================================================= */
+
+    const API_BASE_URL = 'https://apokalypsy.com';
+
+    const RADIO_STREAM =
+    'http://serveur.wanastream.com:21300/;?type=http';
+
+    const SYNC_INTERVAL = 60 * 1000;
+
+    /* =========================================================
+       Ã‰TAT
+    ========================================================= */
+
+    let isPlaying = false;
+
+    let accumulatedSeconds = 0;
+
+    let lastTick = null;
+
+    let syncTimer = null;
+
+    let isSyncing = false;
+
+    /* =========================================================
+       IDENTIFICATION
+    ========================================================= */
+
+    function getToken() {
+        return localStorage.getItem('token');
+    }
+
+    function getUsername() {
+        return localStorage.getItem('user_name');
+    }
+
+    function isAuthenticated() {
+        return !!getToken() && !!getUsername();
+    }
+
+    /* =========================================================
+       FORMAT TEMPS
+    ========================================================= */
+
+    function formatTime(totalSeconds) {
+
+        totalSeconds = Math.max(
+            0,
+            Math.floor(totalSeconds)
+        );
+
+        const hours = Math.floor(totalSeconds / 3600);
+
+        const minutes = Math.floor(
+            (totalSeconds % 3600) / 60
+        );
+
+        const seconds = totalSeconds % 60;
+
+        return [
+            String(hours).padStart(2, '0'),
+            String(minutes).padStart(2, '0'),
+            String(seconds).padStart(2, '0')
+        ].join(':');
+    }
+
+    /* =========================================================
+       AFFICHAGE
+    ========================================================= */
+
+    function updateDisplay() {
+
+        const totalMinutes =
+            Math.floor(accumulatedSeconds / 60);
+
+        const currentRewardedMinutes =
+            Math.floor(totalMinutes / 30) * 30;
+
+        const nextRewardMinutes =
+            currentRewardedMinutes + 30;
+
+        const secondsIntoCurrentPeriod =
+            accumulatedSeconds % (30 * 60);
+
+        const progress =
+            (secondsIntoCurrentPeriod / (30 * 60)) * 100;
+
+        if (listeningTime) {
+            listeningTime.textContent =
+                formatTime(accumulatedSeconds);
+        }
+
+        if (nextReward) {
+            nextReward.textContent =
+                `${nextRewardMinutes} min â†’ +3 points`;
+        }
+
+        if (progressBar) {
+            progressBar.style.width =
+                `${Math.min(100, progress)}%`;
+        }
+
+        if (rewardMessage) {
+
+            const remaining =
+                30 - (totalMinutes % 30);
+
+            if (remaining === 30) {
+
+                rewardMessage.innerHTML =
+                    'Prochain palier : <strong>30 minutes</strong> â†’ <strong>+3 points</strong>.';
+
+            } else {
+
+                rewardMessage.innerHTML =
+                    `Encore <strong>${remaining} minute${remaining > 1 ? 's' : ''}</strong> pour gagner <strong>+3 points</strong>.`;
+            }
+        }
+    }
+
+    /* =========================================================
+       SYNCHRONISATION DU TEMPS
+    ========================================================= */
+
+    async function syncListeningTime() {
+
+        if (!isAuthenticated()) {
+
+            console.log(
+                '[Radio] InvitÃ© : aucun temps envoyÃ© au serveur.'
+            );
+
+            return;
+        }
+
+        if (isSyncing) {
+            return;
+        }
+
+        const now = Date.now();
+
+        if (!lastTick) {
+            lastTick = now;
+            return;
+        }
+
+        const elapsedSeconds =
+            Math.floor((now - lastTick) / 1000);
+
+        if (elapsedSeconds <= 0) {
+            return;
+        }
+
+        /*
+         * On limite volontairement ce qui est envoyÃ©.
+         * Le backend possÃ¨de Ã©galement sa propre protection.
+         */
+        const secondsToSend =
+            Math.min(elapsedSeconds, 120);
+
+        lastTick = now;
+
+        isSyncing = true;
+
+        try {
+
+            const token = getToken();
+
+            const response = await fetch(
+                `${API_BASE_URL}/api/radio/listen`,
+                {
+                    method: 'POST',
+
+                    headers: {
+                        'Content-Type': 'application/json',
+
+                        'Authorization':
+                            `Bearer ${token}`
+                    },
+
+                    body: JSON.stringify({
+                        seconds: secondsToSend
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            console.log(
+                '[Radio] Synchronisation :',
+                data
+            );
+
+            if (!response.ok) {
+
+                console.warn(
+                    '[Radio] Erreur serveur :',
+                    data
+                );
+
+                return;
+            }
+
+            /*
+             * Le serveur est la source de vÃ©ritÃ©.
+             */
+            if (
+                typeof data.radioListenSeconds ===
+                'number'
+            ) {
+
+                accumulatedSeconds =
+                    data.radioListenSeconds;
+            }
+
+            updateDisplay();
+
+            /*
+             * Si une rÃ©compense vient d'Ãªtre obtenue,
+             * on informe l'utilisateur.
+             */
+            if (
+                data.pointsEarned &&
+                Number(data.pointsEarned) > 0
+            ) {
+
+                showRewardNotification(
+                    Number(data.pointsEarned)
+                );
+            }
+
+        } catch (error) {
+
+            console.error(
+                '[Radio] Erreur synchronisation :',
+                error
+            );
+
+            /*
+             * En cas d'erreur rÃ©seau, on ne perd pas
+             * le temps affichÃ© localement.
+             */
+            accumulatedSeconds += secondsToSend;
+
+            updateDisplay();
+
+        } finally {
+
+            isSyncing = false;
+        }
+    }
+
+    /* =========================================================
+       NOTIFICATION RÃ‰COMPENSE
+    ========================================================= */
+
+    function showRewardNotification(points) {
+
+        if (!rewardMessage) {
+            return;
+        }
+
+        rewardMessage.innerHTML =
+            `ðŸŽ‰ <strong>FÃ©licitations !</strong> Vous avez gagnÃ© <strong>+${points} points</strong> grÃ¢ce Ã  votre Ã©coute de Radio Fanambarana.`;
+
+        setTimeout(() => {
+
+            updateDisplay();
+
+        }, 5000);
+    }
+
+    /* =========================================================
+       DÃ‰MARRER
+    ========================================================= */

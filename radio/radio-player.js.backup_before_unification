@@ -1,0 +1,1071 @@
+/*
+ * ============================================================
+ * RADIO FANAMBARANA — LECTEUR GLOBAL
+ * ============================================================
+ *
+ * Ce module est partagé par :
+ *   - index.html
+ *   - bible.html
+ *   - chat.html
+ *   - utilisateur/espace_personnel.html
+ *
+ * Fonctionnalités :
+ *   - lecteur fixe en bas de l'écran
+ *   - mémorisation de l'état
+ *   - reprise après actualisation
+ *   - lecture pour invités
+ *   - synchronisation des points pour utilisateurs connectés
+ *
+ * ============================================================
+ */
+
+(function () {
+
+    'use strict';
+
+    /* =========================================================
+       CONFIGURATION
+    ========================================================= */
+
+    const API_BASE_URL = 'https://apokalypsy.com';
+
+    /*
+     * IMPORTANT :
+     * SHOUTcast expose le flux MP3 via cette URL.
+     */
+    const RADIO_STREAM =
+        'http://serveur.wanastream.com:21300/;?type=http';
+
+    const SYNC_INTERVAL = 60 * 1000;
+
+    const STORAGE = {
+        playing: 'radioFanambaranaPlaying',
+        volume: 'radioFanambaranaVolume',
+        closed: 'radioFanambaranaClosed'
+    };
+
+
+    /* =========================================================
+       ÉTAT
+    ========================================================= */
+
+    let audio = null;
+
+    let isPlaying = false;
+
+    let accumulatedSeconds = 0;
+
+    let lastTick = null;
+
+    let syncTimer = null;
+
+    let isSyncing = false;
+
+
+    /* =========================================================
+       IDENTIFICATION
+    ========================================================= */
+
+    function getToken() {
+
+        return localStorage.getItem('token');
+
+    }
+
+
+    function getUsername() {
+
+        return localStorage.getItem('user_name');
+
+    }
+
+
+    function isAuthenticated() {
+
+        return !!getToken() && !!getUsername();
+
+    }
+
+
+    /* =========================================================
+       TEMPS
+    ========================================================= */
+
+    function formatTime(totalSeconds) {
+
+        totalSeconds = Math.max(
+            0,
+            Math.floor(totalSeconds)
+        );
+
+        const hours =
+            Math.floor(totalSeconds / 3600);
+
+        const minutes =
+            Math.floor(
+                (totalSeconds % 3600) / 60
+            );
+
+        const seconds =
+            totalSeconds % 60;
+
+        return [
+            String(hours).padStart(2, '0'),
+            String(minutes).padStart(2, '0'),
+            String(seconds).padStart(2, '0')
+        ].join(':');
+
+    }
+
+
+    /* =========================================================
+       CRÉATION DU LECTEUR
+    ========================================================= */
+
+    function createPlayer() {
+
+        /*
+         * Si le lecteur existe déjà,
+         * on ne le recrée pas.
+         */
+        if (document.getElementById('radio-global-player')) {
+            return;
+        }
+
+
+        const container =
+            document.createElement('div');
+
+        container.id =
+            'radio-global-player';
+
+        container.innerHTML = `
+
+            <div class="radio-global-main">
+
+                <div class="radio-global-info">
+
+                    <div class="radio-global-live">
+                        <span class="radio-global-dot"></span>
+                        DIRECT
+                    </div>
+
+                    <div class="radio-global-title">
+                        Radio Fanambarana
+                    </div>
+
+                    <div class="radio-global-subtitle">
+                        98.4 FM • La radio de la Parole
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="radio-global-play"
+                    class="radio-global-button"
+                    aria-label="Écouter Radio Fanambarana"
+                >
+                    ▶
+                </button>
+
+
+                <div class="radio-global-time">
+
+                    <span id="radio-global-time">
+                        00:00:00
+                    </span>
+
+                </div>
+
+
+                <input
+                    id="radio-global-volume"
+                    class="radio-global-volume"
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value="1"
+                    aria-label="Volume"
+                >
+
+
+                <button
+                    type="button"
+                    id="radio-global-close"
+                    class="radio-global-close"
+                    aria-label="Fermer le lecteur radio"
+                >
+                    ×
+                </button>
+
+            </div>
+
+        `;
+
+        document.body.appendChild(container);
+
+
+        /*
+         * Élément audio invisible.
+         */
+       audio =
+		document.createElement('audio');
+
+		audio.id =
+			'radio-global-audio';
+
+		audio.preload =
+			'none';
+
+		audio.src =
+			RADIO_STREAM;
+
+        document.body.appendChild(audio);
+
+
+        bindEvents();
+
+        restoreState();
+
+    }
+
+
+    /* =========================================================
+       ÉLÉMENTS
+    ========================================================= */
+
+    function getPlayer() {
+
+        return document.getElementById(
+            'radio-global-player'
+        );
+
+    }
+
+
+    function getPlayButton() {
+
+        return document.getElementById(
+            'radio-global-play'
+        );
+
+    }
+
+
+    function getTimeElement() {
+
+        return document.getElementById(
+            'radio-global-time'
+        );
+
+    }
+
+
+    /* =========================================================
+       AFFICHAGE
+    ========================================================= */
+
+    function updateUI() {
+
+        const button =
+            getPlayButton();
+
+        const time =
+            getTimeElement();
+
+
+        if (button) {
+
+            button.textContent =
+                isPlaying ? '❚❚' : '▶';
+
+            button.setAttribute(
+                'aria-label',
+                isPlaying
+                    ? 'Mettre la radio en pause'
+                    : 'Écouter Radio Fanambarana'
+            );
+
+        }
+
+
+        if (time) {
+
+            time.textContent =
+                formatTime(
+                    accumulatedSeconds
+                );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       LECTURE
+    ========================================================= */
+
+    async function startRadio() {
+
+        if (!audio) {
+            return;
+        }
+
+
+        try {
+
+            /*
+             * Recharge le flux si nécessaire.
+             */
+            if (!audio.src) {
+
+                audio.src =
+                    RADIO_STREAM;
+
+                audio.load();
+
+            }
+
+
+            await audio.play();
+
+
+            isPlaying = true;
+
+            lastTick =
+                Date.now();
+
+
+            localStorage.setItem(
+                STORAGE.playing,
+                '1'
+            );
+
+            localStorage.removeItem(
+                STORAGE.closed
+            );
+
+
+            startSyncTimer();
+
+            updateUI();
+
+
+            console.log(
+                '[Radio globale] Lecture démarrée.'
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                '[Radio globale] Impossible de démarrer :',
+                error
+            );
+
+            isPlaying = false;
+
+            updateUI();
+
+        }
+
+    }
+
+
+    /* =========================================================
+       ARRÊT
+    ========================================================= */
+
+    async function stopRadio() {
+
+        if (isPlaying) {
+
+            await syncListeningTime();
+
+        }
+
+
+        if (audio) {
+
+            audio.pause();
+
+        }
+
+
+        isPlaying = false;
+
+        lastTick = null;
+
+        stopSyncTimer();
+
+
+        localStorage.setItem(
+            STORAGE.playing,
+            '0'
+        );
+
+
+        updateUI();
+
+
+        console.log(
+            '[Radio globale] Lecture arrêtée.'
+        );
+
+    }
+
+
+    /* =========================================================
+       FERMETURE DU LECTEUR
+    ========================================================= */
+
+    async function closePlayer() {
+
+        await stopRadio();
+
+
+        localStorage.setItem(
+            STORAGE.closed,
+            '1'
+        );
+
+
+        const player =
+            getPlayer();
+
+        if (player) {
+
+            player.classList.add(
+                'radio-global-hidden'
+            );
+
+        }
+
+
+        console.log(
+            '[Radio globale] Lecteur fermé.'
+        );
+
+    }
+
+
+    /* =========================================================
+       RÉOUVERTURE
+    ========================================================= */
+
+    function openPlayer() {
+
+        const player =
+            getPlayer();
+
+        if (player) {
+
+            player.classList.remove(
+                'radio-global-hidden'
+            );
+
+        }
+
+
+        localStorage.removeItem(
+            STORAGE.closed
+        );
+
+    }
+
+
+    /* =========================================================
+       SYNCHRONISATION SERVEUR
+    ========================================================= */
+
+    async function syncListeningTime() {
+
+        if (!isAuthenticated()) {
+
+            console.log(
+                '[Radio globale] Invité : aucun temps envoyé.'
+            );
+
+            return;
+
+        }
+
+
+        if (!lastTick || isSyncing) {
+            return;
+        }
+
+
+        const now =
+            Date.now();
+
+
+        const elapsedSeconds =
+            Math.floor(
+                (now - lastTick) / 1000
+            );
+
+
+        if (elapsedSeconds <= 0) {
+            return;
+        }
+
+
+        const secondsToSend =
+            Math.min(
+                elapsedSeconds,
+                120
+            );
+
+
+        lastTick =
+            now;
+
+
+        isSyncing = true;
+
+
+        try {
+
+            const token =
+                getToken();
+
+
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/api/radio/listen`,
+                    {
+                        method: 'POST',
+
+                        headers: {
+                            'Content-Type':
+                                'application/json',
+
+                            'Authorization':
+                                `Bearer ${token}`
+                        },
+
+                        body: JSON.stringify({
+                            seconds:
+                                secondsToSend
+                        })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            console.log(
+                '[Radio globale] Synchronisation :',
+                data
+            );
+
+
+            if (!response.ok) {
+
+                console.warn(
+                    '[Radio globale] Erreur serveur :',
+                    data
+                );
+
+                return;
+
+            }
+
+
+            if (
+                typeof data.radioListenSeconds ===
+                'number'
+            ) {
+
+                accumulatedSeconds =
+                    data.radioListenSeconds;
+
+            }
+
+
+            updateUI();
+
+
+            /*
+             * Une récompense vient d'être obtenue.
+             */
+            if (
+                data.pointsEarned &&
+                Number(data.pointsEarned) > 0
+            ) {
+
+                showReward(
+                    Number(data.pointsEarned)
+                );
+
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                '[Radio globale] Erreur synchronisation :',
+                error
+            );
+
+
+            /*
+             * Le temps n'est pas perdu localement.
+             */
+            accumulatedSeconds +=
+                secondsToSend;
+
+
+            updateUI();
+
+
+        } finally {
+
+            isSyncing = false;
+
+        }
+
+    }
+
+
+    /* =========================================================
+       RÉCOMPENSE
+    ========================================================= */
+
+    function showReward(points) {
+
+        const player =
+            getPlayer();
+
+        if (!player) {
+            return;
+        }
+
+
+        const message =
+            document.createElement('div');
+
+        message.className =
+            'radio-global-reward';
+
+
+        message.innerHTML =
+            `🎉 +${points} points gagnés grâce à votre écoute !`;
+
+
+        player.appendChild(message);
+
+
+        setTimeout(
+            () => {
+
+                message.remove();
+
+            },
+            5000
+        );
+
+    }
+
+
+    /* =========================================================
+       TIMER SERVEUR
+    ========================================================= */
+
+    function startSyncTimer() {
+
+        stopSyncTimer();
+
+
+        syncTimer =
+            setInterval(
+                () => {
+
+                    if (isPlaying) {
+
+                        syncListeningTime();
+
+                    }
+
+                },
+                SYNC_INTERVAL
+            );
+
+    }
+
+
+    function stopSyncTimer() {
+
+        if (syncTimer) {
+
+            clearInterval(
+                syncTimer
+            );
+
+            syncTimer = null;
+
+        }
+
+    }
+
+
+    /* =========================================================
+       CHRONOMÈTRE LOCAL
+    ========================================================= */
+
+    setInterval(
+        () => {
+
+            if (!isPlaying || !lastTick) {
+                return;
+            }
+
+
+            const now =
+                Date.now();
+
+
+            const elapsed =
+                Math.floor(
+                    (now - lastTick) / 1000
+                );
+
+
+            if (elapsed > 0) {
+
+                accumulatedSeconds +=
+                    elapsed;
+
+                lastTick =
+                    now;
+
+                updateUI();
+
+            }
+
+        },
+        1000
+    );
+
+
+    /* =========================================================
+       ÉVÉNEMENTS
+    ========================================================= */
+
+    function bindEvents() {
+
+        const playButton =
+            getPlayButton();
+
+        const closeButton =
+            document.getElementById(
+                'radio-global-close'
+            );
+
+        const volume =
+            document.getElementById(
+                'radio-global-volume'
+            );
+
+
+        if (playButton) {
+
+            playButton.addEventListener(
+                'click',
+                async () => {
+
+                    if (isPlaying) {
+
+                        await stopRadio();
+
+                    } else {
+
+                        openPlayer();
+
+                        await startRadio();
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        if (closeButton) {
+
+            closeButton.addEventListener(
+                'click',
+                closePlayer
+            );
+
+        }
+
+
+        if (volume) {
+
+            const savedVolume =
+                parseFloat(
+                    localStorage.getItem(
+                        STORAGE.volume
+                    )
+                );
+
+
+            if (
+                !Number.isNaN(savedVolume)
+            ) {
+
+                volume.value =
+                    String(
+                        Math.max(
+                            0,
+                            Math.min(
+                                1,
+                                savedVolume
+                            )
+                        )
+                    );
+
+            }
+
+
+            volume.addEventListener(
+                'input',
+                () => {
+
+                    if (audio) {
+
+                        audio.volume =
+                            parseFloat(
+                                volume.value
+                            );
+
+                    }
+
+
+                    localStorage.setItem(
+                        STORAGE.volume,
+                        volume.value
+                    );
+
+                }
+            );
+
+        }
+
+
+        /*
+         * Si le navigateur signale que la radio
+         * s'est arrêtée ou a rencontré une erreur.
+         */
+        if (audio) {
+
+            audio.addEventListener(
+                'play',
+                () => {
+
+                    isPlaying = true;
+
+                    lastTick =
+                        Date.now();
+
+                    updateUI();
+
+                }
+            );
+
+
+            audio.addEventListener(
+                'pause',
+                () => {
+
+                    if (isPlaying) {
+
+                        isPlaying = false;
+
+                    }
+
+                    updateUI();
+
+                }
+            );
+
+
+            audio.addEventListener(
+                'error',
+                event => {
+
+                    console.error(
+                        '[Radio globale] Erreur audio :',
+                        event
+                    );
+
+                }
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       RESTAURATION
+    ========================================================= */
+
+    function restoreState() {
+
+        const volume =
+            document.getElementById(
+                'radio-global-volume'
+            );
+
+
+        const savedVolume =
+            parseFloat(
+                localStorage.getItem(
+                    STORAGE.volume
+                )
+            );
+
+
+        if (
+            volume &&
+            !Number.isNaN(savedVolume)
+        ) {
+
+            volume.value =
+                String(
+                    Math.max(
+                        0,
+                        Math.min(
+                            1,
+                            savedVolume
+                        )
+                    )
+                );
+
+            audio.volume =
+                savedVolume;
+
+        } else {
+
+            audio.volume =
+                1;
+
+        }
+
+
+        /*
+         * Le lecteur est fermé volontairement.
+         */
+        if (
+            localStorage.getItem(
+                STORAGE.closed
+            ) === '1'
+        ) {
+
+            const player =
+                getPlayer();
+
+            if (player) {
+
+                player.classList.add(
+                    'radio-global-hidden'
+                );
+
+            }
+
+            return;
+
+        }
+
+
+        /*
+         * L'utilisateur écoutait la radio
+         * avant l'actualisation.
+         */
+        const shouldResume =
+            localStorage.getItem(
+                STORAGE.playing
+            ) === '1';
+
+
+        updateUI();
+
+
+        if (shouldResume) {
+
+            /*
+             * Certains navigateurs bloquent la lecture
+             * automatique. On tente la reprise.
+             */
+            setTimeout(
+                () => {
+
+                    startRadio();
+
+                },
+                300
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       INITIALISATION
+    ========================================================= */
+
+    function init() {
+
+        createPlayer();
+
+        console.log(
+            '[Radio globale] Module initialisé.'
+        );
+
+    }
+
+
+    if (
+        document.readyState ===
+        'loading'
+    ) {
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            init
+        );
+
+    } else {
+
+        init();
+
+    }
+
+
+    /*
+     * API publique éventuelle.
+     */
+    window.RadioFanambarana = {
+
+        play: startRadio,
+
+        pause: stopRadio,
+
+        close: closePlayer,
+
+        open: openPlayer
+
+    };
+
+
+})();
