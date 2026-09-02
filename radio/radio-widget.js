@@ -262,7 +262,7 @@
                 width: 9px;
                 height: 9px;
                 border-radius: 50%;
-                background: #ff3b3b;
+                background: #3bff41;
                 box-shadow: 0 0 0 3px #121c2d;
                 animation: rfw-pulse 1.4s infinite;
             }
