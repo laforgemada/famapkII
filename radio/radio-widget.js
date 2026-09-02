@@ -38,13 +38,10 @@
     let barPlayButton = null;
     let barMinimizeButton = null;
     let barCloseButton = null;
-    let barExpandToggle = null;
 
     let bubblePlayIcon = null;
 
     let volumeSlider = null;
-
-    let panel = null;
 
     let listeningTimeElement = null;
     let nextRewardElement = null;
@@ -53,7 +50,7 @@
 
     let isPlaying = false;
 
-    // Temps total affiché localement
+    // Temps total d'écoute
     let accumulatedSeconds = 0;
 
     // Dernier moment où le compteur a été calculé
@@ -66,9 +63,7 @@
     let clockTimer = null;
 
     let isSyncing = false;
-
     let autoplayBlocked = false;
-
     let isStopping = false;
 
     // =========================================================
@@ -84,7 +79,10 @@
     }
 
     function isAuthenticated() {
-        return Boolean(getToken() && getUsername());
+        return Boolean(
+            getToken() &&
+            getUsername()
+        );
     }
 
     // =========================================================
@@ -92,11 +90,21 @@
     // =========================================================
 
     function formatTime(totalSeconds) {
-        totalSeconds = Math.max(0, Math.floor(totalSeconds));
+        totalSeconds = Math.max(
+            0,
+            Math.floor(totalSeconds)
+        );
 
-        const hours = Math.floor(totalSeconds / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
+        const hours = Math.floor(
+            totalSeconds / 3600
+        );
+
+        const minutes = Math.floor(
+            (totalSeconds % 3600) / 60
+        );
+
+        const seconds =
+            totalSeconds % 60;
 
         return [
             String(hours).padStart(2, '0'),
@@ -124,14 +132,19 @@
         // -----------------------------------------------------
 
         const progressSeconds =
-            accumulatedSeconds % REWARD_INTERVAL;
+            accumulatedSeconds %
+            REWARD_INTERVAL;
 
         const progressPercent =
-            (progressSeconds / REWARD_INTERVAL) * 100;
+            (progressSeconds /
+                REWARD_INTERVAL) * 100;
 
         if (progressBarElement) {
             progressBarElement.style.width =
-                `${Math.min(100, progressPercent)}%`;
+                `${Math.min(
+                    100,
+                    progressPercent
+                )}%`;
         }
 
         // -----------------------------------------------------
@@ -139,7 +152,10 @@
         // -----------------------------------------------------
 
         const completedRewards =
-            Math.floor(accumulatedSeconds / REWARD_INTERVAL);
+            Math.floor(
+                accumulatedSeconds /
+                REWARD_INTERVAL
+            );
 
         const nextRewardNumber =
             completedRewards + 1;
@@ -155,10 +171,13 @@
 
         if (rewardMessageElement) {
             const remainingSeconds =
-                REWARD_INTERVAL - progressSeconds;
+                REWARD_INTERVAL -
+                progressSeconds;
 
             const remainingMinutes =
-                Math.ceil(remainingSeconds / 60);
+                Math.ceil(
+                    remainingSeconds / 60
+                );
 
             rewardMessageElement.innerHTML =
                 `Encore <strong>${remainingMinutes} minute${remainingMinutes > 1 ? 's' : ''}</strong> ` +
@@ -170,7 +189,9 @@
         // -----------------------------------------------------
 
         const subtitle =
-            document.getElementById('rfw-bar-subtitle');
+            document.getElementById(
+                'rfw-bar-subtitle'
+            );
 
         if (subtitle) {
             if (autoplayBlocked) {
@@ -195,7 +216,9 @@
 
             barPlayButton.setAttribute(
                 'aria-label',
-                isPlaying ? 'Mettre en pause' : 'Écouter'
+                isPlaying
+                    ? 'Mettre en pause'
+                    : 'Écouter'
             );
         }
 
@@ -213,10 +236,14 @@
         // -----------------------------------------------------
 
         const liveDot =
-            document.getElementById('rfw-bar-live-dot');
+            document.getElementById(
+                'rfw-bar-live-dot'
+            );
 
         const bubbleLiveDot =
-            document.getElementById('rfw-bubble-live-dot');
+            document.getElementById(
+                'rfw-bubble-live-dot'
+            );
 
         if (liveDot) {
             liveDot.style.opacity =
@@ -274,9 +301,13 @@
             return;
         }
 
-        root.classList.remove('rfw-hidden');
+        root.classList.remove(
+            'rfw-hidden'
+        );
 
-        localStorage.removeItem(STORAGE.closed);
+        localStorage.removeItem(
+            STORAGE.closed
+        );
     }
 
     function hide() {
@@ -284,7 +315,9 @@
             return;
         }
 
-        root.classList.add('rfw-hidden');
+        root.classList.add(
+            'rfw-hidden'
+        );
     }
 
     // =========================================================
@@ -306,7 +339,9 @@
 
         localStorage.setItem(
             STORAGE.mode,
-            isBubble ? 'bubble' : 'bar'
+            isBubble
+                ? 'bubble'
+                : 'bar'
         );
 
         if (isBubble) {
@@ -338,19 +373,11 @@
     // CAPTURE DU TEMPS ÉCOULÉ
     // =========================================================
 
-    /*
-     * Cette fonction est importante.
-     *
-     * Elle récupère le temps écoulé depuis lastTick,
-     * l'ajoute au compteur local ET au compteur qui
-     * doit être envoyé au serveur.
-     *
-     * Ainsi, tick() et syncListeningTime() ne se
-     * "volent" plus le temps l'un à l'autre.
-     */
-
     function captureElapsedTime() {
-        if (!isPlaying || !lastTick) {
+        if (
+            !isPlaying ||
+            !lastTick
+        ) {
             return 0;
         }
 
@@ -365,9 +392,11 @@
             return 0;
         }
 
-        accumulatedSeconds += elapsedSeconds;
+        accumulatedSeconds +=
+            elapsedSeconds;
 
-        pendingSyncSeconds += elapsedSeconds;
+        pendingSyncSeconds +=
+            elapsedSeconds;
 
         lastTick = now;
 
@@ -385,6 +414,85 @@
     }
 
     // =========================================================
+    // CHARGEMENT DU STATUT RADIO DEPUIS LE SERVEUR
+    // =========================================================
+
+    async function loadRadioStatus() {
+        // Un invité n'a pas de temps d'écoute enregistré
+        if (!isAuthenticated()) {
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}/api/radio/status`,
+                {
+                    method: 'GET',
+
+                    headers: {
+                        'Authorization':
+                            `Bearer ${getToken()}`
+                    }
+                }
+            );
+
+            let data = {};
+
+            try {
+                data = await response.json();
+            } catch (jsonError) {
+                console.warn(
+                    '[Radio] Réponse statut non JSON.'
+                );
+            }
+
+            if (!response.ok) {
+                console.warn(
+                    '[Radio] Impossible de charger le statut :',
+                    response.status
+                );
+
+                return;
+            }
+
+            if (
+                data.success &&
+                data.authenticated
+            ) {
+                // -------------------------------------------------
+                // TEMPS D'ÉCOUTE OFFICIEL
+                // -------------------------------------------------
+
+                if (
+                    typeof data.radioListenSeconds ===
+                    'number'
+                ) {
+                    accumulatedSeconds =
+                        data.radioListenSeconds;
+                }
+
+                // Au chargement, aucune seconde locale
+                // n'est encore en attente d'envoi.
+                pendingSyncSeconds = 0;
+
+                updateUI();
+
+                console.log(
+                    '[Radio] Statut chargé :',
+                    data.radioListenSeconds,
+                    'secondes'
+                );
+            }
+
+        } catch (error) {
+            console.warn(
+                '[Radio] Erreur lors du chargement du statut :',
+                error
+            );
+        }
+    }
+
+    // =========================================================
     // SYNCHRONISATION SERVEUR
     // =========================================================
 
@@ -398,11 +506,7 @@
             return;
         }
 
-        /*
-         * On capture d'abord le temps depuis le dernier tick.
-         * Il ne faut surtout pas appeler tick() juste avant
-         * puis essayer de recalculer le temps ici.
-         */
+        // Capturer d'abord le temps depuis le dernier tick
         captureElapsedTime();
 
         if (pendingSyncSeconds <= 0) {
@@ -432,7 +536,8 @@
                     },
 
                     body: JSON.stringify({
-                        seconds: secondsToSend
+                        seconds:
+                            secondsToSend
                     })
                 }
             );
@@ -448,13 +553,6 @@
             }
 
             if (!response.ok) {
-                /*
-                 * Très important :
-                 * on NE rajoute PAS secondsToSend.
-                 *
-                 * Ces secondes sont déjà présentes
-                 * dans pendingSyncSeconds.
-                 */
                 console.warn(
                     '[Radio] Synchronisation refusée :',
                     response.status
@@ -469,16 +567,15 @@
             pendingSyncSeconds =
                 Math.max(
                     0,
-                    pendingSyncSeconds - secondsToSend
+                    pendingSyncSeconds -
+                    secondsToSend
                 );
 
             /*
-             * Si le serveur nous renvoie le total officiel,
-             * on le prend comme base.
+             * Le serveur nous renvoie le total officiel.
              *
-             * On ajoute les secondes encore en attente
-             * afin de ne pas faire revenir le compteur
-             * en arrière.
+             * On conserve également les secondes qui
+             * restent en attente d'envoi.
              */
             if (
                 typeof data.radioListenSeconds ===
@@ -500,18 +597,16 @@
                 Number(data.pointsEarned) > 0
             ) {
                 showReward(
-                    Number(data.pointsEarned)
+                    Number(
+                        data.pointsEarned
+                    )
                 );
             }
 
         } catch (error) {
             /*
-             * En cas de problème réseau :
-             *
-             * on conserve pendingSyncSeconds.
-             *
-             * Il sera renvoyé lors de la prochaine
-             * synchronisation.
+             * En cas de problème réseau, les secondes
+             * restent dans pendingSyncSeconds.
              */
             console.warn(
                 '[Radio] Erreur de synchronisation :',
@@ -557,7 +652,9 @@
 
     function startClock() {
         if (clockTimer) {
-            clearInterval(clockTimer);
+            clearInterval(
+                clockTimer
+            );
         }
 
         clockTimer = setInterval(
@@ -581,7 +678,9 @@
 
         try {
             if (!audio.src) {
-                audio.src = RADIO_STREAM;
+                audio.src =
+                    RADIO_STREAM;
+
                 audio.load();
             }
 
@@ -592,7 +691,8 @@
             isPlaying = true;
 
             if (!lastTick) {
-                lastTick = Date.now();
+                lastTick =
+                    Date.now();
             }
 
             localStorage.setItem(
@@ -638,18 +738,12 @@
         isStopping = true;
 
         try {
-            /*
-             * On récupère le temps écoulé AVANT d'arrêter
-             * la lecture.
-             */
+            // Récupérer le temps avant l'arrêt
             if (isPlaying) {
                 captureElapsedTime();
             }
 
-            /*
-             * On tente d'envoyer immédiatement le temps
-             * restant au serveur.
-             */
+            // Envoyer immédiatement le temps restant
             await syncListeningTime();
 
             if (audio) {
@@ -676,27 +770,32 @@
         }
     }
 
-    // =========================================================
-    // FERMER LE LECTEUR
-    // =========================================================
+   // =========================================================
+		// FERMER LE LECTEUR
+		// =========================================================
 
-    async function closeWidget() {
-        await stopRadio();
+		async function closeWidget() {
+			await stopRadio();
 
-        localStorage.setItem(
-            STORAGE.closed,
-            '1'
-        );
+			// ✕ = même comportement que le bouton Réduire
+			localStorage.setItem(
+				STORAGE.closed,
+				'0'
+			);
 
-        hide();
-    }
+			show();
+			setMode('bubble');
+		}
 
     // =========================================================
     // VOLUME
     // =========================================================
 
     function restoreVolume() {
-        if (!volumeSlider || !audio) {
+        if (
+            !volumeSlider ||
+            !audio
+        ) {
             return;
         }
 
@@ -709,7 +808,9 @@
 
         if (savedVolume !== null) {
             const parsed =
-                parseFloat(savedVolume);
+                parseFloat(
+                    savedVolume
+                );
 
             if (
                 !Number.isNaN(parsed) &&
@@ -771,15 +872,19 @@
             bubble.style.right = 'auto';
 
             if (savedSide === 'left') {
-                bubble.style.left = '20px';
+                bubble.style.left =
+                    '20px';
             } else {
-                bubble.style.right = '20px';
+                bubble.style.right =
+                    '20px';
             }
         }
 
         if (savedTop !== null) {
             const top =
-                parseFloat(savedTop);
+                parseFloat(
+                    savedTop
+                );
 
             if (!Number.isNaN(top)) {
                 const maxTop =
@@ -826,14 +931,20 @@
                 dragging = true;
                 moved = false;
 
-                startX = event.clientX;
-                startY = event.clientY;
+                startX =
+                    event.clientX;
+
+                startY =
+                    event.clientY;
 
                 const rect =
                     bubble.getBoundingClientRect();
 
-                startLeft = rect.left;
-                startTop = rect.top;
+                startLeft =
+                    rect.left;
+
+                startTop =
+                    rect.top;
 
                 bubble.setPointerCapture(
                     event.pointerId
@@ -849,10 +960,12 @@
                 }
 
                 const deltaX =
-                    event.clientX - startX;
+                    event.clientX -
+                    startX;
 
                 const deltaY =
-                    event.clientY - startY;
+                    event.clientY -
+                    startY;
 
                 if (
                     Math.abs(deltaX) > 5 ||
@@ -866,10 +979,12 @@
                 }
 
                 let newLeft =
-                    startLeft + deltaX;
+                    startLeft +
+                    deltaX;
 
                 let newTop =
-                    startTop + deltaY;
+                    startTop +
+                    deltaY;
 
                 const maxLeft =
                     window.innerWidth -
@@ -883,13 +998,19 @@
 
                 newLeft =
                     Math.min(
-                        Math.max(newLeft, 10),
+                        Math.max(
+                            newLeft,
+                            10
+                        ),
                         maxLeft
                     );
 
                 newTop =
                     Math.min(
-                        Math.max(newTop, 10),
+                        Math.max(
+                            newTop,
+                            10
+                        ),
                         maxTop
                     );
 
@@ -924,13 +1045,9 @@
                     // Rien à faire
                 }
 
-                /*
-                 * Aucun déplacement :
-                 * on agrandit le lecteur.
-                 */
+                // Simple clic : agrandir
                 if (!moved) {
                     setMode('bar');
-
                     return;
                 }
 
@@ -950,7 +1067,9 @@
                     window.innerWidth / 2;
 
                 const side =
-                    goLeft ? 'left' : 'right';
+                    goLeft
+                        ? 'left'
+                        : 'right';
 
                 localStorage.setItem(
                     STORAGE.bubbleSide,
@@ -958,11 +1077,17 @@
                 );
 
                 if (goLeft) {
-                    bubble.style.left = '20px';
-                    bubble.style.right = 'auto';
+                    bubble.style.left =
+                        '20px';
+
+                    bubble.style.right =
+                        'auto';
                 } else {
-                    bubble.style.right = '20px';
-                    bubble.style.left = 'auto';
+                    bubble.style.right =
+                        '20px';
+
+                    bubble.style.left =
+                        'auto';
                 }
 
                 const finalRect =
@@ -970,7 +1095,9 @@
 
                 localStorage.setItem(
                     STORAGE.bubbleTop,
-                    String(finalRect.top)
+                    String(
+                        finalRect.top
+                    )
                 );
             }
         );
@@ -978,10 +1105,6 @@
         bubble.addEventListener(
             'click',
             (event) => {
-                /*
-                 * Si l'utilisateur vient de déplacer
-                 * la bulle, le click ne doit pas ouvrir.
-                 */
                 if (moved) {
                     event.preventDefault();
                     event.stopPropagation();
@@ -1004,9 +1127,12 @@
         }
 
         root =
-            document.createElement('div');
+            document.createElement(
+                'div'
+            );
 
-        root.id = 'rfw-root';
+        root.id =
+            'rfw-root';
 
         root.innerHTML = `
 <style>
@@ -1083,7 +1209,8 @@
 
     border-radius: 13px;
 
-    background: rgba(255, 255, 255, 0.08);
+    background:
+        rgba(255, 255, 255, 0.08);
 
     font-size: 9px;
     font-weight: 800;
@@ -1106,7 +1233,8 @@
     background: #ff3b30;
 
     box-shadow:
-        0 0 0 3px rgba(255, 59, 48, 0.12);
+        0 0 0 3px
+        rgba(255, 59, 48, 0.12);
 }
 
 #rfw-bar-info {
@@ -1139,7 +1267,8 @@
     border: 0;
     border-radius: 50%;
 
-    background: rgba(255, 255, 255, 0.08);
+    background:
+        rgba(255, 255, 255, 0.08);
 
     color: #fff;
 
@@ -1157,7 +1286,8 @@
 }
 
 .rfw-btn:hover {
-    background: rgba(255, 255, 255, 0.16);
+    background:
+        rgba(255, 255, 255, 0.16);
 }
 
 .rfw-btn:active {
@@ -1211,10 +1341,12 @@
     color: #fff;
 
     box-shadow:
-        0 10px 35px rgba(0, 0, 0, 0.3);
+        0 10px 35px
+        rgba(0, 0, 0, 0.3);
 
     border:
-        1px solid rgba(255, 255, 255, 0.08);
+        1px solid
+        rgba(255, 255, 255, 0.08);
 }
 
 .rfw-volume-row {
@@ -1329,10 +1461,12 @@
     color: #fff;
 
     box-shadow:
-        0 8px 28px rgba(0, 0, 0, 0.35);
+        0 8px 28px
+        rgba(0, 0, 0, 0.35);
 
     border:
-        1px solid rgba(255, 255, 255, 0.1);
+        1px solid
+        rgba(255, 255, 255, 0.1);
 }
 
 #rfw-bubble-play {
@@ -1353,7 +1487,8 @@
     background: #ff3b30;
 
     box-shadow:
-        0 0 0 3px rgba(255, 59, 48, 0.12);
+        0 0 0 3px
+        rgba(255, 59, 48, 0.12);
 }
 
 #rfw-root.rfw-mode-bubble #rfw-bar {
@@ -1392,7 +1527,7 @@
         font-size: 10px;
     }
 
-    #rfw-btn {
+    .rfw-btn {
         width: 36px;
         height: 36px;
     }
@@ -1547,9 +1682,6 @@
                 'rfw-bar-close'
             );
 
-        barExpandToggle =
-            bar;
-
         bubblePlayIcon =
             document.getElementById(
                 'rfw-bubble-play'
@@ -1558,11 +1690,6 @@
         volumeSlider =
             document.getElementById(
                 'rfw-volume'
-            );
-
-        panel =
-            document.getElementById(
-                'rfw-panel'
             );
 
         listeningTimeElement =
@@ -1590,7 +1717,9 @@
         // =====================================================
 
         const audioHost =
-            document.createElement('audio');
+            document.createElement(
+                'audio'
+            );
 
         audioHost.id =
             'rfw-audio';
@@ -1632,12 +1761,6 @@
             }
         );
 
-        /*
-         * Cliquer sur la zone principale du lecteur
-         * ouvre/ferme le panneau.
-         *
-         * Le bouton de lecture est exclu.
-         */
         bar.addEventListener(
             'click',
             (event) => {
@@ -1702,12 +1825,6 @@
         bubble.addEventListener(
             'click',
             async () => {
-                /*
-                 * Le système de drag possède son propre
-                 * traitement pointerup.
-                 *
-                 * Un simple clic agrandit la barre.
-                 */
                 setMode('bar');
 
                 if (
@@ -1752,7 +1869,8 @@
                 }
 
                 if (!lastTick) {
-                    lastTick = Date.now();
+                    lastTick =
+                        Date.now();
                 }
 
                 localStorage.setItem(
@@ -1773,10 +1891,6 @@
         audio.addEventListener(
             'pause',
             () => {
-                /*
-                 * Si le pause vient d'un arrêt volontaire,
-                 * stopRadio() s'est déjà occupé du temps.
-                 */
                 if (isStopping) {
                     updateUI();
                     return;
@@ -1797,10 +1911,6 @@
                     '0'
                 );
 
-                /*
-                 * On tente d'envoyer le temps restant
-                 * sans bloquer l'événement audio.
-                 */
                 syncListeningTime();
 
                 updateUI();
@@ -1845,9 +1955,16 @@
         // ÉTAT INITIAL
         // =====================================================
 
-        restoreState();
+        loadRadioStatus()
+            .finally(() => {
+                /*
+                 * Le statut serveur est chargé avant
+                 * la restauration de l'état du lecteur.
+                 */
+                restoreState();
 
-        updateUI();
+                updateUI();
+            });
     }
 
     // =========================================================
@@ -1887,12 +2004,6 @@
         updateUI();
 
         if (shouldResume) {
-            /*
-             * Le navigateur peut bloquer l'autoplay.
-             * Dans ce cas startRadio() positionne
-             * autoplayBlocked=true et l'utilisateur
-             * pourra cliquer pour reprendre.
-             */
             startRadio();
         }
     }
@@ -1953,3 +2064,4 @@
     init();
 
 })();
+
