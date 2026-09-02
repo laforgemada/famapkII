@@ -55,36 +55,7 @@
 
         volume: 'radioFanambaranaVolume',
 
-        closed: 'radioFanambaranaClosed',
-
-        minimized: 'radioFanambaranaMinimized'
-
-    };
-
-
-    /*
-     * Dimensions de la fenetre popup,
-     * identiques a celles de radio-launcher.js,
-     * utilisees pour restaurer la taille normale
-     * apres reduction.
-     */
-
-    const WINDOW_SIZE = {
-
-        desktop: {
-            width: 460,
-            height: 190
-        },
-
-        mobile: {
-            width: 390,
-            height: 160
-        },
-
-        minimized: {
-            width: 220,
-            height: 64
-        }
+        closed: 'radioFanambaranaClosed'
 
     };
 
@@ -111,18 +82,12 @@
 
     let closeButton = null;
 
-    let minimizeButton = null;
-
-    let playerRoot = null;
-
 
     /* =========================================================
        ETAT
     ========================================================= */
 
     let isPlaying = false;
-
-    let isMinimized = false;
 
     let accumulatedSeconds = 0;
 
@@ -207,11 +172,6 @@
 
     function findElements() {
 
-        playerRoot =
-            document.getElementById(
-                'radio-global-player'
-            );
-
         audio =
             document.getElementById(
                 'radio-global-audio'
@@ -255,11 +215,6 @@
         closeButton =
             document.getElementById(
                 'radio-global-close'
-            );
-
-        minimizeButton =
-            document.getElementById(
-                'radio-global-minimize'
             );
 
 
@@ -872,111 +827,6 @@
 
 
     /* =========================================================
-       DETECTER MOBILE
-    ========================================================= */
-
-    function isMobileView() {
-
-        return (
-            window.innerWidth <= 768 ||
-            /Android|iPhone|iPad|iPod|Mobile/i.test(
-                navigator.userAgent
-            )
-        );
-
-    }
-
-
-    /* =========================================================
-       REDUIRE / AGRANDIR
-    ========================================================= */
-
-    function setMinimized(minimized) {
-
-        isMinimized =
-            minimized;
-
-
-        if (playerRoot) {
-
-            playerRoot.classList.toggle(
-                'radio-minimized',
-                minimized
-            );
-
-        }
-
-
-        if (minimizeButton) {
-
-            minimizeButton.innerHTML =
-                minimized
-                    ? '&#9974;'
-                    : '&#8212;';
-
-            minimizeButton.setAttribute(
-                'aria-label',
-                minimized
-                    ? 'Agrandir'
-                    : 'Reduire'
-            );
-
-        }
-
-
-        localStorage.setItem(
-            STORAGE.minimized,
-            minimized ? '1' : '0'
-        );
-
-
-        /*
-         * Redimensionner la vraie fenetre popup.
-         *
-         * window.resizeTo ne fonctionne que sur une
-         * fenetre ouverte par window.open(), ce qui
-         * est le cas ici (voir radio-launcher.js).
-         */
-
-        try {
-
-            const targetSize =
-                minimized
-                    ? WINDOW_SIZE.minimized
-                    : (
-                        isMobileView()
-                            ? WINDOW_SIZE.mobile
-                            : WINDOW_SIZE.desktop
-                    );
-
-
-            window.resizeTo(
-                targetSize.width,
-                targetSize.height
-            );
-
-        } catch (error) {
-
-            console.warn(
-                '[Radio] Redimensionnement de la fenetre impossible.',
-                error
-            );
-
-        }
-
-    }
-
-
-    function toggleMinimized() {
-
-        setMinimized(
-            !isMinimized
-        );
-
-    }
-
-
-    /* =========================================================
        FERMER LA FENETRE
     ========================================================= */
 
@@ -1144,24 +994,6 @@
                         await startRadio();
 
                     }
-
-                }
-            );
-
-        }
-
-
-        /*
-         * REDUIRE / AGRANDIR
-         */
-
-        if (minimizeButton) {
-
-            minimizeButton.addEventListener(
-                'click',
-                () => {
-
-                    toggleMinimized();
 
                 }
             );
@@ -1410,74 +1242,6 @@
          */
 
         /*
-         * Etat reduit.
-         *
-         * On applique la classe visuelle immediatement,
-         * mais on ne redimensionne la fenetre qu'apres
-         * un court delai afin de laisser le navigateur
-         * terminer l'ouverture de la fenetre.
-         */
-
-        const shouldBeMinimized =
-            localStorage.getItem(
-                STORAGE.minimized
-            ) === '1';
-
-
-        if (shouldBeMinimized) {
-
-            isMinimized = true;
-
-
-            if (playerRoot) {
-
-                playerRoot.classList.add(
-                    'radio-minimized'
-                );
-
-            }
-
-
-            if (minimizeButton) {
-
-                minimizeButton.innerHTML =
-                    '&#9974;';
-
-                minimizeButton.setAttribute(
-                    'aria-label',
-                    'Agrandir'
-                );
-
-            }
-
-
-            setTimeout(
-                () => {
-
-                    try {
-
-                        window.resizeTo(
-                            WINDOW_SIZE.minimized.width,
-                            WINDOW_SIZE.minimized.height
-                        );
-
-                    } catch (error) {
-
-                        console.warn(
-                            '[Radio] Redimensionnement initial impossible.',
-                            error
-                        );
-
-                    }
-
-                },
-                200
-            );
-
-        }
-
-
-        /*
          * Etat fermé.
          */
 
@@ -1581,16 +1345,7 @@
             openPlayer,
 
         sync:
-            syncListeningTime,
-
-        minimize:
-            () => setMinimized(true),
-
-        maximize:
-            () => setMinimized(false),
-
-        toggleMinimize:
-            toggleMinimized
+            syncListeningTime
 
     };
 

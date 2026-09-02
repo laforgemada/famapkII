@@ -524,47 +524,6 @@ body {
 
 
 /* ============================================================
-   REDUIRE / AGRANDIR
-   ============================================================ */
-
-.radio-global-minimize {
-
-    width: 29px;
-    height: 29px;
-
-    flex: 0 0 29px;
-
-    border: 0;
-
-    border-radius: 9px;
-
-    background:
-        rgba(255, 255, 255, 0.07);
-
-    color: #c6d0df !important;
-
-    font-size: 13px;
-
-    font-weight: 900;
-
-    line-height: 1;
-
-    cursor: pointer;
-
-}
-
-
-.radio-global-minimize:hover {
-
-    background:
-        rgba(255, 255, 255, 0.16);
-
-    color: #ffffff !important;
-
-}
-
-
-/* ============================================================
    CLOSE
    ============================================================ */
 
@@ -599,62 +558,6 @@ body {
         rgba(239, 68, 68, 0.20);
 
     color: #ff7b7b !important;
-
-}
-
-
-/* ============================================================
-   ETAT REDUIT
-   ============================================================ */
-
-#radio-global-player.radio-minimized {
-
-    padding: 8px;
-
-}
-
-
-#radio-global-player.radio-minimized .radio-window-header,
-#radio-global-player.radio-minimized .radio-reward-panel,
-#radio-global-player.radio-minimized .radio-global-time,
-#radio-global-player.radio-minimized .radio-volume-wrapper {
-
-    display: none;
-
-}
-
-
-#radio-global-player.radio-minimized .radio-global-main {
-
-    padding: 7px;
-
-    border-radius: 40px;
-
-}
-
-
-#radio-global-player.radio-minimized .radio-global-button {
-
-    width: 38px;
-    height: 38px;
-
-    flex-basis: 38px;
-
-    border-radius: 12px;
-
-}
-
-
-#radio-global-player.radio-minimized .radio-global-info span {
-
-    display: none;
-
-}
-
-
-#radio-global-player.radio-minimized .radio-global-info strong {
-
-    font-size: 11px;
 
 }
 
