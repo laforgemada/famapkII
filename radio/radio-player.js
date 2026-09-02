@@ -32,7 +32,7 @@
      * Flux Radio Fanambarana
      */
     const RADIO_STREAM =
-    'http://137.74.114.249:21300/;?type=http';
+    'https://137.74.114.249:21300/;?type=http';
 
     /*
      * Synchronisation serveur :
