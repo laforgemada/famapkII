@@ -31,8 +31,7 @@
     /*
      * Flux Radio Fanambarana
      */
-    const RADIO_STREAM =
-    'https://137.74.114.249:21300/;?type=http';
+    const RADIO_STREAM = 'https://apokalypsy.com/radio-proxy';
 
     /*
      * Synchronisation serveur :
