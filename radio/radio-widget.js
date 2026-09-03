@@ -101,7 +101,7 @@ function getLoginUrl() {
             'github.io'
         )
     ) {
-        return '/famapkII/login/connexion.html';
+        return '/login/connexion.html';
     }
 
     // Site principal + localhost

@@ -2680,7 +2680,7 @@ body{ padding-bottom:calc(120px + var(--safe-bottom)); }
 <div id="guest-banner" class="guest-banner" style="display:none;">
     <span class="guest-banner-icon">🔒</span>
     <span class="guest-banner-text">Connectez-vous pour marquer vos lectures et débloquer le Coach IA</span>
-    <a href="../famapkII/login/connexion.html" class="guest-banner-btn">Se connecter</a>
+    <a href="/login/connexion.html" class="guest-banner-btn">Se connecter</a>
 </div>
 
 <div class="lang-zone">
@@ -3016,9 +3016,9 @@ function renderBibleAuthButtons() {
     } else {
         // Utilisateur non connecté : afficher un bouton de connexion
         authZone.innerHTML = `
-            <a title="Se connecter" href="../famapkII/login/connexion.html" class="nav-btn" aria-label="Se connecter">
-                <i data-feather="log-in"></i>
-            </a>
+            <a title="Se connecter" href="/login/connexion.html" class="nav-btn" aria-label="Se connecter">
+				<i data-feather="log-in"></i>
+			</a>
         `;
     }
     safeFeatherReplace(); // Assurez-vous que les icônes feather sont rendues

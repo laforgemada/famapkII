@@ -5,13 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Espace Membre</title>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<link rel="icon" type="image/png" href="/famapkII/logo/logo.png">
+<link rel="icon" type="image/png" href="/logo/logo.png">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
 <script src="https://unpkg.com/feather-icons" defer></script>
 <script>
     // Définir basePath de manière globale pour les chargements de ressources.
-    const isGitHubPages = window.location.hostname.includes("github.io");
-    const basePath = isGitHubPages ? "/famapkII" : "";
+    const basePath = "";
 
     // Appliqué immédiatement (avant le CSS/rendu) pour éviter le flash de thème clair
     (function() {
@@ -914,7 +913,7 @@ html[data-theme="dark"] @keyframes cardGlow {
 
             <div class="logo-icon">
                 <img
-                    src="/famapkII/logo/logo.png"
+                    src="/logo/logo.png"
                     alt="Apokalypsy Logo"
                     width="45"
                     height="45"
@@ -1100,12 +1099,12 @@ html[data-theme="dark"] @keyframes cardGlow {
 
         <div class="hero-actions">
 
-            <button class="hero-btn primary-btn" onclick="window.location.href='/famapkII/'">
+            <button class="hero-btn primary-btn" onclick="window.location.href='/'">
 				<i data-feather="home"></i>
 				Accueil
 			</button>
 
-            <button class="hero-btn secondary-btn" onclick="window.location.href='/famapkII/chat.html'">
+            <button class="hero-btn secondary-btn" onclick="window.location.href='/chat.html'">
 				<i data-feather="message-circle"></i>
 				Ouvrir le Chat
 			</button>
@@ -1623,21 +1622,21 @@ html[data-theme="dark"] @keyframes cardGlow {
 
 <nav class="bottom-bar" aria-label="Navigation principale">
 
-    <a href="/famapkII/" class="bottom-item" data-page="home">
+    <a href="/" class="bottom-item" data-page="home">
     <div class="nav-icon">
         <i data-feather="home"></i>
     </div>
     <span>Accueil</span>
 </a>
 
-<a href="/famapkII/bible.html" class="bottom-item" data-page="bible">
+<a href="/bible.html" class="bottom-item" data-page="bible">
     <div class="nav-icon">
         <i data-feather="book-open"></i>
     </div>
     <span>Bible</span>
 </a>
 
-<a href="/famapkII/chat.html" class="bottom-item" data-page="chat">
+<a href="/chat.html" class="bottom-item" data-page="chat">
     <div class="nav-icon">
         <i data-feather="message-circle"></i>
     </div>
@@ -2603,9 +2602,9 @@ function showToast(message, type = 'info', duration = 4000) {
  * ==========================================
  */
 const searchIndex = [
-    { title: "Accueil", desc: "Retour à la page d'accueil", icon: "home", link: "/famapkII/" },
-    { title: "Lire la Bible", desc: "Enseignements et lectures bibliques", icon: "book-open", link: "/famapkII/bible.html" },
-    { title: "Chat communautaire", desc: "Discussions chrétiennes en direct", icon: "message-circle", link: "/famapkII/chat.html" },
+    { title: "Accueil", desc: "Retour à la page d'accueil", icon: "home", link: "/" },
+    { title: "Lire la Bible", desc: "Enseignements et lectures bibliques", icon: "book-open", link: "/bible.html" },
+    { title: "Chat communautaire", desc: "Discussions chrétiennes en direct", icon: "message-circle", link: "/chat.html" },
     { title: "Mon profil", desc: "Voir mes points et ma progression", icon: "user", action: "openProfileModal()" },
     { title: "Mes trophées", desc: "Consulter mes badges débloqués", icon: "award", anchor: "trophies" },
     { title: "Bonus quotidien", desc: "Réclamer mon bonus de fidélité", icon: "gift", anchor: "loyalty" },
@@ -3470,7 +3469,7 @@ function initRealtimeNotifications() {
 
             let iconType = 'article'; 
             let iconName = 'book-open';
-            let directLink = '/famapkII/index.html';
+            let directLink = '/index.html';
 
             if (
                 data.type === 'app_update' ||
@@ -3669,12 +3668,9 @@ function performEspaceLogout(){
     localStorage.removeItem('user_role');
     localStorage.removeItem('token');
 
-    // Détection automatique du chemin de base pour GitHub Pages ou Localhost
-    const isGitHubPages = window.location.hostname.includes("github.io");
-    const basePath = isGitHubPages ? "/famapkII" : "";
-
-    window.location.href = basePath + "/index.html";
-}
+    // Retour à la page d'accueil
+	window.location.href = "/index.html";
+	}
 
 /* =========================
    GAINS DE POINTS SUPPLÉMENTAIRES (Cointiply-like)

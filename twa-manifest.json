@@ -1,6 +1,6 @@
 {
   "packageId": "com.laforgemada.famapkii",
-  "host": "laforgemada.github.io",
+  "host": "app.apokalypsy.com",
 
   "name": "Fam Apokalypsy",
   "launcherName": "Fam Apokalypsy",
@@ -13,8 +13,8 @@
 
   "startUrl": "./",
 
-  "iconUrl": "https://laforgemada.github.io/famapkII/icons/icon-512.png",
-  "maskableIconUrl": "https://laforgemada.github.io/famapkII/icons/icon-512.png",
+  "iconUrl": "https://app.apokalypsy.com/icons/icon-512.png",
+  "maskableIconUrl": "https://app.apokalypsy.com/icons/icon-512.png",
 
   "signingKey": {
     "path": "android.keystore",
