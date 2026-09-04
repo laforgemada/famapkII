@@ -1515,7 +1515,7 @@ html[data-theme="dark"] @keyframes cardGlow {
             <div class="earn-card-footer">
                 <div class="earn-reward">
                     <span class="reward-coin">🪙</span>
-                    <strong>+15</strong>
+                    <strong>+5</strong>
                     <small>pts</small>
                 </div>
 
@@ -5511,7 +5511,7 @@ function shareApp() {
             text: 'Découvrez Apokalypsy, votre guide spirituel interactif !',
             url: window.location.origin,
         }).then(async () => {
-            const ok = await awardPoints(15, "Partage de l'application");
+            const ok = await awardPoints(5, "Partage de l'application");
             if (ok) {
                 markActionDoneToday('share');
                 updateEarnCardsState();

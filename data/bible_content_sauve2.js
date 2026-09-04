@@ -13,8 +13,6 @@
 // Chaque chapitre contient plusieurs entrées afin de
 // permettre au quiz de construire des passages de plusieurs
 // versets consécutifs.
-//
-// Les livres sont classés par ordre canonique (champ "number").
 // =========================================================
 
 export const fullBibleContent = {
@@ -31,6 +29,10 @@ export const fullBibleContent = {
         chapterLabel: "Toko",
 
         books: [
+
+            /* =================================================
+             * GENESISY
+             * ================================================= */
 
             {
                 name: "Genesisy",
@@ -75,6 +77,10 @@ export const fullBibleContent = {
             },
 
 
+            /* =================================================
+             * EKSODOSY
+             * ================================================= */
+
             {
                 name: "Eksodosy",
                 number: 2,
@@ -106,6 +112,10 @@ export const fullBibleContent = {
                 ]
             },
 
+
+            /* =================================================
+             * LEVITIKOSY
+             * ================================================= */
 
             {
                 name: "Levitikosy",
@@ -139,6 +149,10 @@ export const fullBibleContent = {
             },
 
 
+            /* =================================================
+             * NOMERA
+             * ================================================= */
+
             {
                 name: "Nomera",
                 number: 4,
@@ -171,133 +185,9 @@ export const fullBibleContent = {
             },
 
 
-            {
-                name: "Deotoronomia",
-                number: 5,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Nitantara tamin'ny vahoaka i Mosesy ny dia lava izay nataon'izy ireo, ary nampahatsiahy azy ireo ny zavatra rehetra efa niainany niaraka tamin'Andriamanitra.",
-                            "Nampianariny ny vahoaka mba hitandrina ny didy nomena azy ireo, satria izany no hitondra fiadanana sy fahombiazana amin'ny fiainany manaraka.",
-                            "Nasongadin'i Mosesy fa tsy tokony hanadino ny zavatra niseho tamin'ny lalana, fa tokony hotehirizina ao am-po mandrakizay izany fahatsiarovana izany.",
-                            "Nampiomana ny vahoaka izy mba ho vonona hiditra any amin'ny tany vaovao, ka nampirisika azy ireo mba hatoky sy hanam-pahasahiana.",
-                            "Nolazainy fa tsy irery izy ireo amin'ny dia manaraka, fa hanaraka azy ireo hatrany Andriamanitra raha mbola mankatò ny toromarika nomena."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Nasongadin'i Mosesy indray fa nisy fifanekena natao teo amin'Andriamanitra sy ny vahoaka, ary tokony hotanana amin'ny fo izany fifanekena izany.",
-                            "Nampahatsiahy azy ireo izy fa tsy tokony hanaraka fomba hafa, fa hijanona tsy hivadika amin'izay nampianarina azy ireo.",
-                            "Nolazainy fa ny fiainana ao amin'ny tany vaovao dia miankina amin'ny fankatoavana sy ny fifandraisana marina amin'Andriamanitra.",
-                            "Nampirisihany ny vahoaka mba hampita ireo fahalalana ireo amin'ny taranany mifandimby, mba tsy ho very ilay fahatsiarovana.",
-                            "Notapahiny ny lahateniny tamin'ny fanantenana fa ho tanteraka ny zavatra nampanantenaina, raha mbola mifikitra amin'ny marina ny vahoaka."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
-                name: "Josoa",
-                number: 6,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Rehefa maty i Mosesy dia noraisin'i Josoa ny andraikitra hitarika ny vahoaka, ary nampahery azy Andriamanitra tamin'izany fiovana lehibe izany.",
-                            "Nampirisihina i Josoa mba ho matanjaka sy hatoky, satria nisy asa lehibe niandry azy teo anoloany.",
-                            "Nolazaina taminy fa tsy hanary azy Andriamanitra na oviana na oviana, ary tokony hitandrina ny toromarika rehetra nomena izy.",
-                            "Nandray fahasahiana i Josoa ka nanomboka nikarakara ny fandaharana rehetra hitarihana ny vahoaka handroso.",
-                            "Ny vahoaka kosa nanaiky hanaraka azy tamin'ny fahatokiana, satria hitany fa nofidin'Andriamanitra izy ho mpitarika vaovao."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Naniraka olona hisafo ny tany i Josoa, mba hahafantarana bebe kokoa izay tokony ho fantatra alohan'ny hidirana any.",
-                            "Tonga tao amin'ny tanàna iray ireo mpisafo ka nifandray tamin'ny vehivavy iray izay nanampy azy ireo tamin'ny fomba tsy nampoizina.",
-                            "Nafenin-drazazavavy tao an-tranony ireo mpisafo rehefa nisy loza nanodidina azy ireo, ary nampanantena ny hiaro azy amin'ny farany.",
-                            "Rehefa afaka ilay loza dia niverina tany amin'i Josoa ireo mpisafo ka nitantara izay hitany sy nolazaina taminy.",
-                            "Ny vaovao nentin'izy ireo dia nampahery an'i Josoa sy ny vahoaka, satria hitany fa afaka mandroso amim-pitokiana izy ireo."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
-                name: "Salamo",
-                number: 19,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Sambatra ny olona izay tsy manaraka ny toro-hevitry ny ratsy fanahy, fa mifidy ny lalana marina sy ny fahamarinana kosa.",
-                            "Ny fony dia mankasitraka ny toromarika sy ny fampianarana, ka mieritreritra amin'izany andro aman'alina izy.",
-                            "Toy ny hazo ambony rano izy, izay mamoa amin'ny fotoana voatondro sady tsy malazo ny raviny na oviana na oviana.",
-                            "Fa tsy toy izany kosa ny ratsy fanahy, satria toy ny mololo entin'ny rivotra izy no lasa tsy misy dikany.",
-                            "Noho izany dia tsy maharitra amin'ny fitsarana ny ratsy fanahy, fa ny lalan'ny marina kosa no fantatr'Andriamanitra."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Andriamanitra no fiarovana sy tanjona ho an'izay mitady azy, ka azo itokiana amin'ny fotoan-tsarotra rehetra izy.",
-                            "Na dia misy fahoriana aza manodidina, dia mahita fialan-tsiny ny fo izay mifikitra amin'ny fanantenana ao amin'Andriamanitra.",
-                            "Ny fiarovana omen'Andriamanitra dia tsy miankina amin'ny toe-javatra ivelany, fa avy amin'ny fifandraisana lalina kokoa.",
-                            "Izay manatona azy amin'ny fahatokiana dia mahazo hery sy fiadanana ao am-po, na dia eo aza ny fanamby.",
-                            "Ny hira fiderana dia mifototra amin'ny fahatokiana fa tsy mandao ny olony Andriamanitra na amin'ny toe-javatra sarotra indrindra."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
-                name: "Ohabolana",
-                number: 20,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Ny fahendrena dia miantso amin'ny feo avo eny an-dalambe, mba hahatratra izay rehetra vonona hihaino.",
-                            "Ny olona kely saina dia asaina mianatra fahazavan-tsaina, fa ny fahaizana dia sarobidy kokoa noho ny harena.",
-                            "Izay mandà ny fananarana dia mampidi-doza ny tenany, fa izay mihaino kosa no hahazo fahendrena marina.",
-                            "Ny toro-hevitra dia natao hitarika ny olona ho amin'ny lalana mahitsy, fa tsy hanakorontana ny fiainany.",
-                            "Ny fahendrena dia manome fiadanana ho an'izay mandray sy manaja izany amin'ny fony."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Raha mitady fahalalana amin'ny fo manontolo ny olona iray, dia hahazo valiny izy amin'ny fomba tsy nampoizina.",
-                            "Ny fahendrena dia miaro amin'ny làlana ratsy sy ny fisainana mamitaka izay mety hahatonga fahasimbana.",
-                            "Izay mandray fahendrena dia hahazo fahalalahan-tsaina hanavaka ny marina amin'ny diso.",
-                            "Ny fahamarinana sy ny rariny dia miaraka amin'izay mizoto hitady fahendrena tamin-kitsim-po.",
-                            "Amin'ny farany, izay mizotra amin'ny lalana marina no hahita fiadanana lalina ao am-piainany."
-                        ]
-                    }
-
-                ]
-            },
-
+            /* =================================================
+             * MATIO
+             * ================================================= */
 
             {
                 name: "Matio",
@@ -331,37 +221,9 @@ export const fullBibleContent = {
             },
 
 
-            {
-                name: "Lioka",
-                number: 42,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Maro ny olona nikasa hanoratra ny tantara momba ireo zavatra niseho, ary Lioka koa naneho ny fikasany hanoratra amim-pahamarinana.",
-                            "Nangataka taminy hanoratra araka ny filaharan'ny zavatra niseho, mba ho azon'ny mpamaky an-kitsiny izany.",
-                            "Nisy anjely niseho tamin'ny fianakaviana iray ka nanambara fa hisy zaza hateraka ao aminy, izay hanana andraikitra manokana.",
-                            "Gaga ilay fianakaviana ary tsy takany tanteraka izay nolazaina taminy, saingy nino ihany izy ireo.",
-                            "Ny vaovao nentin'ilay anjely dia niely tamin'ny fianakaviana akaiky, ary samy niandry ny fahatanterahan'izany avy izy ireo."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Tonga ny fotoana ka niteraka ilay zaza nampanantenaina, ary nisy fifaliana lehibe niely tamin'izany fotoana izany.",
-                            "Nisy mpiandry ondry tany an-tsaha nahita famantarana avy any an-danitra ka gaga fatratra izy ireo.",
-                            "Nolazain'ny anjely tamin'ireo mpiandry ondry ny vaovao mahafaly momba ilay zaza vao teraka.",
-                            "Nandeha faingana ireo mpiandry ondry hijery ilay zaza ary tafavory maro ny olona hankalaza izany hetsika izany.",
-                            "Rehefa hitan'izy ireo ilay zaza dia niverina tamim-pifaliana izy ireo ka nizara tamin'ny olon-drehetra izay hitany sy henony."
-                        ]
-                    }
-
-                ]
-            },
-
+            /* =================================================
+             * JAONA
+             * ================================================= */
 
             {
                 name: "Jaona",
@@ -394,6 +256,190 @@ export const fullBibleContent = {
                 ]
             },
 
+
+            /* =================================================
+             * DEOTORONOMIA
+             * ================================================= */
+
+            {
+                name: "Deotoronomia",
+                number: 5,
+
+                chapters: [
+
+                    {
+                        chapter: 1,
+                        verses: [
+                            "Nitantara tamin'ny vahoaka i Mosesy ny dia lava izay nataon'izy ireo, ary nampahatsiahy azy ireo ny zavatra rehetra efa niainany niaraka tamin'Andriamanitra.",
+                            "Nampianariny ny vahoaka mba hitandrina ny didy nomena azy ireo, satria izany no hitondra fiadanana sy fahombiazana amin'ny fiainany manaraka.",
+                            "Nasongadin'i Mosesy fa tsy tokony hanadino ny zavatra niseho tamin'ny lalana, fa tokony hotehirizina ao am-po mandrakizay izany fahatsiarovana izany.",
+                            "Nampiomana ny vahoaka izy mba ho vonona hiditra any amin'ny tany vaovao, ka nampirisika azy ireo mba hatoky sy hanam-pahasahiana.",
+                            "Nolazainy fa tsy irery izy ireo amin'ny dia manaraka, fa hanaraka azy ireo hatrany Andriamanitra raha mbola mankatò ny toromarika nomena."
+                        ]
+                    },
+
+                    {
+                        chapter: 2,
+                        verses: [
+                            "Nasongadin'i Mosesy indray fa nisy fifanekena natao teo amin'Andriamanitra sy ny vahoaka, ary tokony hotanana amin'ny fo izany fifanekena izany.",
+                            "Nampahatsiahy azy ireo izy fa tsy tokony hanaraka fomba hafa, fa hijanona tsy hivadika amin'izay nampianarina azy ireo.",
+                            "Nolazainy fa ny fiainana ao amin'ny tany vaovao dia miankina amin'ny fankatoavana sy ny fifandraisana marina amin'Andriamanitra.",
+                            "Nampirisihany ny vahoaka mba hampita ireo fahalalana ireo amin'ny taranany mifandimby, mba tsy ho very ilay fahatsiarovana.",
+                            "Notapahiny ny lahateniny tamin'ny fanantenana fa ho tanteraka ny zavatra nampanantenaina, raha mbola mifikitra amin'ny marina ny vahoaka."
+                        ]
+                    }
+
+                ]
+            },
+
+
+            /* =================================================
+             * JOSOA
+             * ================================================= */
+
+            {
+                name: "Josoa",
+                number: 6,
+
+                chapters: [
+
+                    {
+                        chapter: 1,
+                        verses: [
+                            "Rehefa maty i Mosesy dia noraisin'i Josoa ny andraikitra hitarika ny vahoaka, ary nampahery azy Andriamanitra tamin'izany fiovana lehibe izany.",
+                            "Nampirisihina i Josoa mba ho matanjaka sy hatoky, satria nisy asa lehibe niandry azy teo anoloany.",
+                            "Nolazaina taminy fa tsy hanary azy Andriamanitra na oviana na oviana, ary tokony hitandrina ny toromarika rehetra nomena izy.",
+                            "Nandray fahasahiana i Josoa ka nanomboka nikarakara ny fandaharana rehetra hitarihana ny vahoaka handroso.",
+                            "Ny vahoaka kosa nanaiky hanaraka azy tamin'ny fahatokiana, satria hitany fa nofidin'Andriamanitra izy ho mpitarika vaovao."
+                        ]
+                    },
+
+                    {
+                        chapter: 2,
+                        verses: [
+                            "Naniraka olona hisafo ny tany i Josoa, mba hahafantarana bebe kokoa izay tokony ho fantatra alohan'ny hidirana any.",
+                            "Tonga tao amin'ny tanàna iray ireo mpisafo ka nifandray tamin'ny vehivavy iray izay nanampy azy ireo tamin'ny fomba tsy nampoizina.",
+                            "Nafenin-drazazavavy tao an-tranony ireo mpisafo rehefa nisy loza nanodidina azy ireo, ary nampanantena ny hiaro azy amin'ny farany.",
+                            "Rehefa afaka ilay loza dia niverina tany amin'i Josoa ireo mpisafo ka nitantara izay hitany sy nolazaina taminy.",
+                            "Ny vaovao nentin'izy ireo dia nampahery an'i Josoa sy ny vahoaka, satria hitany fa afaka mandroso amim-pitokiana izy ireo."
+                        ]
+                    }
+
+                ]
+            },
+
+
+            /* =================================================
+             * SALAMO
+             * ================================================= */
+
+            {
+                name: "Salamo",
+                number: 19,
+
+                chapters: [
+
+                    {
+                        chapter: 1,
+                        verses: [
+                            "Sambatra ny olona izay tsy manaraka ny toro-hevitry ny ratsy fanahy, fa mifidy ny lalana marina sy ny fahamarinana kosa.",
+                            "Ny fony dia mankasitraka ny toromarika sy ny fampianarana, ka mieritreritra amin'izany andro aman'alina izy.",
+                            "Toy ny hazo ambony rano izy, izay mamoa amin'ny fotoana voatondro sady tsy malazo ny raviny na oviana na oviana.",
+                            "Fa tsy toy izany kosa ny ratsy fanahy, satria toy ny mololo entin'ny rivotra izy no lasa tsy misy dikany.",
+                            "Noho izany dia tsy maharitra amin'ny fitsarana ny ratsy fanahy, fa ny lalan'ny marina kosa no fantatr'Andriamanitra."
+                        ]
+                    },
+
+                    {
+                        chapter: 2,
+                        verses: [
+                            "Andriamanitra no fiarovana sy tanjona ho an'izay mitady azy, ka azo itokiana amin'ny fotoan-tsarotra rehetra izy.",
+                            "Na dia misy fahoriana aza manodidina, dia mahita fialan-tsiny ny fo izay mifikitra amin'ny fanantenana ao amin'Andriamanitra.",
+                            "Ny fiarovana omen'Andriamanitra dia tsy miankina amin'ny toe-javatra ivelany, fa avy amin'ny fifandraisana lalina kokoa.",
+                            "Izay manatona azy amin'ny fahatokiana dia mahazo hery sy fiadanana ao am-po, na dia eo aza ny fanamby.",
+                            "Ny hira fiderana dia mifototra amin'ny fahatokiana fa tsy mandao ny olony Andriamanitra na amin'ny toe-javatra sarotra indrindra."
+                        ]
+                    }
+
+                ]
+            },
+
+
+            /* =================================================
+             * OHABOLANA
+             * ================================================= */
+
+            {
+                name: "Ohabolana",
+                number: 20,
+
+                chapters: [
+
+                    {
+                        chapter: 1,
+                        verses: [
+                            "Ny fahendrena dia miantso amin'ny feo avo eny an-dalambe, mba hahatratra izay rehetra vonona hihaino.",
+                            "Ny olona kely saina dia asaina mianatra fahazavan-tsaina, fa ny fahaizana dia sarobidy kokoa noho ny harena.",
+                            "Izay mandà ny fananarana dia mampidi-doza ny tenany, fa izay mihaino kosa no hahazo fahendrena marina.",
+                            "Ny toro-hevitra dia natao hitarika ny olona ho amin'ny lalana mahitsy, fa tsy hanakorontana ny fiainany.",
+                            "Ny fahendrena dia manome fiadanana ho an'izay mandray sy manaja izany amin'ny fony."
+                        ]
+                    },
+
+                    {
+                        chapter: 2,
+                        verses: [
+                            "Raha mitady fahalalana amin'ny fo manontolo ny olona iray, dia hahazo valiny izy amin'ny fomba tsy nampoizina.",
+                            "Ny fahendrena dia miaro amin'ny làlana ratsy sy ny fisainana mamitaka izay mety hahatonga fahasimbana.",
+                            "Izay mandray fahendrena dia hahazo fahalalahan-tsaina hanavaka ny marina amin'ny diso.",
+                            "Ny fahamarinana sy ny rariny dia miaraka amin'izay mizoto hitady fahendrena tamin-kitsim-po.",
+                            "Amin'ny farany, izay mizotra amin'ny lalana marina no hahita fiadanana lalina ao am-piainany."
+                        ]
+                    }
+
+                ]
+            },
+
+
+            /* =================================================
+             * LIOKA
+             * ================================================= */
+
+            {
+                name: "Lioka",
+                number: 42,
+
+                chapters: [
+
+                    {
+                        chapter: 1,
+                        verses: [
+                            "Maro ny olona nikasa hanoratra ny tantara momba ireo zavatra niseho, ary Lioka koa naneho ny fikasany hanoratra amim-pahamarinana.",
+                            "Nangataka taminy hanoratra araka ny filaharan'ny zavatra niseho, mba ho azon'ny mpamaky an-kitsiny izany.",
+                            "Nisy anjely niseho tamin'ny fianakaviana iray ka nanambara fa hisy zaza hateraka ao aminy, izay hanana andraikitra manokana.",
+                            "Gaga ilay fianakaviana ary tsy takany tanteraka izay nolazaina taminy, saingy nino ihany izy ireo.",
+                            "Ny vaovao nentin'ilay anjely dia niely tamin'ny fianakaviana akaiky, ary samy niandry ny fahatanterahan'izany avy izy ireo."
+                        ]
+                    },
+
+                    {
+                        chapter: 2,
+                        verses: [
+                            "Tonga ny fotoana ka niteraka ilay zaza nampanantenaina, ary nisy fifaliana lehibe niely tamin'izany fotoana izany.",
+                            "Nisy mpiandry ondry tany an-tsaha nahita famantarana avy any an-danitra ka gaga fatratra izy ireo.",
+                            "Nolazain'ny anjely tamin'ireo mpiandry ondry ny vaovao mahafaly momba ilay zaza vao teraka.",
+                            "Nandeha faingana ireo mpiandry ondry hijery ilay zaza ary tafavory maro ny olona hankalaza izany hetsika izany.",
+                            "Rehefa hitan'izy ireo ilay zaza dia niverina tamim-pifaliana izy ireo ka nizara tamin'ny olon-drehetra izay hitany sy henony."
+                        ]
+                    }
+
+                ]
+            },
+
+
+            /* =================================================
+             * ROMANINA
+             * ================================================= */
 
             {
                 name: "Romanina",
@@ -583,6 +629,70 @@ export const fullBibleContent = {
 
 
             {
+                name: "Matthieu",
+                number: 40,
+
+                chapters: [
+
+                    {
+                        chapter: 1,
+                        verses: [
+                            "L'histoire de Jésus-Christ commence par une longue succession de générations qui relie l'histoire des ancêtres à celle d'une nouvelle génération.",
+                            "De nombreuses personnes se succédèrent dans cette histoire, chacune occupant une place particulière dans la suite des générations.",
+                            "Lorsque le moment arriva, Jésus naquit, et sa naissance prit une importance particulière pour ceux qui attendaient l'accomplissement de l'espérance.",
+                            "L'enfant reçut le nom de Jésus, et sa famille croyait qu'il aurait une responsabilité importante dans l'histoire du peuple.",
+                            "Le début de l'histoire de Jésus établit ainsi un lien entre les promesses anciennes et les événements nouveaux qui allaient suivre."
+                        ]
+                    },
+
+                    {
+                        chapter: 2,
+                        verses: [
+                            "Des sages venus d'un pays lointain arrivèrent pour chercher Jésus après avoir observé un signe qui leur avait annoncé sa naissance.",
+                            "Ils parcoururent une longue distance et demandèrent où ils pourraient trouver l'enfant dont ils pensaient qu'il aurait un rôle important.",
+                            "Lorsqu'ils trouvèrent l'enfant, ils furent remplis de joie et lui offrirent des présents en signe de respect et d'honneur.",
+                            "Ils reçurent cependant un avertissement leur demandant de faire attention à certaines personnes qui pouvaient avoir des intentions différentes à l'égard de l'enfant.",
+                            "Après avoir reçu cet avertissement, ils retournèrent dans leur pays par un autre chemin, et l'histoire de l'enfant et de sa famille continua."
+                        ]
+                    }
+
+                ]
+            },
+
+
+            {
+                name: "Jean",
+                number: 43,
+
+                chapters: [
+
+                    {
+                        chapter: 1,
+                        verses: [
+                            "La Parole était au commencement avec Dieu, et toute l'histoire de la création était liée à cette origine.",
+                            "La Parole représentait la vie et apportait une lumière destinée aux hommes, même lorsque les ténèbres semblaient dominer autour d'eux.",
+                            "Un homme fut envoyé pour témoigner de cette lumière afin que beaucoup puissent la connaître et comprendre ce qu'elle représentait.",
+                            "La lumière vint dans le monde, mais tous ne la reconnurent pas et certains refusèrent de comprendre ce qu'elle signifiait.",
+                            "La Parole devint chair et habita parmi les hommes, qui purent alors découvrir la grâce et la gloire qu'elle apportait."
+                        ]
+                    },
+
+                    {
+                        chapter: 2,
+                        verses: [
+                            "Il y eut une fête à Cana en Galilée, où se trouvaient la mère de Jésus, Jésus lui-même et ses disciples.",
+                            "Lorsque les provisions vinrent à manquer pendant la fête, la mère de Jésus lui parla de la situation et attendit de voir ce qu'il ferait.",
+                            "Jésus demanda aux serviteurs de préparer ce qui était nécessaire, tandis que les personnes présentes observaient les événements avec attention.",
+                            "À ce moment-là, Jésus manifesta un premier signe devant ses disciples, et leur confiance en lui grandit à la suite de ce qu'ils avaient vu.",
+                            "Ce qui se passa à Cana permit aux disciples de mieux comprendre la portée du ministère de Jésus et le sens des signes qu'il accomplissait."
+                        ]
+                    }
+
+                ]
+            },
+
+
+            {
                 name: "Deutéronome",
                 number: 5,
 
@@ -711,38 +821,6 @@ export const fullBibleContent = {
 
 
             {
-                name: "Matthieu",
-                number: 40,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "L'histoire de Jésus-Christ commence par une longue succession de générations qui relie l'histoire des ancêtres à celle d'une nouvelle génération.",
-                            "De nombreuses personnes se succédèrent dans cette histoire, chacune occupant une place particulière dans la suite des générations.",
-                            "Lorsque le moment arriva, Jésus naquit, et sa naissance prit une importance particulière pour ceux qui attendaient l'accomplissement de l'espérance.",
-                            "L'enfant reçut le nom de Jésus, et sa famille croyait qu'il aurait une responsabilité importante dans l'histoire du peuple.",
-                            "Le début de l'histoire de Jésus établit ainsi un lien entre les promesses anciennes et les événements nouveaux qui allaient suivre."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Des sages venus d'un pays lointain arrivèrent pour chercher Jésus après avoir observé un signe qui leur avait annoncé sa naissance.",
-                            "Ils parcoururent une longue distance et demandèrent où ils pourraient trouver l'enfant dont ils pensaient qu'il aurait un rôle important.",
-                            "Lorsqu'ils trouvèrent l'enfant, ils furent remplis de joie et lui offrirent des présents en signe de respect et d'honneur.",
-                            "Ils reçurent cependant un avertissement leur demandant de faire attention à certaines personnes qui pouvaient avoir des intentions différentes à l'égard de l'enfant.",
-                            "Après avoir reçu cet avertissement, ils retournèrent dans leur pays par un autre chemin, et l'histoire de l'enfant et de sa famille continua."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
                 name: "Luc",
                 number: 42,
 
@@ -767,38 +845,6 @@ export const fullBibleContent = {
                             "Un ange annonça aux bergers la bonne nouvelle concernant la naissance de cet enfant.",
                             "Les bergers se hâtèrent d'aller voir l'enfant, et de nombreuses personnes se rassemblèrent pour célébrer cet événement.",
                             "Lorsqu'ils virent l'enfant, ils repartirent remplis de joie et racontèrent à tous ce qu'ils avaient vu et entendu."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
-                name: "Jean",
-                number: 43,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "La Parole était au commencement avec Dieu, et toute l'histoire de la création était liée à cette origine.",
-                            "La Parole représentait la vie et apportait une lumière destinée aux hommes, même lorsque les ténèbres semblaient dominer autour d'eux.",
-                            "Un homme fut envoyé pour témoigner de cette lumière afin que beaucoup puissent la connaître et comprendre ce qu'elle représentait.",
-                            "La lumière vint dans le monde, mais tous ne la reconnurent pas et certains refusèrent de comprendre ce qu'elle signifiait.",
-                            "La Parole devint chair et habita parmi les hommes, qui purent alors découvrir la grâce et la gloire qu'elle apportait."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Il y eut une fête à Cana en Galilée, où se trouvaient la mère de Jésus, Jésus lui-même et ses disciples.",
-                            "Lorsque les provisions vinrent à manquer pendant la fête, la mère de Jésus lui parla de la situation et attendit de voir ce qu'il ferait.",
-                            "Jésus demanda aux serviteurs de préparer ce qui était nécessaire, tandis que les personnes présentes observaient les événements avec attention.",
-                            "À ce moment-là, Jésus manifesta un premier signe devant ses disciples, et leur confiance en lui grandit à la suite de ce qu'ils avaient vu.",
-                            "Ce qui se passa à Cana permit aux disciples de mieux comprendre la portée du ministère de Jésus et le sens des signes qu'il accomplissait."
                         ]
                     }
 
@@ -994,6 +1040,70 @@ export const fullBibleContent = {
 
 
             {
+                name: "Matthew",
+                number: 40,
+
+                chapters: [
+
+                    {
+                        chapter: 1,
+                        verses: [
+                            "The story of Jesus Christ begins with a long succession of generations connecting the history of the ancestors with that of a new generation.",
+                            "Many people followed one another in this history, each occupying a particular place within the succession of generations.",
+                            "When the time came, Jesus was born, and his birth became especially important to those who were waiting for the fulfillment of their hope.",
+                            "The child was given the name Jesus, and his family believed that he would have an important responsibility in the history of the people.",
+                            "The beginning of the story of Jesus therefore connects ancient promises with the new events that would follow."
+                        ]
+                    },
+
+                    {
+                        chapter: 2,
+                        verses: [
+                            "Wise men from a distant country came looking for Jesus after observing a sign that had announced his birth.",
+                            "They traveled a long distance and asked where they could find the child whom they believed would have an important role.",
+                            "When they found the child, they were filled with joy and offered gifts as a sign of respect and honor.",
+                            "They were then warned to be careful about certain people who might have different intentions toward the child.",
+                            "After receiving the warning, they returned to their country by another road, and the story of the child and his family continued."
+                        ]
+                    }
+
+                ]
+            },
+
+
+            {
+                name: "John",
+                number: 43,
+
+                chapters: [
+
+                    {
+                        chapter: 1,
+                        verses: [
+                            "The Word was in the beginning with God, and the whole story of creation was connected with that beginning.",
+                            "The Word represented life and brought light to humanity, even when darkness seemed to surround the people.",
+                            "A man was sent to testify about the light so that many people could recognize it and understand what it represented.",
+                            "The light came into the world, but not everyone recognized it, and some refused to understand what it meant.",
+                            "The Word became flesh and lived among people, allowing them to discover the grace and glory that he brought."
+                        ]
+                    },
+
+                    {
+                        chapter: 2,
+                        verses: [
+                            "There was a celebration at Cana in Galilee, where the mother of Jesus, Jesus himself, and his disciples were present.",
+                            "When the provisions ran out during the celebration, the mother of Jesus told him about the situation and waited to see what he would do.",
+                            "Jesus asked the servants to prepare what was necessary while the people present watched the events carefully.",
+                            "At that moment, Jesus showed a first sign before his disciples, and their confidence in him increased because of what they had seen.",
+                            "What happened at Cana helped the disciples understand more deeply the importance of Jesus' ministry and the meaning of the signs he performed."
+                        ]
+                    }
+
+                ]
+            },
+
+
+            {
                 name: "Deuteronomy",
                 number: 5,
 
@@ -1122,38 +1232,6 @@ export const fullBibleContent = {
 
 
             {
-                name: "Matthew",
-                number: 40,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "The story of Jesus Christ begins with a long succession of generations connecting the history of the ancestors with that of a new generation.",
-                            "Many people followed one another in this history, each occupying a particular place within the succession of generations.",
-                            "When the time came, Jesus was born, and his birth became especially important to those who were waiting for the fulfillment of their hope.",
-                            "The child was given the name Jesus, and his family believed that he would have an important responsibility in the history of the people.",
-                            "The beginning of the story of Jesus therefore connects ancient promises with the new events that would follow."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Wise men from a distant country came looking for Jesus after observing a sign that had announced his birth.",
-                            "They traveled a long distance and asked where they could find the child whom they believed would have an important role.",
-                            "When they found the child, they were filled with joy and offered gifts as a sign of respect and honor.",
-                            "They were then warned to be careful about certain people who might have different intentions toward the child.",
-                            "After receiving the warning, they returned to their country by another road, and the story of the child and his family continued."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
                 name: "Luke",
                 number: 42,
 
@@ -1178,38 +1256,6 @@ export const fullBibleContent = {
                             "An angel announced to the shepherds the good news concerning the birth of this child.",
                             "The shepherds hurried to see the child, and many people gathered to celebrate the event.",
                             "When they saw the child, they went back filled with joy and told everyone what they had seen and heard."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
-                name: "John",
-                number: 43,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "The Word was in the beginning with God, and the whole story of creation was connected with that beginning.",
-                            "The Word represented life and brought light to humanity, even when darkness seemed to surround the people.",
-                            "A man was sent to testify about the light so that many people could recognize it and understand what it represented.",
-                            "The light came into the world, but not everyone recognized it, and some refused to understand what it meant.",
-                            "The Word became flesh and lived among people, allowing them to discover the grace and glory that he brought."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "There was a celebration at Cana in Galilee, where the mother of Jesus, Jesus himself, and his disciples were present.",
-                            "When the provisions ran out during the celebration, the mother of Jesus told him about the situation and waited to see what he would do.",
-                            "Jesus asked the servants to prepare what was necessary while the people present watched the events carefully.",
-                            "At that moment, Jesus showed a first sign before his disciples, and their confidence in him increased because of what they had seen.",
-                            "What happened at Cana helped the disciples understand more deeply the importance of Jesus' ministry and the meaning of the signs he performed."
                         ]
                     }
 

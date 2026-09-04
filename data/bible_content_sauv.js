@@ -13,8 +13,6 @@
 // Chaque chapitre contient plusieurs entrées afin de
 // permettre au quiz de construire des passages de plusieurs
 // versets consécutifs.
-//
-// Les livres sont classés par ordre canonique (champ "number").
 // =========================================================
 
 export const fullBibleContent = {
@@ -31,6 +29,10 @@ export const fullBibleContent = {
         chapterLabel: "Toko",
 
         books: [
+
+            /* =================================================
+             * GENESISY
+             * ================================================= */
 
             {
                 name: "Genesisy",
@@ -75,6 +77,10 @@ export const fullBibleContent = {
             },
 
 
+            /* =================================================
+             * EKSODOSY
+             * ================================================= */
+
             {
                 name: "Eksodosy",
                 number: 2,
@@ -106,6 +112,10 @@ export const fullBibleContent = {
                 ]
             },
 
+
+            /* =================================================
+             * LEVITIKOSY
+             * ================================================= */
 
             {
                 name: "Levitikosy",
@@ -139,6 +149,10 @@ export const fullBibleContent = {
             },
 
 
+            /* =================================================
+             * NOMERA
+             * ================================================= */
+
             {
                 name: "Nomera",
                 number: 4,
@@ -171,133 +185,9 @@ export const fullBibleContent = {
             },
 
 
-            {
-                name: "Deotoronomia",
-                number: 5,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Nitantara tamin'ny vahoaka i Mosesy ny dia lava izay nataon'izy ireo, ary nampahatsiahy azy ireo ny zavatra rehetra efa niainany niaraka tamin'Andriamanitra.",
-                            "Nampianariny ny vahoaka mba hitandrina ny didy nomena azy ireo, satria izany no hitondra fiadanana sy fahombiazana amin'ny fiainany manaraka.",
-                            "Nasongadin'i Mosesy fa tsy tokony hanadino ny zavatra niseho tamin'ny lalana, fa tokony hotehirizina ao am-po mandrakizay izany fahatsiarovana izany.",
-                            "Nampiomana ny vahoaka izy mba ho vonona hiditra any amin'ny tany vaovao, ka nampirisika azy ireo mba hatoky sy hanam-pahasahiana.",
-                            "Nolazainy fa tsy irery izy ireo amin'ny dia manaraka, fa hanaraka azy ireo hatrany Andriamanitra raha mbola mankatò ny toromarika nomena."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Nasongadin'i Mosesy indray fa nisy fifanekena natao teo amin'Andriamanitra sy ny vahoaka, ary tokony hotanana amin'ny fo izany fifanekena izany.",
-                            "Nampahatsiahy azy ireo izy fa tsy tokony hanaraka fomba hafa, fa hijanona tsy hivadika amin'izay nampianarina azy ireo.",
-                            "Nolazainy fa ny fiainana ao amin'ny tany vaovao dia miankina amin'ny fankatoavana sy ny fifandraisana marina amin'Andriamanitra.",
-                            "Nampirisihany ny vahoaka mba hampita ireo fahalalana ireo amin'ny taranany mifandimby, mba tsy ho very ilay fahatsiarovana.",
-                            "Notapahiny ny lahateniny tamin'ny fanantenana fa ho tanteraka ny zavatra nampanantenaina, raha mbola mifikitra amin'ny marina ny vahoaka."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
-                name: "Josoa",
-                number: 6,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Rehefa maty i Mosesy dia noraisin'i Josoa ny andraikitra hitarika ny vahoaka, ary nampahery azy Andriamanitra tamin'izany fiovana lehibe izany.",
-                            "Nampirisihina i Josoa mba ho matanjaka sy hatoky, satria nisy asa lehibe niandry azy teo anoloany.",
-                            "Nolazaina taminy fa tsy hanary azy Andriamanitra na oviana na oviana, ary tokony hitandrina ny toromarika rehetra nomena izy.",
-                            "Nandray fahasahiana i Josoa ka nanomboka nikarakara ny fandaharana rehetra hitarihana ny vahoaka handroso.",
-                            "Ny vahoaka kosa nanaiky hanaraka azy tamin'ny fahatokiana, satria hitany fa nofidin'Andriamanitra izy ho mpitarika vaovao."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Naniraka olona hisafo ny tany i Josoa, mba hahafantarana bebe kokoa izay tokony ho fantatra alohan'ny hidirana any.",
-                            "Tonga tao amin'ny tanàna iray ireo mpisafo ka nifandray tamin'ny vehivavy iray izay nanampy azy ireo tamin'ny fomba tsy nampoizina.",
-                            "Nafenin-drazazavavy tao an-tranony ireo mpisafo rehefa nisy loza nanodidina azy ireo, ary nampanantena ny hiaro azy amin'ny farany.",
-                            "Rehefa afaka ilay loza dia niverina tany amin'i Josoa ireo mpisafo ka nitantara izay hitany sy nolazaina taminy.",
-                            "Ny vaovao nentin'izy ireo dia nampahery an'i Josoa sy ny vahoaka, satria hitany fa afaka mandroso amim-pitokiana izy ireo."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
-                name: "Salamo",
-                number: 19,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Sambatra ny olona izay tsy manaraka ny toro-hevitry ny ratsy fanahy, fa mifidy ny lalana marina sy ny fahamarinana kosa.",
-                            "Ny fony dia mankasitraka ny toromarika sy ny fampianarana, ka mieritreritra amin'izany andro aman'alina izy.",
-                            "Toy ny hazo ambony rano izy, izay mamoa amin'ny fotoana voatondro sady tsy malazo ny raviny na oviana na oviana.",
-                            "Fa tsy toy izany kosa ny ratsy fanahy, satria toy ny mololo entin'ny rivotra izy no lasa tsy misy dikany.",
-                            "Noho izany dia tsy maharitra amin'ny fitsarana ny ratsy fanahy, fa ny lalan'ny marina kosa no fantatr'Andriamanitra."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Andriamanitra no fiarovana sy tanjona ho an'izay mitady azy, ka azo itokiana amin'ny fotoan-tsarotra rehetra izy.",
-                            "Na dia misy fahoriana aza manodidina, dia mahita fialan-tsiny ny fo izay mifikitra amin'ny fanantenana ao amin'Andriamanitra.",
-                            "Ny fiarovana omen'Andriamanitra dia tsy miankina amin'ny toe-javatra ivelany, fa avy amin'ny fifandraisana lalina kokoa.",
-                            "Izay manatona azy amin'ny fahatokiana dia mahazo hery sy fiadanana ao am-po, na dia eo aza ny fanamby.",
-                            "Ny hira fiderana dia mifototra amin'ny fahatokiana fa tsy mandao ny olony Andriamanitra na amin'ny toe-javatra sarotra indrindra."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
-                name: "Ohabolana",
-                number: 20,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Ny fahendrena dia miantso amin'ny feo avo eny an-dalambe, mba hahatratra izay rehetra vonona hihaino.",
-                            "Ny olona kely saina dia asaina mianatra fahazavan-tsaina, fa ny fahaizana dia sarobidy kokoa noho ny harena.",
-                            "Izay mandà ny fananarana dia mampidi-doza ny tenany, fa izay mihaino kosa no hahazo fahendrena marina.",
-                            "Ny toro-hevitra dia natao hitarika ny olona ho amin'ny lalana mahitsy, fa tsy hanakorontana ny fiainany.",
-                            "Ny fahendrena dia manome fiadanana ho an'izay mandray sy manaja izany amin'ny fony."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Raha mitady fahalalana amin'ny fo manontolo ny olona iray, dia hahazo valiny izy amin'ny fomba tsy nampoizina.",
-                            "Ny fahendrena dia miaro amin'ny làlana ratsy sy ny fisainana mamitaka izay mety hahatonga fahasimbana.",
-                            "Izay mandray fahendrena dia hahazo fahalalahan-tsaina hanavaka ny marina amin'ny diso.",
-                            "Ny fahamarinana sy ny rariny dia miaraka amin'izay mizoto hitady fahendrena tamin-kitsim-po.",
-                            "Amin'ny farany, izay mizotra amin'ny lalana marina no hahita fiadanana lalina ao am-piainany."
-                        ]
-                    }
-
-                ]
-            },
-
+            /* =================================================
+             * MATIO
+             * ================================================= */
 
             {
                 name: "Matio",
@@ -331,37 +221,9 @@ export const fullBibleContent = {
             },
 
 
-            {
-                name: "Lioka",
-                number: 42,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Maro ny olona nikasa hanoratra ny tantara momba ireo zavatra niseho, ary Lioka koa naneho ny fikasany hanoratra amim-pahamarinana.",
-                            "Nangataka taminy hanoratra araka ny filaharan'ny zavatra niseho, mba ho azon'ny mpamaky an-kitsiny izany.",
-                            "Nisy anjely niseho tamin'ny fianakaviana iray ka nanambara fa hisy zaza hateraka ao aminy, izay hanana andraikitra manokana.",
-                            "Gaga ilay fianakaviana ary tsy takany tanteraka izay nolazaina taminy, saingy nino ihany izy ireo.",
-                            "Ny vaovao nentin'ilay anjely dia niely tamin'ny fianakaviana akaiky, ary samy niandry ny fahatanterahan'izany avy izy ireo."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Tonga ny fotoana ka niteraka ilay zaza nampanantenaina, ary nisy fifaliana lehibe niely tamin'izany fotoana izany.",
-                            "Nisy mpiandry ondry tany an-tsaha nahita famantarana avy any an-danitra ka gaga fatratra izy ireo.",
-                            "Nolazain'ny anjely tamin'ireo mpiandry ondry ny vaovao mahafaly momba ilay zaza vao teraka.",
-                            "Nandeha faingana ireo mpiandry ondry hijery ilay zaza ary tafavory maro ny olona hankalaza izany hetsika izany.",
-                            "Rehefa hitan'izy ireo ilay zaza dia niverina tamim-pifaliana izy ireo ka nizara tamin'ny olon-drehetra izay hitany sy henony."
-                        ]
-                    }
-
-                ]
-            },
-
+            /* =================================================
+             * JAONA
+             * ================================================= */
 
             {
                 name: "Jaona",
@@ -388,38 +250,6 @@ export const fullBibleContent = {
                             "Nilaza tamin'ireo mpanompo Jesosy mba hanomana izay zavatra nilaina, ary samy niandry izay zavatra hataony ny olona.",
                             "Tamin'izany fotoana izany dia naneho famantarana voalohany teo anatrehan'ny mpianany Jesosy, ka nitombo ny fahatokisan'izy ireo Azy.",
                             "Ny zavatra nitranga tao Kana dia nanampy ny mpianatra hahatakatra bebe kokoa ny maha-zava-dehibe ny asan'i Jesosy sy ny famantarana nasehony."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
-                name: "Romanina",
-                number: 45,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Nanoratra taratasy ho an'ny vahoaka tao amin'ny tanàna lehibe iray i Paoly, mba hizarany hafatra momba ny finoana.",
-                            "Nolazainy fa ny hafatra nentiny dia natokana ho an'ny olon-drehetra, na avy amin'ny fiaviana samihafa aza izy ireo.",
-                            "Nasongadiny fa ny finoana no fototra iorenan'ny fifandraisana lalina kokoa amin'Andriamanitra.",
-                            "Nohazavainy fa tsy misy avaka eo amin'ny olona rehetra raha ny amin'ny fahitàna izay marina sy tsara.",
-                            "Nangataka izy mba hisian'ny firaisan-kina eo amin'ny vahoaka, na dia samy hafa aza ny fiaviany avy."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Nazavain'i Paoly fa ny fitsarana marina dia mifototra amin'ny asa sy ny fanapahan-kevitra nataon'ny tsirairay, fa tsy amin'ny fiaviana ihany.",
-                            "Nampahatsiahy izy fa samy manana andraikitra amin'ny fiainany avy ny olona tsirairay, na inona na inona toerana misy azy.",
-                            "Nasongadiny fa ny fahamarinana dia tokony hiseho amin'ny fihetsika andavanandro, fa tsy amin'ny teny ihany.",
-                            "Nanome toky izy fa hisy valiny ho an'izay mizotra amin'ny lalana marina amim-paharetana.",
-                            "Notapahiny ny hafatra tamin'ny fanantenana fa hitohy hifamatotra amin'ny fahamarinana ny vahoaka rehetra mpino."
                         ]
                     }
 
@@ -583,134 +413,6 @@ export const fullBibleContent = {
 
 
             {
-                name: "Deutéronome",
-                number: 5,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Moïse rappela au peuple le long voyage qu'ils avaient traversé, et il leur remémora tout ce qu'ils avaient vécu avec Dieu.",
-                            "Il leur enseigna à observer les instructions qui leur avaient été données, car cela devait leur apporter paix et réussite dans les jours à venir.",
-                            "Moïse insista sur le fait qu'ils ne devaient pas oublier ce qui s'était passé en chemin, mais garder ce souvenir gravé dans leur cœur.",
-                            "Il prépara le peuple à entrer dans un territoire nouveau, en les encourageant à avancer avec confiance et courage.",
-                            "Il leur affirma qu'ils ne seraient pas seuls dans cette nouvelle étape, car Dieu continuerait à les accompagner tant qu'ils suivraient ses instructions."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Moïse rappela encore qu'une alliance avait été établie entre Dieu et le peuple, et qu'il fallait la garder fidèlement dans le cœur.",
-                            "Il les avertit de ne pas se tourner vers d'autres pratiques, mais de rester attachés à ce qui leur avait été enseigné.",
-                            "Il expliqua que la vie dans ce nouveau territoire dépendrait de leur fidélité et d'une relation sincère avec Dieu.",
-                            "Il les encouragea à transmettre ces enseignements à leurs descendants, afin que ce souvenir ne se perde jamais.",
-                            "Il conclut son discours avec l'espérance que les promesses se réaliseraient, tant que le peuple resterait attaché à ce qui était juste."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
-                name: "Josué",
-                number: 6,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Après la mort de Moïse, Josué reçut la responsabilité de conduire le peuple, et Dieu l'encouragea face à ce grand changement.",
-                            "Josué fut invité à être fort et confiant, car une tâche importante l'attendait.",
-                            "On lui assura que Dieu ne l'abandonnerait jamais, à condition qu'il reste attentif à toutes les instructions reçues.",
-                            "Josué prit courage et commença à organiser tout ce qui était nécessaire pour faire avancer le peuple.",
-                            "Le peuple accepta de le suivre avec confiance, car il voyait en lui le nouveau chef choisi par Dieu."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Josué envoya des hommes explorer le territoire, afin de mieux comprendre ce qu'il fallait savoir avant d'y entrer.",
-                            "Arrivés dans une ville, ces explorateurs rencontrèrent une femme qui les aida d'une manière inattendue.",
-                            "Elle les cacha chez elle lorsqu'un danger survint, et leur promit de les protéger jusqu'au bout.",
-                            "Une fois le danger passé, les explorateurs retournèrent auprès de Josué pour lui raconter ce qu'ils avaient vu.",
-                            "Les nouvelles qu'ils rapportèrent encouragèrent Josué et le peuple, qui virent qu'ils pouvaient avancer avec confiance."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
-                name: "Psaumes",
-                number: 19,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Heureux celui qui ne suit pas les conseils de ceux qui font le mal, mais qui choisit le chemin juste et la vérité.",
-                            "Son cœur trouve du plaisir dans les enseignements et l'instruction, qu'il médite jour et nuit.",
-                            "Il ressemble à un arbre planté près de l'eau, qui porte du fruit en son temps et dont les feuilles ne se flétrissent jamais.",
-                            "Il n'en va pas de même pour celui qui fait le mal, car il est comme la paille emportée par le vent, sans consistance.",
-                            "C'est pourquoi celui qui agit mal ne résistera pas au jugement, tandis que le chemin du juste est connu de Dieu."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Dieu est un refuge et un but pour celui qui le cherche, et l'on peut compter sur lui dans tous les moments difficiles.",
-                            "Même au milieu des épreuves, le cœur qui s'attache à l'espérance en Dieu trouve du réconfort.",
-                            "La protection qu'offre Dieu ne dépend pas des circonstances extérieures, mais d'une relation plus profonde.",
-                            "Celui qui s'approche de lui avec confiance reçoit force et paix intérieure, même face aux difficultés.",
-                            "Le chant de louange repose sur la certitude que Dieu n'abandonne jamais les siens, même dans les situations les plus difficiles."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
-                name: "Proverbes",
-                number: 20,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "La sagesse élève la voix sur les places publiques, afin d'atteindre tous ceux qui sont prêts à écouter.",
-                            "Celui qui manque de discernement est invité à apprendre le bon sens, car la connaissance vaut plus que la richesse.",
-                            "Celui qui refuse la correction se met lui-même en danger, tandis que celui qui écoute obtient une véritable sagesse.",
-                            "Les conseils sont donnés pour guider la personne vers un chemin droit, et non pour bouleverser sa vie.",
-                            "La sagesse apporte la paix à celui qui l'accueille et la respecte de tout son cœur."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Celui qui recherche la connaissance de tout son cœur trouvera une réponse d'une manière inattendue.",
-                            "La sagesse protège des chemins mauvais et des pensées trompeuses qui pourraient causer du tort.",
-                            "Celui qui reçoit la sagesse obtient la clarté d'esprit nécessaire pour distinguer le vrai du faux.",
-                            "La justice et l'équité accompagnent ceux qui cherchent la sagesse avec sincérité.",
-                            "Finalement, celui qui suit le chemin juste connaîtra une paix profonde dans sa vie."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
                 name: "Matthieu",
                 number: 40,
 
@@ -743,38 +445,6 @@ export const fullBibleContent = {
 
 
             {
-                name: "Luc",
-                number: 42,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Plusieurs avaient déjà entrepris de raconter les événements survenus, et Luc exprima lui aussi son intention d'écrire avec précision.",
-                            "On lui demanda de rédiger le récit selon l'ordre des événements, afin que les lecteurs puissent le comprendre clairement.",
-                            "Un ange apparut à une famille pour annoncer la naissance prochaine d'un enfant qui aurait un rôle particulier.",
-                            "Cette famille fut surprise et ne comprit pas immédiatement ce qui leur était annoncé, mais ils crurent malgré tout.",
-                            "La nouvelle apportée par l'ange se répandit parmi les proches, et chacun attendait de voir cette promesse se réaliser."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Le moment vint où l'enfant promis naquit, et une grande joie se répandit à cette occasion.",
-                            "Des bergers qui gardaient leurs troupeaux dans les champs virent un signe venu du ciel et furent remplis d'étonnement.",
-                            "Un ange annonça aux bergers la bonne nouvelle concernant la naissance de cet enfant.",
-                            "Les bergers se hâtèrent d'aller voir l'enfant, et de nombreuses personnes se rassemblèrent pour célébrer cet événement.",
-                            "Lorsqu'ils virent l'enfant, ils repartirent remplis de joie et racontèrent à tous ce qu'ils avaient vu et entendu."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
                 name: "Jean",
                 number: 43,
 
@@ -799,38 +469,6 @@ export const fullBibleContent = {
                             "Jésus demanda aux serviteurs de préparer ce qui était nécessaire, tandis que les personnes présentes observaient les événements avec attention.",
                             "À ce moment-là, Jésus manifesta un premier signe devant ses disciples, et leur confiance en lui grandit à la suite de ce qu'ils avaient vu.",
                             "Ce qui se passa à Cana permit aux disciples de mieux comprendre la portée du ministère de Jésus et le sens des signes qu'il accomplissait."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
-                name: "Romains",
-                number: 45,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Paul écrivit une lettre au peuple d'une grande ville, afin de leur transmettre un message concernant la foi.",
-                            "Il expliqua que ce message était destiné à tous, quelle que soit leur origine.",
-                            "Il souligna que la foi était le fondement d'une relation plus profonde avec Dieu.",
-                            "Il précisa qu'il n'y avait aucune différence entre les personnes en ce qui concerne ce qui est juste et bon.",
-                            "Il souhaita que l'unité règne parmi le peuple, malgré la diversité de leurs origines."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Paul expliqua que le jugement juste repose sur les actes et les choix de chacun, et non uniquement sur l'origine.",
-                            "Il rappela que chaque personne porte une responsabilité dans sa propre vie, quelle que soit sa position.",
-                            "Il souligna que la droiture devait se manifester dans les actions quotidiennes, et non seulement dans les paroles.",
-                            "Il assura qu'une récompense attendait ceux qui persévéraient sur le chemin juste.",
-                            "Il conclut son message avec l'espérance que tout le peuple croyant resterait uni dans la vérité."
                         ]
                     }
 
@@ -994,134 +632,6 @@ export const fullBibleContent = {
 
 
             {
-                name: "Deuteronomy",
-                number: 5,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Moses reminded the people of the long journey they had traveled, recalling everything they had experienced together with God.",
-                            "He taught them to observe the instructions they had received, since this would bring them peace and success in the days ahead.",
-                            "Moses emphasized that they should not forget what had happened along the way, but keep that memory in their hearts forever.",
-                            "He prepared the people to enter a new land, encouraging them to move forward with confidence and courage.",
-                            "He assured them they would not be alone in this next stage, since God would continue to accompany them as long as they followed his instructions."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Moses reminded them again that a covenant had been established between God and the people, and that it should be kept faithfully in their hearts.",
-                            "He warned them not to turn toward other practices, but to remain faithful to what they had been taught.",
-                            "He explained that life in the new land would depend on their faithfulness and a sincere relationship with God.",
-                            "He encouraged them to pass these teachings on to their descendants, so that the memory would never be lost.",
-                            "He concluded his speech with the hope that the promises would be fulfilled, as long as the people remained faithful to what was right."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
-                name: "Joshua",
-                number: 6,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "After Moses died, Joshua received the responsibility of leading the people, and God encouraged him through this major change.",
-                            "Joshua was told to be strong and confident, since an important task awaited him.",
-                            "He was assured that God would never abandon him, as long as he remained attentive to all the instructions he received.",
-                            "Joshua took courage and began organizing everything necessary to move the people forward.",
-                            "The people agreed to follow him with confidence, since they saw in him the new leader chosen by God."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Joshua sent men to explore the land, so they could better understand what needed to be known before entering it.",
-                            "Arriving in a city, these explorers met a woman who helped them in an unexpected way.",
-                            "She hid them in her house when danger arose, and promised to protect them to the end.",
-                            "Once the danger had passed, the explorers returned to Joshua to tell him what they had seen.",
-                            "The news they brought encouraged Joshua and the people, who saw that they could move forward with confidence."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
-                name: "Psalms",
-                number: 19,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Blessed is the one who does not follow the advice of those who do wrong, but chooses the right path and the truth instead.",
-                            "Their heart finds delight in instruction and teaching, meditating on it day and night.",
-                            "They are like a tree planted near water, bearing fruit in its season, with leaves that never wither.",
-                            "It is not the same for the one who does wrong, for they are like chaff carried away by the wind, without substance.",
-                            "That is why the wrongdoer will not stand in the judgment, while the path of the righteous is known by God."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "God is a refuge and a goal for anyone who seeks him, and can be relied upon in every difficult moment.",
-                            "Even amid hardship, a heart that holds on to hope in God finds comfort.",
-                            "The protection God offers does not depend on outward circumstances, but on a deeper relationship.",
-                            "Anyone who approaches him with confidence receives strength and inner peace, even in the face of difficulty.",
-                            "The song of praise rests on the certainty that God never abandons his own, even in the hardest situations."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
-                name: "Proverbs",
-                number: 20,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Wisdom raises her voice in the public squares, so as to reach everyone who is ready to listen.",
-                            "Those who lack discernment are invited to learn good sense, for knowledge is worth more than riches.",
-                            "Whoever refuses correction puts themselves in danger, while whoever listens gains true wisdom.",
-                            "Advice is given to guide a person onto a straight path, not to disrupt their life.",
-                            "Wisdom brings peace to whoever welcomes and respects it with their whole heart."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Whoever seeks knowledge with their whole heart will find an answer in an unexpected way.",
-                            "Wisdom protects against harmful paths and deceptive thoughts that could cause damage.",
-                            "Whoever receives wisdom gains the clarity of mind needed to tell truth from falsehood.",
-                            "Justice and fairness accompany those who seek wisdom sincerely.",
-                            "In the end, whoever follows the right path will know a deep peace in their life."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
                 name: "Matthew",
                 number: 40,
 
@@ -1154,38 +664,6 @@ export const fullBibleContent = {
 
 
             {
-                name: "Luke",
-                number: 42,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Many had already undertaken to tell the story of what had happened, and Luke also expressed his intention to write it accurately.",
-                            "He was asked to set down the account in the order of events, so that readers could understand it clearly.",
-                            "An angel appeared to a family to announce the coming birth of a child who would have a particular role.",
-                            "The family was surprised and did not immediately understand what they were being told, but they believed anyway.",
-                            "The news the angel brought spread among their relatives, and everyone waited to see this promise fulfilled."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "The time came when the promised child was born, and great joy spread on that occasion.",
-                            "Shepherds watching their flocks in the fields saw a sign from the sky and were filled with amazement.",
-                            "An angel announced to the shepherds the good news concerning the birth of this child.",
-                            "The shepherds hurried to see the child, and many people gathered to celebrate the event.",
-                            "When they saw the child, they went back filled with joy and told everyone what they had seen and heard."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
                 name: "John",
                 number: 43,
 
@@ -1210,38 +688,6 @@ export const fullBibleContent = {
                             "Jesus asked the servants to prepare what was necessary while the people present watched the events carefully.",
                             "At that moment, Jesus showed a first sign before his disciples, and their confidence in him increased because of what they had seen.",
                             "What happened at Cana helped the disciples understand more deeply the importance of Jesus' ministry and the meaning of the signs he performed."
-                        ]
-                    }
-
-                ]
-            },
-
-
-            {
-                name: "Romans",
-                number: 45,
-
-                chapters: [
-
-                    {
-                        chapter: 1,
-                        verses: [
-                            "Paul wrote a letter to the people of a great city, in order to pass on to them a message about faith.",
-                            "He explained that this message was meant for everyone, regardless of their background.",
-                            "He emphasized that faith was the foundation of a deeper relationship with God.",
-                            "He stated that there was no difference among people when it came to what is right and good.",
-                            "He hoped that unity would prevail among the people, despite the diversity of their backgrounds."
-                        ]
-                    },
-
-                    {
-                        chapter: 2,
-                        verses: [
-                            "Paul explained that fair judgment rests on each person's actions and choices, not only on their background.",
-                            "He reminded them that every person carries responsibility for their own life, whatever position they hold.",
-                            "He emphasized that righteousness should show itself in everyday actions, not only in words.",
-                            "He assured them that a reward awaited those who persevered on the right path.",
-                            "He concluded his message with the hope that all believing people would remain united in truth."
                         ]
                     }
 
